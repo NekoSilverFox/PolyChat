@@ -97,7 +97,7 @@ PolyChat 是一款跨平台即时通讯软件，旨在解决上述问题，提�
 | ChatWidget_Text_Font_I       | (选中一段文字)点击斜体按钮会使文字倾斜                       |
 | ChatWidget_Text_Font_L       | (选中一段文字)点击下划线按钮会在文字底部添加下划线           |
 | ChatWidget_Mess_View         | 用户可以使用鼠标滚轮查看聊天记录                             |
-| ChatWidget_Mess_Clean        | 点击清空聊天记录按钮会清空窗口内的所有聊天记录               |
+| ChatWidget_Mess_Clean        | 点击清空聊天记录按钮会清空自己窗口内的所有聊天记录，其他用户的窗口内容不受影响 |
 | ChatWidget_Mess_Save         | 点击保存按钮可以将聊天记录保存为 txt 文件                    |
 | ChatWidget_Mess_Send         | 点击发送按钮可以将输入框中的文字内容发送至群聊               |
 | ChatWidget_Mess_Send_Empty   | 当文字输入框为空时，点击发送按钮无法发送任何内容             |
