@@ -80,6 +80,8 @@ PolyChat 是一款跨平台即时通讯软件，旨在解决上述问题，提�
 | Login_Maximize               | 当点击关闭按钮时，主程序退出                                 |
 |                              |                                                              |
 | DialogList_Load              | 当用户成功登陆，对话框列表（局域网中的群聊）会被调用，并且相应资源文件会被加载 |
+| DialogList_Add_Chat          | 用户可以点击加号按钮，通过弹出的对话框指定群聊名称，之后该名称的群聊将会被创建。创建新群聊之后，群聊列表将会被刷新以增加新创建的群聊 |
+| DialogList_Add_Chat_Clash    | 当某个名称的群聊已经存在时，如果尝试重复创建将会显示一个通知，其中包括错误信息 |
 | DialogList_View              | 用户可以使用鼠标滚轮查看列表中的内容                         |
 | DialogList_Select            | 用户可以在对话框列表中选择某个群聊                           |
 | DialogList_Search            | 用户可以通过搜索框，通过群聊的名称搜索一个群聊               |
@@ -89,8 +91,8 @@ PolyChat 是一款跨平台即时通讯软件，旨在解决上述问题，提�
 | DialogList_Maximize          | 当点击全屏按钮时，窗口会铺满整个屏幕                         |
 | DialogList_Exit              | 按下关闭按钮，退出主程序                                     |
 |                              |                                                              |
-| ChatWidget_Text_Font_Type    | (选中一段文字)可以在下拉列表中修改字体                       |
-| ChatWidget_Text_Font_Size    | (选中一段文字)可以在下拉列表中修改文字大小                   |
+| ChatWidget_Text_Font_Type    | (选中一段文字)可以在下拉列表中修改字体，可修改的字体为电脑上已安装的。 |
+| ChatWidget_Text_Font_Size    | (选中一段文字)可以在下拉列表中修改文字大小，字体大小从 12 到 28 |
 | ChatWidget_Text_Font_B       | (选中一段文字)点击加粗按钮会使文字加粗                       |
 | ChatWidget_Text_Font_I       | (选中一段文字)点击斜体按钮会使文字倾斜                       |
 | ChatWidget_Text_Font_L       | (选中一段文字)点击下划线按钮会在文字底部添加下划线           |
@@ -115,11 +117,11 @@ PolyChat 是一款跨平台即时通讯软件，旨在解决上述问题，提�
 
 ## 用户列表界面
 
-![未命名绘图](./pic/README/未命名绘图-4526660.svg)
+<img src="./pic/README/chat_llist.svg" alt="chat_llist" style="zoom: 67%;" />
 
 ## 聊天窗口
 
-![未命名绘图](./pic/README/未命名绘图.svg)
+<img src="./pic/README/chat_widget.svg" alt="chat_widget" style="zoom:67%;" />
 
 
 
