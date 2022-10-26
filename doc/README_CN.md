@@ -113,13 +113,21 @@ PolyChat 是一款跨平台即时通讯软件，旨在解决上述问题，提�
 
 
 
-# 界面设计
+# HLD
 
-## 用户列表界面
+## 软件架构
+
+我们使用用例图来表述 PolyChat 的软件架构：
+
+![architecture](HLD_EN/architecture.svg)
+
+## 界面设计
+
+### 用户列表界面
 
 <img src="./pic/README/chat_llist.svg" alt="chat_llist" style="zoom: 67%;" />
 
-## 聊天窗口
+### 聊天窗口
 
 <img src="./pic/README/chat_widget.svg" alt="chat_widget" style="zoom:67%;" />
 

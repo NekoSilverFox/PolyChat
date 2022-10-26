@@ -122,12 +122,20 @@ PolyChat - это кроссплатформенное программное о
 
 
 
-# Дизайн GUI
+# HLD
 
-## Список пользователей
+## Архитектур
+
+Мы используем диаграмму Use Case для представления архитектуры программного обеспечения PolyChat:
+
+![architecture](doc/pic/README/architecture.svg)
+
+## Дизайн GUI
+
+### Список пользователей
 
 <img src="doc/pic/README/chat_llist.svg" alt="chat_widget" style="zoom:67%;" />
 
-## Окно чата
+### Окно чата
 
 <img src="doc/pic/README/chat_widget.svg" alt="chat_widget" style="zoom:67%;" />
