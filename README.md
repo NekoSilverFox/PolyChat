@@ -137,7 +137,7 @@ PolyChat - это кроссплатформенное программное о
 
 ### Окно чата
 
-<img src="doc/pic/README/chat_widget.svg" alt="chat_widget" style="zoom:67%;" />
+<img src="doc/pic/README/widget_chatbox.svg" alt="chat_widget" style="zoom:67%;" />
 
 
 

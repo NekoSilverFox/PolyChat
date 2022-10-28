@@ -132,7 +132,7 @@ PolyChat 是一款跨平台即时通讯软件，旨在解决上述问题，提�
 
 ### 聊天窗口
 
-<img src="./pic/README/chat_widget.svg" alt="chat_widget" style="zoom:67%;" />
+<img src="./pic/README/widget_chatbox.svg" alt="chat_widget" style="zoom:67%;" />
 
 
 
