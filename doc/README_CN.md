@@ -128,7 +128,7 @@ PolyChat 是一款跨平台即时通讯软件，旨在解决上述问题，提�
 
 ### 用户列表界面
 
-<img src="./pic/README/chat_llist.svg" alt="chat_llist" style="zoom: 67%;" />
+<img src="./pic/README/chat_list.svg" alt="chat_list" style="zoom: 67%;" />
 
 ### 聊天窗口
 
