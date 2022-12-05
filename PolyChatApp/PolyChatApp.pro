@@ -10,13 +10,16 @@ CONFIG += c++17
 
 SOURCES += \
     main.cpp \
-    uil_chatboxwidget.cpp
+    uil_chatboxwidget.cpp \
+    uil_loginwidget.cpp
 
 HEADERS += \
-    uil_chatboxwidget.h
+    uil_chatboxwidget.h \
+    uil_loginwidget.h
 
 FORMS += \
-    chatboxwidget.ui
+    chatboxwidget.ui \
+    loginwidget.ui
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
