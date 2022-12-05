@@ -1,0 +1,14 @@
+<RCC>
+    <qresource prefix="/icon">
+        <file>icons/bord.png</file>
+        <file>icons/clean.png</file>
+        <file>icons/collect.png</file>
+        <file>icons/italics.png</file>
+        <file>icons/plus.png</file>
+        <file>icons/search.png</file>
+        <file>icons/underline.png</file>
+        <file>icons/send.png</file>
+        <file>icons/color-text.png</file>
+        <file>icons/save.png</file>
+    </qresource>
+</RCC>

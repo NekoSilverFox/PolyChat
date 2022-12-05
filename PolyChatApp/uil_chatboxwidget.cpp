@@ -1,7 +1,7 @@
-#include "UI_chatboxwidget.h"
+#include "uil_chatboxwidget.h"
 #include "ui_chatboxwidget.h"
 
-ChatBoxWidget::ChatBoxWidget(QWidget *parent)
+ChatBoxWidget::ChatBoxWidget(QWidget* parent)
     : QWidget(parent)
     , ui(new Ui::ChatBoxWidget)
 {

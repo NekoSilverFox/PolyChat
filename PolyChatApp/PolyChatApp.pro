@@ -10,10 +10,10 @@ CONFIG += c++17
 
 SOURCES += \
     main.cpp \
-    UI_chatboxwidget.cpp
+    uil_chatboxwidget.cpp
 
 HEADERS += \
-    UI_chatboxwidget.h
+    uil_chatboxwidget.h
 
 FORMS += \
     chatboxwidget.ui
@@ -22,3 +22,6 @@ FORMS += \
 qnx: target.path = /tmp/$${TARGET}/bin
 else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
+
+RESOURCES += \
+    resource.qrc
