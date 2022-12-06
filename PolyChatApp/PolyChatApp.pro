@@ -11,14 +11,17 @@ CONFIG += c++17
 SOURCES += \
     main.cpp \
     uil_chatboxwidget.cpp \
+    uil_chatlist.cpp \
     uil_loginwidget.cpp
 
 HEADERS += \
     uil_chatboxwidget.h \
+    uil_chatlist.h \
     uil_loginwidget.h
 
 FORMS += \
     chatboxwidget.ui \
+    chatlist.ui \
     loginwidget.ui
 
 # Default rules for deployment.
