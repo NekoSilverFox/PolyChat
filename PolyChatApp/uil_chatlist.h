@@ -12,7 +12,7 @@ class ChatList : public QWidget
     Q_OBJECT
 
 public:
-    explicit ChatList(QWidget *parent = nullptr);
+    explicit ChatList(QWidget *parent, QString localUserName, QString localUserGroupNumber, QString localIpAddress);
     ~ChatList();
 
 private:
