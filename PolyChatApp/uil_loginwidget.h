@@ -15,6 +15,9 @@ public:
     explicit LoginWidget(QWidget *parent = nullptr);
     ~LoginWidget();
 
+public slots:
+    void userLogin();
+
 private:
     Ui::LoginWidget *ui;
 };

@@ -1,4 +1,4 @@
-QT       += core gui
+QT       += core gui network
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -15,6 +15,9 @@ SOURCES += \
     uil_loginwidget.cpp
 
 HEADERS += \
+    bll_polychat.h \
+    dal_polychat.h \
+    db_localdata.h \
     uil_chatboxwidget.h \
     uil_chatlist.h \
     uil_loginwidget.h
