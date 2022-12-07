@@ -8,6 +8,7 @@
 
 namespace BLL
 {
+
 /** Get IP address local PC, fomat like `192.168.XX.XX`
  * @brief getIPAddress
  * @return [QHostAddress] IP Address local PC
@@ -32,6 +33,7 @@ static QHostAddress getIPAddress()
     return ipAddress;
 }
 
+
 /**
  * @brief initLocalUser
  * @param name
@@ -47,7 +49,25 @@ static bool initLocalUser(QString name, QString groupNumber)
     return true;
 }
 
+static QString      getLocalUserName()
+{
+    return DB::localUserName;
+}
 
+static QString      getLocalUserGroupNumber()
+{
+    return DB::localUserGroupNumber;
+}
+
+static QHostAddress getLocalIpAddress()
+{
+    return DB::localIpAddress;
+}
+
+static qint16 getPortChatList()
+{
+    return DB::PORT_CHAT_LIST;
+}
 
 /** Show ChatList Widget
  * @brief initAndShowChatList
@@ -101,7 +121,6 @@ static qint16 getRandomPort()
     while (true)
     {
         qint16 port = QRandomGenerator::global()->bounded(DB::PORT_MIN, DB::PORT_MAX);
-qDebug() << "TTT" << port;  //TODO 往下有错误
         if (!isPortExist(port)) return port;
     }
 
@@ -123,6 +142,7 @@ static Chat* getAndInsertNewChat(QString name, qint16 port, bool isOpen = true)
     DB::vChat.push_back(chat);
     return chat;
 }
+
 
 
 }

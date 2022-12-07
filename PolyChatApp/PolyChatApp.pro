@@ -21,6 +21,7 @@ HEADERS += \
     chat.h \
     dal_polychat.h \
     db_localdata.h \
+    signaltype.h \
     uil_addchat.h \
     uil_chatboxwidget.h \
     uil_chatlist.h \

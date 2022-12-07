@@ -25,6 +25,29 @@ static bool initLocalUser(const QString name, const QString groupNumber)
     return true;
 }
 
+
+static QString      getLocalUserName()
+{
+    return DB::localUserName;
+}
+
+static QString      getLocalUserGroupNumber()
+{
+    return DB::localUserGroupNumber;
+}
+
+static QHostAddress getLocalIpAddress()
+{
+    return DB::localIpAddress;
+}
+
+
+static qint16 getPortChatList()
+{
+    return BLL::getPortChatList();
+}
+
+
 /** Show ChatList Widget
  * @brief initAndShowChatList
  */
