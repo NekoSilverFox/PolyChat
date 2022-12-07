@@ -9,20 +9,25 @@ CONFIG += c++17
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
+    chat.cpp \
     main.cpp \
+    uil_addchat.cpp \
     uil_chatboxwidget.cpp \
     uil_chatlist.cpp \
     uil_loginwidget.cpp
 
 HEADERS += \
     bll_polychat.h \
+    chat.h \
     dal_polychat.h \
     db_localdata.h \
+    uil_addchat.h \
     uil_chatboxwidget.h \
     uil_chatlist.h \
     uil_loginwidget.h
 
 FORMS += \
+    addchat.ui \
     chatboxwidget.ui \
     chatlist.ui \
     loginwidget.ui
