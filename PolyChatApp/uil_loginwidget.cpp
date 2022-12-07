@@ -1,8 +1,8 @@
 #include "uil_loginwidget.h"
 #include "ui_loginwidget.h"
+#include "dal_polychat.h"
 
 #include <QMessageBox>
-#include "dal_polychat.h"
 
 LoginWidget::LoginWidget(QWidget *parent) :
     QWidget(parent),

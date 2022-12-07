@@ -12,10 +12,14 @@ class ChatBoxWidget : public QWidget
     Q_OBJECT
 
 public:
-    ChatBoxWidget(QWidget* parent = nullptr);
+    ChatBoxWidget(QWidget* parent, QString name, qint16 port);
     ~ChatBoxWidget();
 
 private:
     Ui::ChatBoxWidget* ui;
+
+public:
+    QString name;
+    qint16 port;
 };
 #endif // CHATBOXWIDGET_H
