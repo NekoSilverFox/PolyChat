@@ -81,6 +81,11 @@ void ChatBoxWidget::sendUDPSignal(const SignalType type)
         udpSocketOnPortChatList->writeDatagram(resByteArray,
                                                QHostAddress(QHostAddress::Broadcast),
                                                DAL::getPortChatList());
+        qDebug() << "ChatBoxWidget send signal: SignalType::ChatExist, "
+                 << chatName_2 << chatPort_3
+                 << localUserName_4
+                 << localUserGroupNumber_5
+                 << localIpAddress_6;
         break;  // END SignalType::ChatExist
 
     case SignalType::ChatDestory:

@@ -3,6 +3,7 @@
 
 #include "bll_polychat.h"
 
+
 namespace DAL
 {
 
@@ -28,17 +29,31 @@ static bool initLocalUser(const QString name, const QString groupNumber)
 
 static QString      getLocalUserName()
 {
-    return DB::localUserName;
+    return BLL::getLocalUserName();
 }
+static void      setLocalUserName(QString localUserName)
+{
+    BLL::setLocalUserName(localUserName);
+}
+
 
 static QString      getLocalUserGroupNumber()
 {
-    return DB::localUserGroupNumber;
+    return BLL::getLocalUserGroupNumber();
 }
+static void      setLocalUserGroupNumber(QString localUserGroupNumber)
+{
+    BLL::setLocalUserGroupNumber(localUserGroupNumber);
+}
+
 
 static QHostAddress getLocalIpAddress()
 {
-    return DB::localIpAddress;
+    return BLL::getLocalIpAddress();
+}
+static void setLocalIpAddress(QHostAddress localIpAddress)
+{
+    BLL::setLocalIpAddress(localIpAddress);
 }
 
 
@@ -60,7 +75,7 @@ static void initAndShowChatList(QWidget* parent)
 /** 查找一个名称的群聊是否已经存在
  * @brief isChatExist
  * @param name
- * @return
+ * @return 存在返回 true
  */
 static bool isChatExist(const QString name)
 {
@@ -86,6 +101,12 @@ static qint16 getRandomPort()
 static Chat* getAndInsertNewChat(QString name, qint16 port, bool isOpen = true)
 {
     return BLL::getAndInsertNewChat(name, port, isOpen);
+}
+
+
+static QVector<Chat*> getVectorChatList()
+{
+    return BLL::getVectorChatList();
 }
 
 }

@@ -6,7 +6,6 @@
 #include <QTimer>
 #include <QUdpSocket>
 
-
 QT_BEGIN_NAMESPACE
 namespace Ui { class ChatBoxWidget; }
 QT_END_NAMESPACE
@@ -21,6 +20,9 @@ public:
 
     void sendUDPSignal(const SignalType type);  // 广播 UDP 消息
     QString getAndCleanMsg();
+
+private:
+    void receiveMessage();          // 接收 UDP 消息
 
 private:
     Ui::ChatBoxWidget* ui;

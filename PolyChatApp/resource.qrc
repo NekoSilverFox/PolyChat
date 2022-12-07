@@ -10,5 +10,6 @@
         <file>icons/send.png</file>
         <file>icons/color-text.png</file>
         <file>icons/save.png</file>
+        <file>icons/user-group.png</file>
     </qresource>
 </RCC>

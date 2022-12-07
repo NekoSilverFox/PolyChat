@@ -42,9 +42,9 @@ static QHostAddress getIPAddress()
  */
 static bool initLocalUser(QString name, QString groupNumber)
 {
-    DB::localUserName = name;
-    DB::localUserGroupNumber = groupNumber;
-    DB::localIpAddress = getIPAddress();
+    DB::localUserName           = name;
+    DB::localUserGroupNumber    = groupNumber;
+    DB::localIpAddress          = getIPAddress();
 
     return true;
 }
@@ -54,14 +54,28 @@ static QString      getLocalUserName()
     return DB::localUserName;
 }
 
+static void      setLocalUserName(QString localUserName)
+{
+    DB::localUserName = localUserName;
+}
+
 static QString      getLocalUserGroupNumber()
 {
     return DB::localUserGroupNumber;
 }
+static void      setLocalUserGroupNumber(QString localUserGroupNumber)
+{
+    DB::localUserGroupNumber = localUserGroupNumber;
+}
+
 
 static QHostAddress getLocalIpAddress()
 {
     return DB::localIpAddress;
+}
+static void setLocalIpAddress(QHostAddress localIpAddress)
+{
+    DB::localIpAddress = localIpAddress;
 }
 
 static qint16 getPortChatList()
@@ -74,7 +88,7 @@ static qint16 getPortChatList()
  */
 static void initAndShowChatList(QWidget* parent)
 {
-    DB::chatList = new ChatList(parent, DB::localUserName, DB::localUserGroupNumber, DB::localIpAddress.toString());
+    DB::chatList = new ChatList(parent, DB::localUserName, DB::localUserGroupNumber, DB::localIpAddress);
     DB::chatList->show();
 }
 
@@ -82,7 +96,7 @@ static void initAndShowChatList(QWidget* parent)
 /** 查找一个名称的群聊是否已经存在
  * @brief isChatExist
  * @param name
- * @return
+ * @return 存在返回 true
  */
 static bool isChatExist(const QString name)
 {
@@ -143,6 +157,11 @@ static Chat* getAndInsertNewChat(QString name, qint16 port, bool isOpen = true)
     return chat;
 }
 
+
+static QVector<Chat*> getVectorChatList()
+{
+    return DB::vChat;
+}
 
 
 }
