@@ -27,21 +27,21 @@ static bool initLocalUser(const QString name, const QString groupNumber)
 }
 
 
-static QString      getLocalUserName()
+static QString getLocalUserName()
 {
     return BLL::getLocalUserName();
 }
-static void      setLocalUserName(QString localUserName)
+static void setLocalUserName(QString localUserName)
 {
     BLL::setLocalUserName(localUserName);
 }
 
 
-static QString      getLocalUserGroupNumber()
+static QString getLocalUserGroupNumber()
 {
     return BLL::getLocalUserGroupNumber();
 }
-static void      setLocalUserGroupNumber(QString localUserGroupNumber)
+static void setLocalUserGroupNumber(QString localUserGroupNumber)
 {
     BLL::setLocalUserGroupNumber(localUserGroupNumber);
 }
@@ -69,44 +69,6 @@ static qint16 getPortChatList()
 static void initAndShowChatList(QWidget* parent)
 {
     BLL::initAndShowChatList(parent);
-}
-
-
-/** 查找一个名称的群聊是否已经存在
- * @brief isChatExist
- * @param name
- * @return 存在返回 true
- */
-static bool isChatExist(const QString name)
-{
-    return BLL::isChatExist(name);
-}
-
-/** 获取一个不重复的随机端口号
- * @brief getRandomPort
- * @return
- */
-static qint16 getRandomPort()
-{
-    return BLL::getRandomPort();
-}
-
-/** 创建并插入新的聊天窗口信息
- * @brief getAndInsertNewChat
- * @param name
- * @param port
- * @param isOpen
- * @return
- */
-static Chat* getAndInsertNewChat(QString name, qint16 port, bool isOpen = true)
-{
-    return BLL::getAndInsertNewChat(name, port, isOpen);
-}
-
-
-static QVector<Chat*> getVectorChatList()
-{
-    return BLL::getVectorChatList();
 }
 
 }

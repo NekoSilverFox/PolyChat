@@ -5,6 +5,9 @@
 #include "dal_polychat.h"
 #include "signaltype.h"
 
+#include "uil_chatboxwidget.h"
+
+#include <QMessageBox>
 
 ChatList::ChatList(QWidget* parent, QString localUserName, QString localUserGroupNumber, QHostAddress localIpAddress) :
     QWidget(parent),
@@ -13,10 +16,7 @@ ChatList::ChatList(QWidget* parent, QString localUserName, QString localUserGrou
     ui->setupUi(this);
 
 
-//    DAL::setLocalUserName(localUserName);
-//    DAL::setLocalUserGroupNumber(localUserGroupNumber);
-//    DAL::setLocalIpAddress(localIpAddress);
-    qDebug() << "IN ChatList::ChatList:" <<  DB::localUserName <<  DB::localUserGroupNumber <<  DB::localIpAddress;
+    qDebug() << "IN ChatList::ChatList:" <<  ::localUserName <<  ::localUserGroupNumber <<  ::localIpAddress;
 
     /* Init data on UI */
     ui->lbName->setText(localUserName);
@@ -30,13 +30,33 @@ ChatList::ChatList(QWidget* parent, QString localUserName, QString localUserGrou
     connect(udpSocket, &QUdpSocket::readyRead,
             this, &ChatList::receiveMessage);
 
+
+    /* 点击添加群聊按钮，会返回一个要创建群聊名称的信号 */
     connect(ui->btnNewChat, &QToolButton::clicked,
             this, [=](){
         AddChat* addChat = new AddChat(nullptr);
         addChat->setAttribute(Qt::WA_DeleteOnClose);
         addChat->setWindowModality(Qt::ApplicationModal);
         addChat->show();
+
+        connect(addChat, &AddChat::addNewChat,
+                this, [=](QString name){
+
+                if (isChatExist(name))
+                {
+                    QMessageBox::warning(this, "Warning", "Chat with the same name already exists");
+                    return;
+                }
+
+            /* 条件满足，添加新的聊天窗口 */
+            Chat* chat = getAndInsertNewChat(name, getRandomPort(), true);  // 添加到本地[记录-Chat]
+            ChatBoxWidget* chatBoxWidget = new ChatBoxWidget(nullptr, chat->name, chat->port);
+            chatBoxWidget->setAttribute(Qt::WA_DeleteOnClose);
+            chatBoxWidget->show();
+
+        });
     });
+
 }
 
 ChatList::~ChatList()
@@ -103,13 +123,13 @@ void ChatList::receiveMessage()
     switch (signalType_1)
     {
     case SignalType::ChatExist:
-        if (DAL::isChatExist(chatName_2)) return;
+        if (isChatExist(chatName_2)) return;
 
     {
         bool isOpen = false;
         if (localUserName_4 == DAL::getLocalUserName()) isOpen = true;
 
-        DAL::getAndInsertNewChat(chatName_2, chatPort_3, isOpen);
+        getAndInsertNewChat(chatName_2, chatPort_3, isOpen);
     }
         break;
 
@@ -121,3 +141,62 @@ void ChatList::receiveMessage()
 
 
 }
+
+/** 查找一个名称的群聊是否已经存在
+ * @brief isChatExist
+ * @param name
+ * @return 存在返回 true
+ */
+bool ChatList::isChatExist(const QString name)
+{
+    for (auto i : vChat)
+    {
+        if (name == i->name) return true;
+    }
+
+    return false;
+}
+
+/** 查找一个端口号是否被占用
+ * @brief isPortExist
+ * @param port
+ * @return
+ */
+bool ChatList::isPortExist(const qint16 port)
+{
+    if (vChat.isEmpty()) return false;
+    for (auto i : vChat)
+    {
+        if (port == i->port || port == PORT_CHAT_LIST) return true;
+    }
+
+    return false;
+}
+
+/** 获取一个不重复的随机端口号
+ * @brief getRandomPort
+ * @return
+ */
+qint16 ChatList::getRandomPort()
+{
+    while (true)
+    {
+        qint16 port = QRandomGenerator::global()->bounded(PORT_MIN, PORT_MAX);
+        if (!isPortExist(port)) return port;
+    }
+}
+
+/** 创建并插入新的聊天窗口信息
+ * @brief getAndInsertNewChat
+ * @param name
+ * @param port
+ * @param isOpen
+ * @return
+ */
+Chat* ChatList::getAndInsertNewChat(QString name, qint16 port, bool isOpen)
+{
+    Chat* chat = new Chat(name, port, isOpen);
+    vChat.push_back(chat);
+    return chat;
+}
+

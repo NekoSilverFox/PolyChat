@@ -4,6 +4,11 @@
 #include <uil_loginwidget.h>
 #include "uil_chatlist.h"
 
+#include "db_localdata.h"
+QString      localUserName           = "";               // User Name (get in user login)
+QString      localUserGroupNumber    = "";               // Group number (get in user login)
+QHostAddress localIpAddress          = QHostAddress();
+ChatList*    chatList                = nullptr;          // Widget ChatList (Only one)
 
 int main(int argc, char *argv[])
 {

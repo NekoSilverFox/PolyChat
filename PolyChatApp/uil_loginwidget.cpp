@@ -34,9 +34,9 @@ void LoginWidget::userLogin()
     }
     this->close();
 
-    qDebug() << "IN LoginWidget::userLogin:" <<  DB::localUserName <<  DB::localUserGroupNumber <<  DB::localIpAddress;
+    qDebug() << "IN LoginWidget::userLogin:" <<  localUserName <<  localUserGroupNumber <<  localIpAddress;
     DAL::initAndShowChatList(nullptr);  // If user login, then show ChatList. After this `ChatList` Widget is main windows
-    qDebug() << "IN LoginWidget::userLogin222:" <<  DB::localUserName <<  DB::localUserGroupNumber <<  DB::localIpAddress;
+    qDebug() << "IN LoginWidget::userLogin222:" <<  localUserName <<  localUserGroupNumber <<  localIpAddress;
 }
 
 

@@ -7,27 +7,15 @@
 #include "uil_chatlist.h"
 #include "chat.h"
 
-extern QString      localUserName;
-extern QString      localUserGroupNumber;
-extern QHostAddress localIpAddress      ;
-extern ChatList*    chatList            ;
-extern QVector<Chat*> vChat;
-
-namespace DB
-{
-
 static const qint16 PORT_CHAT_LIST          = 8888;
 static const qint16 PORT_MIN                = 1;
 static const qint16 PORT_MAX                = 32767;
 
-//static QString      localUserName           = "";               // User Name (get in user login)
-//static QString      localUserGroupNumber    = "";               // Group number (get in user login)
-//static QHostAddress localIpAddress          = QHostAddress();
 
-//static ChatList*    chatList                = nullptr;          // Widget ChatList (Only one)
-//static QVector<Chat*> vChat;
-}
-
+extern QString      localUserName;
+extern QString      localUserGroupNumber;
+extern QHostAddress localIpAddress      ;
+extern ChatList*    chatList            ;
 
 
 #endif // DB_LOCALDATA_H
