@@ -23,6 +23,7 @@ public:
 private:
     void receiveMessage();  // 接收 UDP 消息
     void addBtnChat(QString chatName, qint16 chatPort, bool isOpen);  // 更新窗口中的聊天列表
+    bool isBtnChatInVector(QString name);
 
     bool isPortExist(const qint16 port);  // 查找一个端口号是否被占用
     qint16 getRandomPort(); //获取一个不重复的随机端口号
@@ -33,9 +34,10 @@ private:
     Ui::ChatList *ui;
 
     QUdpSocket* udpSocket;
-    QVector<Chat*> vChat;
-    QVector<QToolButton*> vBtnChat;  // 窗口中的聊天列表
-    QVector<bool> vIsOpenChat;
+    QVector<QPair<Chat*, QToolButton*>> vPair_OChat_BtnChat;  // 第一个是 Chat 对象，第二个是 按钮对象
+//    QVector<Chat*> vChat;
+//    QVector<QToolButton*> vBtnChat;  // 窗口中的聊天列表
+//    QVector<bool> vIsOpenChat;
 };
 
 #endif // UIL_CHATLIST_H

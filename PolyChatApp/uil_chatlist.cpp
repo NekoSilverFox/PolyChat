@@ -79,7 +79,7 @@ void ChatList::addBtnChat(QString chatName, qint16 chatPort, bool isOpen)
     btn->setFixedSize(220, 50);
 
     vBtnChat.push_back(btn);
-    vIsOpenChat.push_back(isOpen);
+//    vIsOpenChat.push_back(isOpen);
 
     ui->vLayout->addWidget(btn); // 加到垂直布局中
 }
@@ -88,6 +88,7 @@ void ChatList::addBtnChat(QString chatName, qint16 chatPort, bool isOpen)
 /* 接收和解析 UDP 消息 */
 void ChatList::receiveMessage()
 {
+    qDebug() << "ChatList::receiveMessage : Msg get!!!!";
     /* 拿到数据报文 */
     qint64 size = udpSocket->pendingDatagramSize();
     QByteArray byteArrayGetUDP = QByteArray(size, 0);
@@ -122,8 +123,14 @@ void ChatList::receiveMessage()
 
     switch (signalType_1)
     {
+    /* 接受到 ChatBox 存在的信号 */
     case SignalType::ChatExist:
-        if (isChatExist(chatName_2)) return;
+        /* 存在于本地记录，但是没有 ChatList 还没有按钮 */
+        if (isChatExist(chatName_2) && !isBtnChatInVector(chatName_2))
+        {
+            qDebug() <<"return";
+            return;
+        }
 
     {
         bool isOpen = false;
@@ -139,7 +146,11 @@ void ChatList::receiveMessage()
         break;
     }
 
-
+    qDebug() << "ChaList receiveMessage signal: SignalType::" << signalType_1
+             << chatName_2 << chatPort_3
+             << localUserName_4
+             << localUserGroupNumber_5
+             << localIpAddress_6;
 }
 
 /** 查找一个名称的群聊是否已经存在
@@ -154,6 +165,20 @@ bool ChatList::isChatExist(const QString name)
         if (name == i->name) return true;
     }
 
+    return false;
+}
+
+/** 按钮是否存在于 this 的 vBtnChat 中
+ * @brief ChatList::isBtnChatInVector
+ * @param name
+ * @return
+ */
+bool ChatList::isBtnChatInVector(QString name)
+{
+    for (auto i: this->vBtnChat)
+    {
+        if (name == i->text()) return true;
+    }
     return false;
 }
 
