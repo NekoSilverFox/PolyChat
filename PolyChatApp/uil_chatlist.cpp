@@ -14,9 +14,9 @@ ChatList::ChatList(QWidget* parent, QString localUserName, QString localUserGrou
     ui(new Ui::ChatList)
 {
     ui->setupUi(this);
+    this->setWindowTitle("Chat list");
+    this->setWindowIcon(QIcon(":/icon/icons/logo_fox.png"));
 
-
-    qDebug() << "IN ChatList::ChatList:" <<  ::localUserName <<  ::localUserGroupNumber <<  ::localIpAddress;
 
     /* Init data on UI */
     ui->lbName->setText(localUserName);
@@ -35,6 +35,8 @@ ChatList::ChatList(QWidget* parent, QString localUserName, QString localUserGrou
     connect(ui->btnNewChat, &QToolButton::clicked,
             this, [=](){
         AddChat* addChat = new AddChat(nullptr);
+        addChat->setWindowTitle("Add new chat");
+        addChat->setWindowIcon(QIcon(":/icon/icons/register-add-friend.png"));
         addChat->setAttribute(Qt::WA_DeleteOnClose);
         addChat->setWindowModality(Qt::ApplicationModal);
         addChat->show();
@@ -58,8 +60,11 @@ ChatList::ChatList(QWidget* parent, QString localUserName, QString localUserGrou
                 /* 条件满足，添加新的聊天窗口 */
                 ChatBoxWidget* chatBoxWidget = new ChatBoxWidget(nullptr, name, port);
                 chatBoxWidget->setAttribute(Qt::WA_DeleteOnClose);
+                chatBoxWidget->setWindowIcon(QIcon(":/icon/icons/user-group.png"));
                 chatBoxWidget->show();
-
+                /* 关闭聊天对话框 重置是否打开的数组。（如果接收到窗口关闭信号，就 XXX） */
+                connect(chatBoxWidget, &ChatBoxWidget::signalClose,
+                        this, [=](){ setChatState(name, false); });
         });
     });
 
@@ -84,7 +89,6 @@ void ChatList::addBtnChatInLayout(QToolButton* btn)
 /* 接收和解析 UDP 消息 */
 void ChatList::receiveMessage()
 {
-    qDebug() << "ChatList::receiveMessage : Msg get!!!!";
     /* 拿到数据报文 */
     qint64 size = udpSocket->pendingDatagramSize();
     QByteArray byteArrayGetUDP = QByteArray(size, 0);
@@ -105,7 +109,7 @@ void ChatList::receiveMessage()
     QString         localUserName_4       ;
     QString         localUserGroupNumber_5;
     QHostAddress    localIpAddress_6      ;
-    QString         msg_7;
+    QString         msg_7                 ;
 
     QDataStream dataStream(&byteArrayGetUDP, QIODevice::ReadOnly);
 
@@ -133,17 +137,21 @@ void ChatList::receiveMessage()
     }
         break;
 
-    case SignalType::ChatDestory: break;
+    case SignalType::ChatDestory:
+        /* 移除本地记录及按钮 */
+        for (int i = 0; i < this->vPair_OChat_BtnChat.size(); i++)
+        {
+            if (chatName_2 == this->vPair_OChat_BtnChat.at(i).first->name)
+            {
+                this->vPair_OChat_BtnChat.at(i).second->close();
+                this->vPair_OChat_BtnChat.removeAt(i);
+            }
+        }
+        break;
 
     default:
         break;
     }
-
-    qDebug() << "ChaList receiveMessage signal: SignalType::" << signalType_1
-             << chatName_2 << chatPort_3
-             << localUserName_4
-             << localUserGroupNumber_5
-             << localIpAddress_6;
 }
 
 /** 查找一个名称的群聊是否已经存在
@@ -229,10 +237,10 @@ QToolButton* ChatList::getNewBtn(QString btn_text, qint16 port, bool isOpen)
     QToolButton* btn = new QToolButton;
 //    btn->setText(QString("[%1] %2").arg(chatPort).arg(chatName));
     btn->setText(btn_text);
-
     btn->setIcon(QIcon(":/icon/icons/user-group.png"));
     btn->setAutoRaise(true);  // 按钮透明风格
     btn->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);  // 设置显示图标和文字
+    btn->setAttribute(Qt::WA_DeleteOnClose);
     btn->setFixedSize(220, 50);
 
     /* 按钮添加信号和槽 */

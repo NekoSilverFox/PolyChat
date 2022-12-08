@@ -11,5 +11,9 @@
         <file>icons/color-text.png</file>
         <file>icons/save.png</file>
         <file>icons/user-group.png</file>
+        <file>icons/logo.png</file>
+        <file>icons/user-info.png</file>
+        <file>icons/register-add-friend.png</file>
+        <file>icons/logo_fox.png</file>
     </qresource>
 </RCC>

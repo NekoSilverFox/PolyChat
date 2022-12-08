@@ -175,7 +175,7 @@ void ChatBoxWidget::receiveUDPMessage()
         break;
 
     case SignalType::UserJoin:
-        userJoin(localUserName_4);
+        userJoin(localUserName_4, localUserGroupNumber_5, localIpAddress_6);
         break;
 
     case SignalType::UserLeft:
@@ -188,14 +188,15 @@ void ChatBoxWidget::receiveUDPMessage()
 }
 
 /* 处理用户加入 */
-void ChatBoxWidget::userJoin(QString name)
+void ChatBoxWidget::userJoin(QString name, QString groupNumber, QHostAddress ip)
 {
     if (ui->tbUser->findItems(name, Qt::MatchExactly).isEmpty())
     {
         /* 更新用户列表 */
-        QTableWidgetItem* user = new QTableWidgetItem(name);
         ui->tbUser->insertRow(0);
-        ui->tbUser->setItem(0, 0, user);
+        ui->tbUser->setItem(0, 0, new QTableWidgetItem(name));
+        ui->tbUser->setItem(0, 1, new QTableWidgetItem(groupNumber));
+        ui->tbUser->setItem(0, 2, new QTableWidgetItem(ip.toString()));
 
         /* 追加聊天记录 */
         ui->msgTextBrowser->setTextColor(Qt::gray);
@@ -243,10 +244,12 @@ QString ChatBoxWidget::getAndCleanMsg()
 void ChatBoxWidget::closeEvent(QCloseEvent* event)
 {
     emit this->signalClose();
+    sendUDPSignal(SignalType::UserLeft);
 
-
-
-    sendUDPSignal(SignalType::UserLeft);  // TODO 如果是最后一个用户则应该发出销毁指令
+    if (1 == ui->tbUser->rowCount())
+    {
+        sendUDPSignal(SignalType::ChatDestory);
+    }  // TODO
 
     udpSocketOnPortChatList->close();  // 关闭套接字
     udpSocketOnPortChatList->destroyed();
