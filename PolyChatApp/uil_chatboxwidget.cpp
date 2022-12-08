@@ -3,6 +3,7 @@
 #include "dal_polychat.h"
 #include <QDataStream>
 #include <QDateTime>
+#include <QColorDialog>
 
 ChatBoxWidget::ChatBoxWidget(QWidget* parent, QString name, qint16 port)
     : QWidget(parent)
@@ -43,6 +44,49 @@ ChatBoxWidget::ChatBoxWidget(QWidget* parent, QString name, qint16 port)
     /* 点击退出按钮，关闭窗口 */
     connect(ui->btnExit, &QPushButton::clicked,
             this, [=](){this->close();});
+
+    //////////////////////////////////////////////// 辅助功能 ////////////////////////////////////////////////
+    /* 字体 */
+    connect(ui->cbxFontType, &QFontComboBox::currentFontChanged,
+            [=](const QFont& font){
+        ui->msgTextEdit->setCurrentFont(font);
+        ui->msgTextEdit->setFocus();
+    });
+
+    /* 字号 */
+    void(QComboBox::* cbxSingal)(const QString &text) = &QComboBox::currentTextChanged;
+    connect(ui->cbxFontSize, cbxSingal,
+            [=](const QString &text){
+        ui->msgTextEdit->setFontPointSize(text.toDouble());
+        ui->msgTextEdit->setFocus();
+    });
+
+    /* 加粗 */
+    connect(ui->btnBold, &QToolButton::clicked,
+            [=](bool isCheck){
+        if (isCheck) ui->msgTextEdit->setFontWeight(QFont::Bold);
+        else ui->msgTextEdit->setFontWeight(QFont::Normal);
+    });
+
+    /* 倾斜 */
+    connect(ui->btnItalic, &QToolButton::clicked,
+            [=](bool isCheck){
+        ui->msgTextEdit->setFontItalic(isCheck);
+    });
+
+
+    /* 下划线 */
+    connect(ui->btnUnderLine, &QToolButton::clicked,
+            [=](bool isCheck){
+        ui->msgTextEdit->setFontUnderline(isCheck);
+    });
+
+    /* 更改颜色 */
+    connect(ui->btnColor, &QToolButton::clicked,
+            [=](){
+        QColor color = QColorDialog::getColor(Qt::black);
+        ui->msgTextEdit->setTextColor(color);
+    });
 }
 
 ChatBoxWidget::~ChatBoxWidget()
@@ -244,12 +288,15 @@ QString ChatBoxWidget::getAndCleanMsg()
 void ChatBoxWidget::closeEvent(QCloseEvent* event)
 {
     emit this->signalClose();
-    sendUDPSignal(SignalType::UserLeft);
 
     if (1 == ui->tbUser->rowCount())
     {
         sendUDPSignal(SignalType::ChatDestory);
-    }  // TODO
+    }
+    else
+    {
+        sendUDPSignal(SignalType::UserLeft);
+    }
 
     udpSocketOnPortChatList->close();  // 关闭套接字
     udpSocketOnPortChatList->destroyed();

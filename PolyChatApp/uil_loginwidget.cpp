@@ -18,6 +18,17 @@ LoginWidget::LoginWidget(QWidget *parent) :
     connect(ui->btnLogin, &QPushButton::clicked,
             this, &LoginWidget::userLogin);
 
+    connect(ui->btnInfo, &QPushButton::clicked,
+            this, [=](){
+        QMessageBox::information(this, "About Polychat",
+                                 "Project SPbSTU<br><br>"
+                                 "Source Code:<br>"
+                                 "<a href=\"https://github.com/NekoSilverFox/PolyChat\">[Github] PolyChat</a>"
+                                 "<br><br>"
+                                 "License: Apache License 2.0"
+                                 "<br><br>"
+                                 "Made on Qt 6.2");
+    });
 }
 
 
