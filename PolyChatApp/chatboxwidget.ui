@@ -149,6 +149,9 @@
                 <height>20</height>
                </size>
               </property>
+              <property name="shortcut">
+               <string>Ctrl+C</string>
+              </property>
               <property name="checkable">
                <bool>true</bool>
               </property>
@@ -172,6 +175,9 @@
                 <height>20</height>
                </size>
               </property>
+              <property name="shortcut">
+               <string>Ctrl+I</string>
+              </property>
               <property name="checkable">
                <bool>true</bool>
               </property>
@@ -194,6 +200,9 @@
                 <width>20</width>
                 <height>20</height>
                </size>
+              </property>
+              <property name="shortcut">
+               <string>Ctrl+U</string>
               </property>
               <property name="checkable">
                <bool>true</bool>
@@ -237,6 +246,9 @@
                 <width>20</width>
                 <height>20</height>
                </size>
+              </property>
+              <property name="shortcut">
+               <string>Ctrl+S</string>
               </property>
              </widget>
             </item>
@@ -380,6 +392,9 @@
                 <width>16</width>
                 <height>16</height>
                </size>
+              </property>
+              <property name="shortcut">
+               <string>Return</string>
               </property>
              </widget>
             </item>

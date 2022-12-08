@@ -3,7 +3,11 @@
 #include "dal_polychat.h"
 #include <QDataStream>
 #include <QDateTime>
+#include <QFile>
+#include <QTextStream>
+#include <QMessageBox>
 #include <QColorDialog>
+#include <QFileDialog>
 
 ChatBoxWidget::ChatBoxWidget(QWidget* parent, QString name, qint16 port)
     : QWidget(parent)
@@ -86,6 +90,43 @@ ChatBoxWidget::ChatBoxWidget(QWidget* parent, QString name, qint16 port)
             [=](){
         QColor color = QColorDialog::getColor(Qt::black);
         ui->msgTextEdit->setTextColor(color);
+    });
+
+    /* 清空聊天 */
+    connect(ui->btnClean, &QToolButton::clicked,
+            this, [=](){
+
+        if (QMessageBox::Ok ==
+                QMessageBox::question(this,
+                                      "Clean all message",
+                                      "Are you sure you want to clear all messages?",
+                                      QMessageBox::Ok | QMessageBox::Cancel,
+                                      QMessageBox::Cancel))
+        {
+            ui->msgTextBrowser->clear();
+        }});
+
+    /* 保存聊天记录 */
+    connect(ui->btnSave, &QToolButton::clicked,
+            this, [=](){
+        if (ui->msgTextBrowser->document()->isEmpty())
+        {
+            QMessageBox::warning(this, "Warning", "Can not save!\nMessage box is empty");
+            return;
+        }
+
+        QString path = QFileDialog::getSaveFileName(this, "Save file", "PolyChat-MsgLog", "(*.txt)");
+        if (path.isEmpty())
+        {
+            QMessageBox::warning(this, "Warning", "Path can not be empty");
+            return;
+        }
+
+        QFile file(path);
+        file.open(QIODevice::WriteOnly | QIODevice::Text);  // 支持换行
+        QTextStream textStream(&file);
+        textStream << ui->msgTextBrowser->toPlainText();
+        file.close();
     });
 }
 
