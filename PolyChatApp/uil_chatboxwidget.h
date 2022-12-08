@@ -23,11 +23,14 @@ public:
 
     virtual void closeEvent(QCloseEvent*);  // 【重写】触发关闭事件
 
+    void userJoin(QString name);  // 处理用户加入
+    void userLeft(QString name, QString time);  // 处理用户离开
+
 signals:
     void signalClose();  // 【自定义信号】如果关闭窗口则发送关闭信号
 
 private:
-    void receiveMessage();          // 接收 UDP 消息
+    void receiveUDPMessage();          // 接收 UDP 消息
 
 private:
     Ui::ChatBoxWidget* ui;
