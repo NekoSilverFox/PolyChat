@@ -136,3 +136,20 @@ QString ChatBoxWidget::getAndCleanMsg()
 
     return str;
 }
+
+
+/* 触发关闭事件 */
+void ChatBoxWidget::closeEvent(QCloseEvent* event)
+{
+    emit this->signalClose();
+
+    sendUDPSignal(SignalType::UserLeft);  // TODO 如果是最后一个用户则应该发出销毁指令
+
+    udpSocketOnPortChatList->close();  // 关闭套接字
+    udpSocketOnPortChatList->destroyed();
+
+    udpSocketOnPortChatBox->close();
+    udpSocketOnPortChatBox->destroyed();
+
+    QWidget::closeEvent(event);
+}
