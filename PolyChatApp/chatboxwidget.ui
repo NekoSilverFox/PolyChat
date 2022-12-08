@@ -150,7 +150,7 @@
                </size>
               </property>
               <property name="shortcut">
-               <string>Ctrl+C</string>
+               <string>Ctrl+B</string>
               </property>
               <property name="checkable">
                <bool>true</bool>
@@ -270,6 +270,9 @@
                 <height>20</height>
                </size>
               </property>
+              <property name="shortcut">
+               <string>Ctrl+Shift+C</string>
+              </property>
              </widget>
             </item>
            </layout>
@@ -326,6 +329,9 @@
               </property>
               <property name="text">
                <string>Exit</string>
+              </property>
+              <property name="shortcut">
+               <string>Ctrl+Shift+Esc</string>
               </property>
              </widget>
             </item>
