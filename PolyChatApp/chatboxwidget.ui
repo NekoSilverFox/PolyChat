@@ -86,6 +86,9 @@
             </item>
             <item>
              <widget class="QComboBox" name="cbxFontSize">
+              <property name="currentIndex">
+               <number>3</number>
+              </property>
               <item>
                <property name="text">
                 <string>8</string>
@@ -410,6 +413,12 @@
        <height>0</height>
       </size>
      </property>
+     <property name="maximumSize">
+      <size>
+       <width>350</width>
+       <height>16777215</height>
+      </size>
+     </property>
      <property name="selectionMode">
       <enum>QAbstractItemView::NoSelection</enum>
      </property>
@@ -419,6 +428,16 @@
      <column>
       <property name="text">
        <string>Name</string>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>Group</string>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>IP</string>
       </property>
      </column>
     </widget>
