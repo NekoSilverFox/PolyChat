@@ -118,7 +118,7 @@ ChatBoxWidget::ChatBoxWidget(QWidget* parent, QString name, qint16 port)
         QString path = QFileDialog::getSaveFileName(this, "Save file", "PolyChat-MsgLog", "(*.txt)");
         if (path.isEmpty())
         {
-            QMessageBox::warning(this, "Warning", "Path can not be empty");
+            QMessageBox::warning(this, "Warning", "Save cancel");
             return;
         }
 
