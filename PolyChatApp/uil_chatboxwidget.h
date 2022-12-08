@@ -21,6 +21,11 @@ public:
     void sendUDPSignal(const SignalType type);  // 广播 UDP 消息
     QString getAndCleanMsg();
 
+    virtual void closeEvent(QCloseEvent*);  // 【重写】触发关闭事件
+
+signals:
+    void signalClose();  // 【自定义信号】如果关闭窗口则发送关闭信号
+
 private:
     void receiveMessage();          // 接收 UDP 消息
 

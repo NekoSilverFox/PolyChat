@@ -206,20 +206,6 @@ qint16 ChatList::getRandomPort()
     }
 }
 
-/** 创建并插入新的聊天窗口信息
- * @brief getAndInsertNewChat
- * @param name
- * @param port
- * @param isOpen
- * @return
- */
-Chat* ChatList::getAndInsertNewChat(QString name, qint16 port, bool isOpen, QToolButton* btnChat)
-{
-    Chat* chat = new Chat(name, port, isOpen);
-    vPair_OChat_BtnChat.push_back(QPair<Chat*, QToolButton*>(chat, btnChat));
-    return chat;
-}
-
 
 bool ChatList::isChatOpen(QString name)
 {
@@ -249,8 +235,53 @@ QToolButton* ChatList::getNewBtn(QString btn_text, qint16 port, bool isOpen)
     btn->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);  // 设置显示图标和文字
     btn->setFixedSize(220, 50);
 
+    /* 按钮添加信号和槽 */
+    connect(btn, &QToolButton::clicked,
+            [=](){
+                /* 如果窗口已经被打开，就不要再执行 */
+                if (isChatOpen(btn_text))
+                {
+                    QMessageBox::warning(this, "Warning", QString("Chat %1 already open").arg(btn_text));
+                    return;
+                }
+
+                /* 条件满足，添加新的聊天窗口 */
+                ChatBoxWidget* chatBoxWidget = new ChatBoxWidget(nullptr, btn_text, port);
+                chatBoxWidget->setAttribute(Qt::WA_DeleteOnClose);
+                chatBoxWidget->setWindowIcon(QIcon(":/icon/icons/user-group.png"));
+                chatBoxWidget->show();
+
+                setChatState(btn_text, true);
+
+                /* 关闭聊天对话框 重置是否打开的数组。（如果接收到窗口关闭信号，就 XXX） */
+                connect(chatBoxWidget, &ChatBoxWidget::signalClose,
+                        this, [=](){ setChatState(btn_text, false); });
+    });
+
     return btn;
 }
+
+
+/** 设置聊天窗口为打开或者关闭
+ * @brief setChatState
+ * @param name
+ * @param state
+ * @return 如果设置成功返回 true，如果不成功返回 false
+ */
+bool ChatList::setChatState(QString name, bool state)
+{
+    for (auto i : this->vPair_OChat_BtnChat)
+    {
+        if (name == i.first->name)
+        {
+            i.first->isOpen = state;
+            return true;
+        }
+    }
+
+    return false;
+}
+
 
 
 bool ChatList::updateBtnInvPair(QString name, QToolButton* btn)
