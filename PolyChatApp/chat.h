@@ -2,6 +2,7 @@
 #define CHAT_H
 
 #include <QString>
+#include <QToolButton>
 
 class Chat
 {

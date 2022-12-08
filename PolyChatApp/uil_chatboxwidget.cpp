@@ -12,11 +12,13 @@ ChatBoxWidget::ChatBoxWidget(QWidget* parent, QString name, qint16 port)
     ui->setupUi(this);
     this->setWindowTitle(QString("[Chat] %1 on port %2").arg(name).arg(port));
 
+    /* 对所有窗口的同样地址广播 8888 (告诉 ChatList 本窗口存在) */
     this->udpSocketOnPortChatList = new QUdpSocket(this);
     this->udpSocketOnPortChatList->bind(DAL::getPortChatList(),
                                         QUdpSocket::ShareAddress | QUdpSocket::ReuseAddressHint);  // 共享地址 + 断线重连
 
 
+    /* 对所有本窗口的地址广播 自己的随机端口 */
     this->udpSocketOnPortChatBox = new QUdpSocket(this);
     this->udpSocketOnPortChatBox->bind(this->port,
                                        QUdpSocket::ShareAddress | QUdpSocket::ReuseAddressHint);  // 共享地址 + 断线重连
@@ -77,19 +79,14 @@ void ChatBoxWidget::sendUDPSignal(const SignalType type)
     switch (type) {
 
     case SignalType::ChatExist:
-        dataStream << "NONE";
+        dataStream << "SignalType::ChatExist";
         udpSocketOnPortChatList->writeDatagram(resByteArray,
                                                QHostAddress(QHostAddress::Broadcast),
                                                DAL::getPortChatList());
-        qDebug() << "ChatBoxWidget send signal: SignalType::ChatExist, "
-                 << chatName_2 << chatPort_3
-                 << localUserName_4
-                 << localUserGroupNumber_5
-                 << localIpAddress_6;
         break;  // END SignalType::ChatExist
 
     case SignalType::ChatDestory:
-        dataStream << "NONE";
+        dataStream << "SignalType::ChatDestory";
         udpSocketOnPortChatList->writeDatagram(resByteArray,
                                                QHostAddress(QHostAddress::Broadcast),
                                                DAL::getPortChatList());
@@ -119,6 +116,13 @@ void ChatBoxWidget::sendUDPSignal(const SignalType type)
     default:
         break;
     }
+
+    qDebug() << "ChatBoxWidget send signal on port:" << udpSocketOnPortChatList
+             << "SignalType::" << type
+             << chatName_2 << chatPort_3
+             << localUserName_4
+             << localUserGroupNumber_5
+             << localIpAddress_6;
 }
 
 
