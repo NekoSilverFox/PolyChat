@@ -1,7 +1,10 @@
 #ifndef CHATBOXWIDGET_H
 #define CHATBOXWIDGET_H
+#include "signaltype.h"
 
 #include <QWidget>
+#include <QTimer>
+#include <QUdpSocket>
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class ChatBoxWidget; }
@@ -15,10 +18,17 @@ public:
     ChatBoxWidget(QWidget* parent, QString name, qint16 port);
     ~ChatBoxWidget();
 
+    void sendUDPSignal(const SignalType type);  // 广播 UDP 消息
+    QString getAndCleanMsg();
+
+private:
+    void receiveMessage();          // 接收 UDP 消息
+
 private:
     Ui::ChatBoxWidget* ui;
 
-public:
+    QUdpSocket* udpSocketOnPortChatList;
+    QUdpSocket* udpSocketOnPortChatBox;
     QString name;
     qint16 port;
 };

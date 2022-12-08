@@ -15,6 +15,10 @@ public:
     explicit AddChat(QWidget *parent = nullptr);
     ~AddChat();
 
+signals:
+    void addNewChat(QString name);
+
+
 private:
     Ui::AddChat *ui;
 };
