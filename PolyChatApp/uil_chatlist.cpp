@@ -48,11 +48,17 @@ ChatList::ChatList(QWidget* parent, QString localUserName, QString localUserGrou
                     return;
                 }
 
-            /* 条件满足，添加新的聊天窗口 */
-            Chat* chat = getAndInsertNewChat(name, getRandomPort(), true);  // 添加到本地[记录-Chat]
-            ChatBoxWidget* chatBoxWidget = new ChatBoxWidget(nullptr, chat->name, chat->port);
-            chatBoxWidget->setAttribute(Qt::WA_DeleteOnClose);
-            chatBoxWidget->show();
+                /* 条件满足，创建群聊，并且把他放入到本地记录 */
+                qint16 port = getRandomPort();
+                QToolButton* btn = getNewBtn(name, port, true);
+                Chat* chat = new Chat(name, port, true);
+                this->vPair_OChat_BtnChat.push_back(QPair<Chat*, QToolButton*>(chat, btn));
+                addBtnChatInLayout(btn);
+
+                /* 条件满足，添加新的聊天窗口 */
+                ChatBoxWidget* chatBoxWidget = new ChatBoxWidget(nullptr, name, port);
+                chatBoxWidget->setAttribute(Qt::WA_DeleteOnClose);
+                chatBoxWidget->show();
 
         });
     });
@@ -67,19 +73,9 @@ ChatList::~ChatList()
 /** 更新窗口中的聊天列表
  * @brief addBtnChat
  */
-void ChatList::addBtnChat(QString chatName, qint16 chatPort, bool isOpen)
+void ChatList::addBtnChatInLayout(QToolButton* btn)
 {
-    /* 设置头像 */
-    QToolButton* btn = new QToolButton;
-    btn->setText(QString("[%1] %2").arg(chatPort).arg(chatName));
-
-    btn->setIcon(QIcon(":/icon/icons/user-group.png"));
-    btn->setAutoRaise(true);  // 按钮透明风格
-    btn->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);  // 设置显示图标和文字
-    btn->setFixedSize(220, 50);
-
-    vBtnChat.push_back(btn);
-//    vIsOpenChat.push_back(isOpen);
+    if (nullptr == btn) return;
 
     ui->vLayout->addWidget(btn); // 加到垂直布局中
 }
@@ -125,18 +121,15 @@ void ChatList::receiveMessage()
     {
     /* 接受到 ChatBox 存在的信号 */
     case SignalType::ChatExist:
-        /* 存在于本地记录，但是没有 ChatList 还没有按钮 */
-        if (isChatExist(chatName_2) && !isBtnChatInVector(chatName_2))
-        {
-            qDebug() <<"return";
-            return;
-        }
-
     {
-        bool isOpen = false;
-        if (localUserName_4 == DAL::getLocalUserName()) isOpen = true;
-
-        getAndInsertNewChat(chatName_2, chatPort_3, isOpen);
+        /* 如果不存在于本地记录，说明是在局域网上的其他群聊，在本窗口里肯定也没按钮 */
+        if (!isChatExist(chatName_2))
+        {
+            Chat* chat = new Chat(chatName_2, chatPort_3, false);
+            QToolButton* btn = getNewBtn(chatName_2, chatPort_3, false);
+            this->vPair_OChat_BtnChat.push_back(QPair<Chat*, QToolButton*>(chat, btn));
+            addBtnChatInLayout(btn);
+        }
     }
         break;
 
@@ -160,24 +153,26 @@ void ChatList::receiveMessage()
  */
 bool ChatList::isChatExist(const QString name)
 {
-    for (auto i : vChat)
+    for (auto i : this->vPair_OChat_BtnChat)
     {
-        if (name == i->name) return true;
+        if (name == i.first->name) return true;
     }
 
     return false;
 }
 
-/** 按钮是否存在于 this 的 vBtnChat 中
+/** 聊天已经记录（存在）的情况下，按钮不存在于 this 的 vPair_OChat_BtnChat 中
  * @brief ChatList::isBtnChatInVector
  * @param name
  * @return
  */
-bool ChatList::isBtnChatInVector(QString name)
+bool ChatList::isChatExist_But_BtnNotExist(QString name)
 {
-    for (auto i: this->vBtnChat)
+    if (!isChatExist(name)) return false;
+
+    for (auto i: this->vPair_OChat_BtnChat)
     {
-        if (name == i->text()) return true;
+        if ((name == i.first->name) && (nullptr == i.second)) return true;
     }
     return false;
 }
@@ -189,10 +184,10 @@ bool ChatList::isBtnChatInVector(QString name)
  */
 bool ChatList::isPortExist(const qint16 port)
 {
-    if (vChat.isEmpty()) return false;
-    for (auto i : vChat)
+    if (vPair_OChat_BtnChat.isEmpty()) return false;
+    for (auto i : vPair_OChat_BtnChat)
     {
-        if (port == i->port || port == PORT_CHAT_LIST) return true;
+        if ((port == i.first->port) || (port == PORT_CHAT_LIST)) return true;
     }
 
     return false;
@@ -218,10 +213,57 @@ qint16 ChatList::getRandomPort()
  * @param isOpen
  * @return
  */
-Chat* ChatList::getAndInsertNewChat(QString name, qint16 port, bool isOpen)
+Chat* ChatList::getAndInsertNewChat(QString name, qint16 port, bool isOpen, QToolButton* btnChat)
 {
     Chat* chat = new Chat(name, port, isOpen);
-    vChat.push_back(chat);
+    vPair_OChat_BtnChat.push_back(QPair<Chat*, QToolButton*>(chat, btnChat));
     return chat;
 }
 
+
+bool ChatList::isChatOpen(QString name)
+{
+    for (auto i : vPair_OChat_BtnChat)
+    {
+        if (name == i.first->name) return i.first->isOpen;
+    }
+    return true;  // FIX!
+}
+
+/** 创建并返回一个 按钮对象
+ * @brief ChatList::getNewBtn
+ * @param btn_text
+ * @param port
+ * @param isOpen
+ * @return
+ */
+QToolButton* ChatList::getNewBtn(QString btn_text, qint16 port, bool isOpen)
+{
+    /* 设置头像 */
+    QToolButton* btn = new QToolButton;
+//    btn->setText(QString("[%1] %2").arg(chatPort).arg(chatName));
+    btn->setText(btn_text);
+
+    btn->setIcon(QIcon(":/icon/icons/user-group.png"));
+    btn->setAutoRaise(true);  // 按钮透明风格
+    btn->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);  // 设置显示图标和文字
+    btn->setFixedSize(220, 50);
+
+    return btn;
+}
+
+
+bool ChatList::updateBtnInvPair(QString name, QToolButton* btn)
+{
+    for (auto i : this->vPair_OChat_BtnChat)
+    {
+        if (name == i.first->name)
+        {
+            i.second = btn;
+            return true;
+        }
+    }
+
+    qDebug() << "[ERROR] File to update btn, ChatBox named" << name << "do not exits in local vPair_OChat_BtnChat";
+    return false;
+}

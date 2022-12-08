@@ -12,6 +12,6 @@ enum SignalType
 
 };
 
-static const int    BORDCAST_TIME_STEP      = 1000;             // 广播信息的时间间隔
+static const int    BORDCAST_TIME_STEP      = 3000;             // 广播信息的时间间隔
 
 #endif // SIGNALTYPE_H
