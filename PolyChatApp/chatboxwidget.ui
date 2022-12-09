@@ -64,6 +64,12 @@
              <height>380</height>
             </size>
            </property>
+           <property name="openExternalLinks">
+            <bool>false</bool>
+           </property>
+           <property name="openLinks">
+            <bool>false</bool>
+           </property>
           </widget>
          </item>
          <item>
@@ -87,7 +93,7 @@
             <item>
              <widget class="QComboBox" name="cbxFontSize">
               <property name="currentIndex">
-               <number>3</number>
+               <number>0</number>
               </property>
               <item>
                <property name="text">
@@ -127,6 +133,16 @@
               <item>
                <property name="text">
                 <string>22</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>24</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>28</string>
                </property>
               </item>
              </widget>
@@ -226,6 +242,32 @@
                 <width>20</width>
                 <height>20</height>
                </size>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QToolButton" name="btnFileSend">
+              <property name="toolTip">
+               <string>Bold</string>
+              </property>
+              <property name="text">
+               <string>B</string>
+              </property>
+              <property name="icon">
+               <iconset resource="resource.qrc">
+                <normaloff>:/icon/icons/send-file.png</normaloff>:/icon/icons/send-file.png</iconset>
+              </property>
+              <property name="iconSize">
+               <size>
+                <width>20</width>
+                <height>20</height>
+               </size>
+              </property>
+              <property name="shortcut">
+               <string>Ctrl+B</string>
+              </property>
+              <property name="checkable">
+               <bool>false</bool>
               </property>
              </widget>
             </item>
@@ -373,7 +415,7 @@
               <property name="minimumSize">
                <size>
                 <width>0</width>
-                <height>30</height>
+                <height>0</height>
                </size>
               </property>
               <property name="font">

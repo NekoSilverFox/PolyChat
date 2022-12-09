@@ -31,9 +31,12 @@ signals:
 
 private:
     void receiveUDPMessage();          // 接收 UDP 消息
+    void openURL(const QUrl &url);
 
 private:
     Ui::ChatBoxWidget* ui;
+
+    QString lastFilePath;
 
     QUdpSocket* udpSocketOnPortChatList;
     QUdpSocket* udpSocketOnPortChatBox;

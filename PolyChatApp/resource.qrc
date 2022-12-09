@@ -15,5 +15,6 @@
         <file>icons/user-info.png</file>
         <file>icons/register-add-friend.png</file>
         <file>icons/logo_fox.png</file>
+        <file>icons/send-file.png</file>
     </qresource>
 </RCC>

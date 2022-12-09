@@ -8,6 +8,7 @@
 #include <QMessageBox>
 #include <QColorDialog>
 #include <QFileDialog>
+#include <QDesktopServices>
 
 ChatBoxWidget::ChatBoxWidget(QWidget* parent, QString name, qint16 port)
     : QWidget(parent)
@@ -128,6 +129,15 @@ ChatBoxWidget::ChatBoxWidget(QWidget* parent, QString name, qint16 port)
         textStream << ui->msgTextBrowser->toPlainText();
         file.close();
     });
+
+    /* 发送文件 */
+    connect(ui->btnFileSend, &QToolButton::clicked,
+            this, [=](){
+        this->lastFilePath = QFileDialog::getOpenFileName(this, "Send file", ".");
+        sendUDPSignal(SignalType::FilePath);
+    });
+    connect(ui->msgTextBrowser, &QTextBrowser::anchorClicked,
+            this, &ChatBoxWidget::openURL);
 }
 
 ChatBoxWidget::~ChatBoxWidget()
@@ -193,6 +203,13 @@ void ChatBoxWidget::sendUDPSignal(const SignalType type)
                                               QHostAddress(QHostAddress::Broadcast),
                                               port);
         break;  // END SignalType::Msg
+
+    case SignalType::FilePath:
+        dataStream << this->lastFilePath;
+        udpSocketOnPortChatBox->writeDatagram(resByteArray,
+                                              QHostAddress(QHostAddress::Broadcast),
+                                              port);
+        break;  // END SignalType::FilePath
 
     case SignalType::UserJoin:
         dataStream <<  QString("SignalType::UserJoin");
@@ -266,6 +283,13 @@ void ChatBoxWidget::receiveUDPMessage()
         ui->msgTextBrowser->setTextColor(Qt::blue);
         ui->msgTextBrowser->append("[" + localUserName_4 + "] " + time);
         ui->msgTextBrowser->append(msg_7);
+        break;
+
+    case SignalType::FilePath:
+        // 追加聊天记录
+        ui->msgTextBrowser->setTextColor(Qt::red);
+        ui->msgTextBrowser->append(">>> [FILE] " + time);
+        ui->msgTextBrowser->append(QString("<p><a href=\"%1\" target=\"_blank\">%2</a></p>").arg(msg_7).arg("File"));
         break;
 
     case SignalType::UserJoin:
@@ -355,4 +379,11 @@ void ChatBoxWidget::closeEvent(QCloseEvent* event)
     udpSocketOnPortChatBox->destroyed();
 
     QWidget::closeEvent(event);
+}
+
+void ChatBoxWidget::openURL(const QUrl &url)
+{
+    QString strUrl = url.toString();
+    qDebug() << strUrl;
+    QDesktopServices::openUrl(url);
 }
