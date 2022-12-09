@@ -91,7 +91,6 @@ static void initAndShowChatList(QWidget* parent)
     chatList->show();
 }
 
-
 }
 
 #endif // BLL_POLYCHAT_H
