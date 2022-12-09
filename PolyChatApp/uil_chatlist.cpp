@@ -68,6 +68,28 @@ ChatList::ChatList(QWidget* parent, QString localUserName, QString localUserGrou
         });
     });
 
+
+    /* 搜索框状态变化 */
+    connect(ui->leSearch, &QLineEdit::textChanged,
+            this, [=](){
+        /* 如果文本框中的内容为空，则显示所有的聊天按钮 */
+        if (ui->leSearch->text().isEmpty())
+        {
+            for (auto i : this->vPair_OChat_BtnChat)
+            {
+                i.second->show();
+            }
+            return;
+        }
+
+        for (auto i : this->vPair_OChat_BtnChat)
+        {
+            QString textOnBtn = i.second->text();
+            if (isNeedHideBtn(textOnBtn)) i.second->hide();
+            else i.second->show();
+        }
+    });
+
 }
 
 ChatList::~ChatList()
@@ -81,6 +103,9 @@ ChatList::~ChatList()
 void ChatList::addBtnChatInLayout(QToolButton* btn)
 {
     if (nullptr == btn) return;
+
+    /* 根据搜索框中的内容，显示或者隐藏按钮 */
+    if (isNeedHideBtn(btn->text())) btn->hide();
 
     ui->vLayout->addWidget(btn); // 加到垂直布局中
 }
@@ -291,7 +316,6 @@ bool ChatList::setChatState(QString name, bool state)
 }
 
 
-
 bool ChatList::updateBtnInvPair(QString name, QToolButton* btn)
 {
     for (auto i : this->vPair_OChat_BtnChat)
@@ -305,4 +329,23 @@ bool ChatList::updateBtnInvPair(QString name, QToolButton* btn)
 
     qDebug() << "[ERROR] File to update btn, ChatBox named" << name << "do not exits in local vPair_OChat_BtnChat";
     return false;
+}
+
+
+/** 根据搜索框中的内容，并使用正则表达式，判断是否需要隐藏按钮
+ * @brief isNeedHideBtn
+ * @param btnText
+ * @return true 代表需要隐藏
+ */
+bool ChatList::isNeedHideBtn(QString textOnBtn)
+{
+    /* 如果文本框中的内容为空，则不需要隐藏 */
+    if (ui->leSearch->text().isEmpty()) return false;
+
+    QString strRegExp("\\S*" + ui->leSearch->text() + "\\S*");
+    QRegularExpression regExp;
+    regExp.setPattern(strRegExp);
+
+    if (!regExp.match(textOnBtn).hasMatch()) return true;
+    else return false;
 }

@@ -6,6 +6,7 @@
 #include <QWidget>
 #include <QUdpSocket>
 #include <QToolButton>
+#include <QRegularExpression>
 
 namespace Ui {
 class ChatList;
@@ -31,11 +32,12 @@ private:
     void addBtnChatInLayout(QToolButton* btn);  // 添加按钮对象到 Layout
 
     QToolButton* getNewBtn(QString btn_text, qint16 port, bool isOpen);
-    qint16 getRandomPort(); //获取一个不重复的随机端口号
+    qint16 getRandomPort();  //获取一个不重复的随机端口号
 
     bool setChatState(QString name, bool state);  // 设置聊天窗口为打开或者关闭
     bool updateBtnInvPair(QString name, QToolButton* btn);
 
+    bool isNeedHideBtn(QString textOnBtn);  // 根据正则表达式，判断是否需要隐藏按钮
 private:
     Ui::ChatList *ui;
 
