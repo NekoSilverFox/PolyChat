@@ -134,6 +134,7 @@ ChatBoxWidget::ChatBoxWidget(QWidget* parent, QString name, qint16 port)
     connect(ui->btnFileSend, &QToolButton::clicked,
             this, [=](){
         this->lastFilePath = QFileDialog::getOpenFileName(this, "Send file", ".");
+        if (lastFilePath.isEmpty()) return;
         sendUDPSignal(SignalType::FilePath);
     });
     connect(ui->msgTextBrowser, &QTextBrowser::anchorClicked,
@@ -289,7 +290,7 @@ void ChatBoxWidget::receiveUDPMessage()
         // 追加聊天记录
         ui->msgTextBrowser->setTextColor(Qt::red);
         ui->msgTextBrowser->append(">>> [FILE] " + time);
-        ui->msgTextBrowser->append(QString("<p><a href=\"%1\" target=\"_blank\">%2</a></p>").arg(msg_7).arg("File"));
+        ui->msgTextBrowser->append(QString("<p><a href=\"%1\" target=\"_blank\">[Name]: %2    [Size]: %3Kb</a></p>").arg(msg_7).arg(QFileInfo(msg_7).fileName()).arg(QFileInfo(msg_7).size()));
         break;
 
     case SignalType::UserJoin:
