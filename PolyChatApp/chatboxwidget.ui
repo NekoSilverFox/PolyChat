@@ -93,13 +93,8 @@
             <item>
              <widget class="QComboBox" name="cbxFontSize">
               <property name="currentIndex">
-               <number>0</number>
+               <number>2</number>
               </property>
-              <item>
-               <property name="text">
-                <string>8</string>
-               </property>
-              </item>
               <item>
                <property name="text">
                 <string>10</string>
@@ -442,7 +437,7 @@
                </size>
               </property>
               <property name="shortcut">
-               <string>Return</string>
+               <string>Shift+Return</string>
               </property>
              </widget>
             </item>

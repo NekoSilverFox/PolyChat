@@ -290,7 +290,7 @@ void ChatBoxWidget::receiveUDPMessage()
         // 追加聊天记录
         ui->msgTextBrowser->setTextColor(Qt::red);
         ui->msgTextBrowser->append(">>> [FILE] " + time);
-        ui->msgTextBrowser->append(QString("<p><a href=\"%1\" target=\"_blank\">[Name]: %2    [Size]: %3Kb</a></p>").arg(msg_7).arg(QFileInfo(msg_7).fileName()).arg(QFileInfo(msg_7).size()));
+        ui->msgTextBrowser->append(QString("<div><p><a href=\"%1\" target=\"_blank\">[Name]: %2    [Size]: %3Kb</a></p></div>").arg(msg_7).arg(QFileInfo(msg_7).fileName()).arg(QFileInfo(msg_7).size()));
         break;
 
     case SignalType::UserJoin:

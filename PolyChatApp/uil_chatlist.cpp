@@ -14,7 +14,7 @@ ChatList::ChatList(QWidget* parent, QString localUserName, QString localUserGrou
     ui(new Ui::ChatList)
 {
     ui->setupUi(this);
-    this->setWindowTitle("Chat list");
+    this->setWindowTitle("PolyChat Chat list");
     this->setWindowIcon(QIcon(":/icon/icons/logo_fox.png"));
 
 
