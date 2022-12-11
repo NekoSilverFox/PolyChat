@@ -133,10 +133,24 @@ ChatBoxWidget::ChatBoxWidget(QWidget* parent, QString name, qint16 port)
     /* 发送文件 */
     connect(ui->btnFileSend, &QToolButton::clicked,
             this, [=](){
-        this->lastFilePath = QFileDialog::getOpenFileName(this, "Send file", ".");
-        if (lastFilePath.isEmpty()) return;
+        QString path = QFileDialog::getOpenFileName(this, "Send file", ".");
+
+        if (path.isEmpty())
+        {
+             QMessageBox::warning(this, "Warning", "File sending cancellation");
+             return;
+        }
+
+        QFileInfo info(path);
+        if (info.size() > FILE_SEND_MAX_KB)
+        {
+            QMessageBox::critical(this, "Error", "File size cannot exceed 1Gb");
+            return;
+        }
+
         sendUDPSignal(SignalType::FilePath);
     });
+
     connect(ui->msgTextBrowser, &QTextBrowser::anchorClicked,
             this, &ChatBoxWidget::openURL);
 }
@@ -288,9 +302,9 @@ void ChatBoxWidget::receiveUDPMessage()
 
     case SignalType::FilePath:
         // 追加聊天记录
-        ui->msgTextBrowser->setTextColor(Qt::red);
-        ui->msgTextBrowser->append(">>> [FILE] " + time);
-        ui->msgTextBrowser->append(QString("<div><p><a href=\"%1\" target=\"_blank\">[Name]: %2    [Size]: %3Kb</a></p></div>").arg(msg_7).arg(QFileInfo(msg_7).fileName()).arg(QFileInfo(msg_7).size()));
+//        ui->msgTextBrowser->setTextColor(Qt::red);
+//        ui->msgTextBrowser->append(">>> [FILE] " + time);
+//        ui->msgTextBrowser->append(QString("<div><p><a href=\"%1\" target=\"_blank\">[Name]: %2    [Size]: %3Kb</a></p></div>").arg(msg_7).arg(QFileInfo(msg_7).fileName()).arg(QFileInfo(msg_7).size()));
         break;
 
     case SignalType::UserJoin:

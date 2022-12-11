@@ -220,7 +220,7 @@ bool ChatList::isPortExist(const qint16 port)
     if (vPair_OChat_BtnChat.isEmpty()) return false;
     for (auto i : vPair_OChat_BtnChat)
     {
-        if ((port == i.first->port) || (port == PORT_CHAT_LIST)) return true;
+        if ((port == i.first->port) || (port == PORT_CHAT_LIST) || (port == PORT_TCP_FILE)) return true;
     }
 
     return false;

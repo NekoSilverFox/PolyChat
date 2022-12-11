@@ -3,6 +3,7 @@
 #include "dal_polychat.h"
 
 #include <QMessageBox>
+#include <QPalette>
 
 LoginWidget::LoginWidget(QWidget *parent) :
     QWidget(parent),
@@ -13,6 +14,15 @@ LoginWidget::LoginWidget(QWidget *parent) :
     this->setWindowTitle("PolyChat Login");
     this->setWindowIcon(QIcon(":/icon/icons/user-info.png"));
     ui->leUserName->setFocus();
+
+    this->setAutoFillBackground(true);
+    QPalette background = this->palette();
+    background.setBrush(QPalette::Window,
+                        QBrush(QPixmap(":/bk/background/bg-login.png").scaled(// 缩放背景图.
+                            this->size(),
+                            Qt::IgnoreAspectRatio,
+                            Qt::SmoothTransformation)));             // 使用平滑的缩放方式
+    this->setPalette(background);
 
     /* User checked button `login` */
     connect(ui->btnLogin, &QPushButton::clicked,

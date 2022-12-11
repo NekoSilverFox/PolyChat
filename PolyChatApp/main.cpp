@@ -3,6 +3,7 @@
 #include <QApplication>
 #include <uil_loginwidget.h>
 #include "uil_chatlist.h"
+#include "tcpserver.h"
 
 #include "db_localdata.h"
 QString      localUserName           = "";               // User Name (get in user login)
