@@ -36,7 +36,7 @@ private:
 private:
     Ui::ChatBoxWidget* ui;
 
-    QString lastFilePath;
+    QString lastFilePath;  // TODO remove
 
     QUdpSocket* udpSocketOnPortChatList;
     QUdpSocket* udpSocketOnPortChatBox;

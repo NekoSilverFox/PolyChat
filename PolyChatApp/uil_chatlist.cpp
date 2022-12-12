@@ -59,7 +59,7 @@ ChatList::ChatList(QWidget* parent, QString localUserName, QString localUserGrou
 
                 /* 条件满足，添加新的聊天窗口 */
                 ChatBoxWidget* chatBoxWidget = new ChatBoxWidget(nullptr, name, port);
-                chatBoxWidget->setAttribute(Qt::WA_DeleteOnClose);
+                chatBoxWidget->setAttribute(Qt::WA_DeleteOnClose);  // TODO 移动到class内部
                 chatBoxWidget->setWindowIcon(QIcon(":/icon/icons/user-group.png"));
                 chatBoxWidget->show();
                 /* 关闭聊天对话框 重置是否打开的数组。（如果接收到窗口关闭信号，就 XXX） */
@@ -220,7 +220,7 @@ bool ChatList::isPortExist(const qint16 port)
     if (vPair_OChat_BtnChat.isEmpty()) return false;
     for (auto i : vPair_OChat_BtnChat)
     {
-        if ((port == i.first->port) || (port == PORT_CHAT_LIST)) return true;
+        if ((port == i.first->port) || (port == PORT_CHAT_LIST) || (port == PORT_TCP_FILE)) return true;
     }
 
     return false;

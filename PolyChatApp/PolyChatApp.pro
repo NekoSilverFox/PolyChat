@@ -11,6 +11,7 @@ CONFIG += c++17
 SOURCES += \
     chat.cpp \
     main.cpp \
+    tcpserver.cpp \
     uil_addchat.cpp \
     uil_chatboxwidget.cpp \
     uil_chatlist.cpp \
@@ -22,6 +23,7 @@ HEADERS += \
     dal_polychat.h \
     db_localdata.h \
     signaltype.h \
+    tcpserver.h \
     uil_addchat.h \
     uil_chatboxwidget.h \
     uil_chatlist.h \
@@ -31,7 +33,8 @@ FORMS += \
     addchat.ui \
     chatboxwidget.ui \
     chatlist.ui \
-    loginwidget.ui
+    loginwidget.ui \
+    tcpserver.ui
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
