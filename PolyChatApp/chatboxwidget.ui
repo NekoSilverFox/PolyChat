@@ -243,7 +243,7 @@
             <item>
              <widget class="QToolButton" name="btnFileSend">
               <property name="toolTip">
-               <string>Bold</string>
+               <string>Send file</string>
               </property>
               <property name="text">
                <string>B</string>

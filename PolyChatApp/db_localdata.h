@@ -12,7 +12,7 @@ static const qint16 PORT_CHAT_LIST          = 8888;
 static const qint16 PORT_MIN                = 1;
 static const qint16 PORT_MAX                = 32767;
 
-static const int    FILE_SEND_MAX_KB        = 1 * 1024 * 1024;  // Kb
+static const int    FILE_SEND_MAX_KB        = 1 * 1024 * 1024 * 1024;  // bytes
 
 
 extern QString      localUserName;

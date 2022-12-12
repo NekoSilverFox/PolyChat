@@ -1,6 +1,8 @@
 #include "uil_chatboxwidget.h"
 #include "ui_chatboxwidget.h"
 #include "dal_polychat.h"
+#include "tcpserver.h"
+
 #include <QDataStream>
 #include <QDateTime>
 #include <QFile>
@@ -148,9 +150,13 @@ ChatBoxWidget::ChatBoxWidget(QWidget* parent, QString name, qint16 port)
             return;
         }
 
-        sendUDPSignal(SignalType::FilePath);
+        TcpServer* tcpServer = new TcpServer(nullptr, path, DAL::getLocalIpAddress(), PORT_TCP_FILE);
+        tcpServer->show();
+
+        sendUDPSignal(SignalType::FilePath);  // TODO
     });
 
+    /* 点击聊天框中的链接可以再外部进行打开 */
     connect(ui->msgTextBrowser, &QTextBrowser::anchorClicked,
             this, &ChatBoxWidget::openURL);
 }
@@ -354,7 +360,7 @@ void ChatBoxWidget::userLeft(QString name, QString time)
 
         /* 追加聊天记录 */
         ui->msgTextBrowser->setTextColor(Qt::gray);
-        ui->msgTextBrowser->append(QString("%1 left %2 on ").arg(name).arg(time));
+        ui->msgTextBrowser->append(QString("%1 left on %2").arg(name).arg(time));
 
         /* 在线用户更新 */
         ui->lbNumberOnlineUse->setText(QString("Number of online user：%1").arg(ui->tbUser->rowCount()));
