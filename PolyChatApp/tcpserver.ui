@@ -147,7 +147,7 @@
                </size>
               </property>
               <property name="text">
-               <string>Your port:</string>
+               <string>Your TCP port:</string>
               </property>
              </widget>
             </item>

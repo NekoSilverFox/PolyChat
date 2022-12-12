@@ -20,6 +20,7 @@
         <file>icons/file-received.png</file>
         <file>icons/file-send.png</file>
         <file>icons/christmas-fox.png</file>
+        <file>icons/nekosilverfox.png</file>
     </qresource>
     <qresource prefix="/gif">
         <file>icons/loading.gif</file>
