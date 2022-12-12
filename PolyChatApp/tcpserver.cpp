@@ -1,5 +1,6 @@
 #include "tcpserver.h"
 #include "ui_tcpserver.h"
+#include "db_localdata.h"
 
 #include <QMovie>
 #include <QTimer>
@@ -41,7 +42,6 @@ TcpServer::TcpServer(QWidget *parent, QString filePath, QHostAddress ip, qint16 
     /* 初始化 ui */
     ui->lbServerIP->setText(this->ip.toString());
     ui->lbServerPort->setText(QString::number(this->port));
-    qDebug() << "TCP 服务器端口：" << QString(this->port);
     ui->lbFilePath->setText(filePath);
     ui->lbFileSize->setText(QString("%1Kb").arg(this->fileSize / 1024));
     appendTextBrowser(Qt::blue, "[INFO] Initializing the TCP server done");
@@ -101,7 +101,7 @@ TcpServer::TcpServer(QWidget *parent, QString filePath, QHostAddress ip, qint16 
         if (len > 0)
         {
             appendTextBrowser(Qt::blue, "[INFO] The file header is sent successfully");
-            timer->start(1000);
+            timer->start(TCP_DELAY_MS);
             return;
         }
         else
@@ -123,8 +123,6 @@ TcpServer::TcpServer(QWidget *parent, QString filePath, QHostAddress ip, qint16 
 
     /* 点击取消按钮 */
     connect(ui->btnCancel, &QPushButton::clicked, [=](){ this->close(); });
-
-
 }
 
 
@@ -145,12 +143,16 @@ void TcpServer::sendData()
 
         /* 更新 ui 界面及 */
         ui->progressBar->setValue(this->bytesAlreadySend / this->fileSize * 100);
-        appendTextBrowser(Qt::blue, QString("[INFO] this->bytesAlreadySend:%1").arg(this->bytesAlreadySend));
+
+#if !QT_NO_DEBUG
+        appendTextBrowser(Qt::darkCyan, QString("[DEBUG] TCP-Server this->bytesAlreadySend:%1").arg(this->bytesAlreadySend));
+#endif
+
     } while (lenPackage > 0);
 
     if (this->bytesAlreadySend == this->fileSize)
     {
-        appendTextBrowser(Qt::blue, "[INFO] Success to send file\n#############################\n\n");
+        appendTextBrowser(Qt::green, "[INFO] Success to send file\n#############################\n\n");
         this->file.close();
         this->tcpSocket->disconnectFromHost();
         this->tcpSocket->close();
@@ -186,6 +188,8 @@ void  TcpServer::closeEvent(QCloseEvent* event)
     }
     else
     {
+        tcpSocket->disconnectFromHost(); //断开连接
+        tcpSocket->close(); //关闭套接字
         event->accept();
         QWidget::closeEvent(event);
     }

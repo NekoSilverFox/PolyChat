@@ -9,6 +9,8 @@
 
 static const qint16 PORT_TCP_FILE           = 8848;
 static const qint16 PORT_CHAT_LIST          = 8888;
+static const unsigned int TCP_DELAY_MS      = 20;
+
 static const qint16 PORT_MIN                = 1;
 static const qint16 PORT_MAX                = 32767;
 

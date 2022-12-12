@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>TcpServer</class>
- <widget class="QWidget" name="TcpServer">
+ <class>TcpClient</class>
+ <widget class="QWidget" name="TcpClient">
   <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>647</width>
-    <height>430</height>
+    <width>688</width>
+    <height>462</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -15,7 +15,7 @@
   </property>
   <layout class="QVBoxLayout" name="verticalLayout_2">
    <item>
-    <widget class="QWidget" name="widget_3" native="true">
+    <widget class="QWidget" name="widget" native="true">
      <layout class="QHBoxLayout" name="horizontalLayout">
       <property name="leftMargin">
        <number>0</number>
@@ -51,7 +51,7 @@
           <number>0</number>
          </property>
          <item>
-          <widget class="QLabel" name="label">
+          <widget class="QLabel" name="label_2">
            <property name="font">
             <font>
              <family>Times New Roman</family>
@@ -61,7 +61,8 @@
             </font>
            </property>
            <property name="text">
-            <string>File Sender</string>
+            <string>File
+Receipter</string>
            </property>
            <property name="alignment">
             <set>Qt::AlignCenter</set>
@@ -86,7 +87,7 @@
             <string/>
            </property>
            <property name="pixmap">
-            <pixmap resource="resource.qrc">:/icon/icons/file-send.png</pixmap>
+            <pixmap resource="resource.qrc">:/icon/icons/file-received.png</pixmap>
            </property>
            <property name="scaledContents">
             <bool>true</bool>
@@ -112,37 +113,37 @@
           <number>0</number>
          </property>
          <item>
-          <widget class="QGroupBox" name="groupBox">
+          <widget class="QGroupBox" name="groupBox_4">
            <property name="title">
-            <string>Your info (TCP server)</string>
+            <string>Your info (TCP client)</string>
            </property>
-           <layout class="QGridLayout" name="gridLayout">
+           <layout class="QGridLayout" name="gridLayout_3">
             <item row="0" column="1">
-             <widget class="QLabel" name="lbServerIP">
+             <widget class="QLabel" name="lbClientIP">
               <property name="text">
                <string>192.168.XX.X</string>
               </property>
              </widget>
             </item>
             <item row="0" column="0">
-             <widget class="QLabel" name="label_2">
+             <widget class="QLabel" name="label_4">
               <property name="text">
                <string>Your IP:</string>
               </property>
              </widget>
             </item>
             <item row="1" column="1">
-             <widget class="QLabel" name="lbServerPort">
+             <widget class="QLabel" name="lbClientPort">
               <property name="text">
                <string>XXXX</string>
               </property>
              </widget>
             </item>
             <item row="1" column="0">
-             <widget class="QLabel" name="label_4">
+             <widget class="QLabel" name="label_5">
               <property name="maximumSize">
                <size>
-                <width>150</width>
+                <width>90</width>
                 <height>16777215</height>
                </size>
               </property>
@@ -155,35 +156,14 @@
           </widget>
          </item>
          <item>
-          <widget class="QGroupBox" name="groupBox_2">
+          <widget class="QGroupBox" name="groupBox_3">
            <property name="title">
-            <string>Sending info (TCP client)</string>
+            <string>Receive from info (TCP server)</string>
            </property>
            <layout class="QGridLayout" name="gridLayout_2">
             <property name="bottomMargin">
              <number>0</number>
             </property>
-            <item row="0" column="0">
-             <widget class="QLabel" name="label_8">
-              <property name="text">
-               <string>Now connect with IP:</string>
-              </property>
-             </widget>
-            </item>
-            <item row="0" column="1">
-             <widget class="QLabel" name="lbClientIP">
-              <property name="text">
-               <string/>
-              </property>
-             </widget>
-            </item>
-            <item row="3" column="0">
-             <widget class="QLabel" name="label_12">
-              <property name="text">
-               <string>File size:</string>
-              </property>
-             </widget>
-            </item>
             <item row="3" column="1">
              <widget class="QLabel" name="lbFileSize">
               <property name="text">
@@ -195,31 +175,31 @@
              <widget class="QLabel" name="label_7">
               <property name="maximumSize">
                <size>
-                <width>150</width>
+                <width>90</width>
                 <height>16777215</height>
                </size>
               </property>
               <property name="text">
-               <string>Now connect with port:</string>
+               <string>Server port:</string>
               </property>
              </widget>
             </item>
-            <item row="1" column="1">
-             <widget class="QLabel" name="lbClientPort">
+            <item row="4" column="0">
+             <widget class="QLabel" name="label">
               <property name="text">
-               <string/>
+               <string>Save to path:</string>
               </property>
              </widget>
             </item>
-            <item row="2" column="0">
-             <widget class="QLabel" name="label_10">
+            <item row="0" column="0">
+             <widget class="QLabel" name="label_8">
               <property name="text">
-               <string>File path:</string>
+               <string>Server IP:</string>
               </property>
              </widget>
             </item>
             <item row="2" column="1">
-             <widget class="QLabel" name="lbFilePath">
+             <widget class="QLabel" name="lbFileName">
               <property name="maximumSize">
                <size>
                 <width>400</width>
@@ -231,10 +211,45 @@
               </property>
              </widget>
             </item>
-            <item row="4" column="0" colspan="2">
+            <item row="1" column="1">
+             <widget class="QLabel" name="lbServerPort">
+              <property name="text">
+               <string/>
+              </property>
+             </widget>
+            </item>
+            <item row="5" column="0" colspan="2">
              <widget class="QProgressBar" name="progressBar">
               <property name="value">
                <number>0</number>
+              </property>
+             </widget>
+            </item>
+            <item row="3" column="0">
+             <widget class="QLabel" name="label_12">
+              <property name="text">
+               <string>File size:</string>
+              </property>
+             </widget>
+            </item>
+            <item row="0" column="1">
+             <widget class="QLabel" name="lbServerIP">
+              <property name="text">
+               <string/>
+              </property>
+             </widget>
+            </item>
+            <item row="2" column="0">
+             <widget class="QLabel" name="label_10">
+              <property name="text">
+               <string>File name:</string>
+              </property>
+             </widget>
+            </item>
+            <item row="4" column="1">
+             <widget class="QLabel" name="lbFileSavePath">
+              <property name="text">
+               <string>[EMPTY] Click `Save` to receive the file</string>
               </property>
              </widget>
             </item>
@@ -251,7 +266,7 @@
     <widget class="QTextBrowser" name="textBrowser"/>
    </item>
    <item>
-    <widget class="QWidget" name="widget" native="true">
+    <widget class="QWidget" name="widget_3" native="true">
      <layout class="QHBoxLayout" name="horizontalLayout_2">
       <property name="leftMargin">
        <number>0</number>
@@ -269,6 +284,18 @@
        <widget class="QPushButton" name="btnCancel">
         <property name="text">
          <string>Cancel</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="btnSave">
+        <property name="font">
+         <font>
+          <bold>true</bold>
+         </font>
+        </property>
+        <property name="text">
+         <string>Save</string>
         </property>
        </widget>
       </item>

@@ -12,7 +12,7 @@ LoginWidget::LoginWidget(QWidget *parent) :
     ui->setupUi(this);
 
     this->setWindowTitle("PolyChat Login");
-    this->setWindowIcon(QIcon(":/icon/icons/user-info.png"));
+    this->setWindowIcon(QIcon(":/icon/icons/nekosilverfox.png"));
     ui->leUserName->setFocus();
 
     this->setAutoFillBackground(true);
@@ -30,7 +30,7 @@ LoginWidget::LoginWidget(QWidget *parent) :
 
     connect(ui->btnInfo, &QPushButton::clicked,
             this, [=](){
-        QMessageBox::information(this, "About Polychat",
+        QMessageBox::about(this, "About Polychat",
                                  "Project SPbSTU<br><br>"
                                  "Source Code:<br>"
                                  "<a href=\"https://github.com/NekoSilverFox/PolyChat\">[Github] PolyChat</a>"

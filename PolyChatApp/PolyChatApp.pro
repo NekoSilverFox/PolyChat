@@ -11,6 +11,7 @@ CONFIG += c++17
 SOURCES += \
     chat.cpp \
     main.cpp \
+    tcpclient.cpp \
     tcpserver.cpp \
     uil_addchat.cpp \
     uil_chatboxwidget.cpp \
@@ -23,6 +24,7 @@ HEADERS += \
     dal_polychat.h \
     db_localdata.h \
     signaltype.h \
+    tcpclient.h \
     tcpserver.h \
     uil_addchat.h \
     uil_chatboxwidget.h \
@@ -34,6 +36,7 @@ FORMS += \
     chatboxwidget.ui \
     chatlist.ui \
     loginwidget.ui \
+    tcpclient.ui \
     tcpserver.ui
 
 # Default rules for deployment.
