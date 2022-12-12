@@ -149,7 +149,7 @@ void TcpClient::receiveTcpDataAndSave()
         if (fileSizeBytes == bytesReceived)
         {
             ui->textBrowser->setTextColor(Qt::green);
-            ui->textBrowser->append(QString("[INFO] File received successfully, already saved to the path: %1").arg(fileName));
+            ui->textBrowser->append(QString("[INFO] File %1 received successfully, already saved to the path: %2").arg(fileName).arg(file.fileName()));
 
             this->isHeaderReceived = false;
             this->bytesReceived = 0;
@@ -175,6 +175,8 @@ void  TcpClient::closeEvent(QCloseEvent* event)
     }
     else
     {
+        tcpSocket->disconnectFromHost(); //断开连接
+        tcpSocket->close(); //关闭套接字
         event->accept();
         QWidget::closeEvent(event);
     }

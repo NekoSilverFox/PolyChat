@@ -325,7 +325,7 @@ void ChatBoxWidget::receiveUDPMessage()
          */
 
 #if !QT_NO_DEBUG
-//        if (localIpAddress_6 == DAL::getLocalIpAddress()) { return; }
+        if (localIpAddress_6 == DAL::getLocalIpAddress()) { return; }
 #endif
         if (QMessageBox::Yes == QMessageBox::information(this, "File reception request", QString(
                                  "[%1] from group [%2] wants to send you a file, do you want to receive it?\n\n"

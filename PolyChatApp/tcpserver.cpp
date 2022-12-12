@@ -1,5 +1,6 @@
 #include "tcpserver.h"
 #include "ui_tcpserver.h"
+#include "db_localdata.h"
 
 #include <QMovie>
 #include <QTimer>
@@ -100,7 +101,7 @@ TcpServer::TcpServer(QWidget *parent, QString filePath, QHostAddress ip, qint16 
         if (len > 0)
         {
             appendTextBrowser(Qt::blue, "[INFO] The file header is sent successfully");
-            timer->start(1000);
+            timer->start(TCP_DELAY_MS);
             return;
         }
         else
@@ -187,6 +188,8 @@ void  TcpServer::closeEvent(QCloseEvent* event)
     }
     else
     {
+        tcpSocket->disconnectFromHost(); //断开连接
+        tcpSocket->close(); //关闭套接字
         event->accept();
         QWidget::closeEvent(event);
     }
