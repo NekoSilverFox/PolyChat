@@ -328,7 +328,7 @@ void ChatBoxWidget::receiveUDPMessage()
         dataStream >> fileSize_8; // 第8段：（当发送文件时才接收）为文件大小 qint64-bytes
 
 
-#if !QT_NO_DEBUG
+#if QT_NO_DEBUG
         /* 判断发送方是不是自己，如果是自己的话，就不用再接收了
          * 如果是不是自己的话，那么就询问是否接收
          */

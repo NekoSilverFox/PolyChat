@@ -66,6 +66,7 @@ TcpClient::TcpClient(QWidget *parent, QString fileName, qint64 fileSizeBytes, QH
     connect(ui->btnCancel, &QPushButton::clicked, [=](){ this->close(); });
 
     appendTextBrowser(Qt::blue, "[INFO] Initializing the TCP client done");
+    appendTextBrowser(Qt::red, "[INFO] Click `Save` to receive the file");
 }
 
 /** 点击 Save 文件按钮，初始化数据，并且保存文件
