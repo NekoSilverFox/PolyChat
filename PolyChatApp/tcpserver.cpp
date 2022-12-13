@@ -47,6 +47,7 @@ TcpServer::TcpServer(QWidget *parent, QString filePath, QHostAddress ip, qint16 
     appendTextBrowser(Qt::blue, "[INFO] Initializing the TCP server done");
 
     ///////////////////////////////// 监听套接字: 如果有连接就开始发送文件 /////////////////////////////////
+    this->tcpSocket = nullptr;
     this->tcpServer = new QTcpServer(this);
     this->tcpServer->listen(QHostAddress::Any, this->port);
     connect(tcpServer, &QTcpServer::newConnection, this, [=](){
@@ -186,13 +187,15 @@ void  TcpServer::closeEvent(QCloseEvent* event)
     {
         event->ignore();
     }
-    else
+
+    /* 防止在未发送文件（tcpSocket 未初始化）的情况下关闭窗口出现的奔溃 */
+    if (nullptr != this->tcpSocket)
     {
         tcpSocket->disconnectFromHost(); //断开连接
         tcpSocket->close(); //关闭套接字
-        event->accept();
-        QWidget::closeEvent(event);
     }
+    event->accept();
+    QWidget::closeEvent(event);
 }
 
 
