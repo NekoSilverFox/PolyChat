@@ -35,10 +35,6 @@ ChatList::ChatList(QWidget* parent, QString localUserName, QString localUserGrou
     connect(ui->btnNewChat, &QToolButton::clicked,
             this, [=](){
         AddChat* addChat = new AddChat(nullptr);
-        addChat->setWindowTitle("Add new chat");
-        addChat->setWindowIcon(QIcon(":/icon/icons/register-add-friend.png"));
-        addChat->setAttribute(Qt::WA_DeleteOnClose);
-        addChat->setWindowModality(Qt::ApplicationModal);
         addChat->show();
 
         connect(addChat, &AddChat::addNewChat,
@@ -59,9 +55,8 @@ ChatList::ChatList(QWidget* parent, QString localUserName, QString localUserGrou
 
                 /* 条件满足，添加新的聊天窗口 */
                 ChatBoxWidget* chatBoxWidget = new ChatBoxWidget(nullptr, name, port);
-                chatBoxWidget->setAttribute(Qt::WA_DeleteOnClose);  // TODO 移动到class内部
-                chatBoxWidget->setWindowIcon(QIcon(":/icon/icons/user-group.png"));
                 chatBoxWidget->show();
+
                 /* 关闭聊天对话框 重置是否打开的数组。（如果接收到窗口关闭信号，就 XXX） */
                 connect(chatBoxWidget, &ChatBoxWidget::signalClose,
                         this, [=](){ setChatState(name, false); });

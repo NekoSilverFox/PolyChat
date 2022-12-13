@@ -17,10 +17,12 @@ TcpClient::TcpClient(QWidget *parent, QString fileName, qint64 fileSizeBytes, QH
     this->setAttribute(Qt::WA_DeleteOnClose);
     appendTextBrowser(Qt::blue, "[INFO] TCP client start");
 
+
     ///////////////////////////////// ui 图片 /////////////////////////////////
     movie = new QMovie(":/gif/icons/eating.gif");
     movie->start();
     ui->labelPic->setMovie(movie);
+
 
     ///////////////////////////////// 初始化变量 /////////////////////////////////
     appendTextBrowser(Qt::blue, "[INFO] Initializing the TCP client...");
@@ -35,11 +37,13 @@ TcpClient::TcpClient(QWidget *parent, QString fileName, qint64 fileSizeBytes, QH
         ui->btnSave->setEnabled(false);
         appendTextBrowser(Qt::green, "[INFO] Successfully establish a link with the host");
     });
+
     /* 如果与主机断开连接 */
     connect(this->tcpSocket, &QTcpSocket::disconnected, [=](){
         ui->btnSave->setEnabled(true);
-        appendTextBrowser(Qt::darkYellow, "[WARRING] Disconnected with the host");
+        appendTextBrowser(Qt::darkYellow, "[WARNING] Disconnected with the host");
     });
+
     /* 从通信套接字里面取内容 */
     connect(tcpSocket, &QTcpSocket::readyRead, this, &TcpClient::receiveTcpDataAndSave);
 
@@ -162,7 +166,7 @@ void TcpClient::receiveTcpDataAndSave()
 }
 
 
-void  TcpClient::closeEvent(QCloseEvent* event)
+void TcpClient::closeEvent(QCloseEvent* event)
 {
     QMessageBox::StandardButton btnPush = QMessageBox::warning(this, "Cancel receive",
                          "If the file is not received, it will be stopped and disconnected.\n"

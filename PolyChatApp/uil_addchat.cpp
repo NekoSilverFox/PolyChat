@@ -12,6 +12,10 @@ AddChat::AddChat(QWidget *parent) :
     ui(new Ui::AddChat)
 {
     ui->setupUi(this);
+    this->setWindowTitle("Add new chat");
+    this->setWindowIcon(QIcon(":/icon/icons/register-add-friend.png"));
+    this->setAttribute(Qt::WA_DeleteOnClose);
+    this->setWindowModality(Qt::ApplicationModal);
 
     connect(ui->btnCancelAddChat, &QPushButton::clicked,
             this, [=](){this->close();});
