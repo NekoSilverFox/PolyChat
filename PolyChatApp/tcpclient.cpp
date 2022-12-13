@@ -135,7 +135,7 @@ void TcpClient::receiveTcpDataAndSave()
         appendTextBrowser(Qt::blue, QString("[INFO] The result of the file header parsing is:\n"
                                             "Name: %1\n"
                                             "Size: %2Kb").arg(fileName).arg(fileSizeBytes / 1024));
-        appendTextBrowser(Qt::blue, "[INFO] Start to save file, receive data from TCP Server...");
+        appendTextBrowser(Qt::blue, "[INFO] Start to save file, receive data from TCP Server.\nPLEASE WAIT, DO NOT CLOSE THIS WINDOW...");
     }
     /* 文件头接收，接下来是文件的数据内容 */
     else
