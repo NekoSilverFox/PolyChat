@@ -21,7 +21,6 @@ public:
     void connectTcpServerAndOpenFile();
     void receiveTcpDataAndSave();
 
-
     virtual void closeEvent(QCloseEvent* event);
 
 private:

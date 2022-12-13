@@ -14,6 +14,7 @@ LoginWidget::LoginWidget(QWidget *parent) :
     this->setWindowTitle("PolyChat Login");
     this->setWindowIcon(QIcon(":/icon/icons/nekosilverfox.png"));
     ui->leUserName->setFocus();
+//    this->setAttribute(Qt::WA_DeleteOnClose);
 
     this->setAutoFillBackground(true);
     QPalette background = this->palette();

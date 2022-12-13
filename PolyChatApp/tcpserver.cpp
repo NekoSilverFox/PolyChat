@@ -106,8 +106,8 @@ TcpServer::TcpServer(QWidget *parent, QString filePath, QHostAddress ip, qint16 
         }
         else
         {
-            file.close();
             appendTextBrowser(Qt::red, "[ERROR] File header sending failed");
+            file.close();
             return;
         }
     });
@@ -135,7 +135,7 @@ void TcpServer::sendData()
     this->bytesAlreadySend = 0;
 
     do {
-        char buf[4 * 1024] = {0};  // 【数据包】每次发送的数据
+        char buf[4 * 1024] = {0};  // 【数据包】每次发送的数据 4Kb
         lenPackage = file.read(buf, sizeof(buf));
         lenPackage = tcpSocket->write(buf, lenPackage);  // 发送数据，读多少，发多少
 
