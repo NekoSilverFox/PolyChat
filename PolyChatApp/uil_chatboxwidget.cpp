@@ -326,8 +326,12 @@ void ChatBoxWidget::receiveUDPMessage()
 
     case SignalType::File:
         dataStream >> fileSize_8; // 第8段：（当发送文件时才接收）为文件大小 qint64-bytes
-
-
+        ui->msgTextBrowser->setTextColor(Qt::darkCyan);
+        ui->msgTextBrowser->append(QString(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>\n"
+                                           "[%1] on [%2] send a file, file information:\n"
+                                           "Name: %3\n"
+                                           "Size: %4Kb\n"
+                                           ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>").arg(localUserName_4).arg(time).arg(msg_7).arg(fileSize_8 / 1024));
 #if QT_NO_DEBUG
         /* 判断发送方是不是自己，如果是自己的话，就不用再接收了
          * 如果是不是自己的话，那么就询问是否接收
