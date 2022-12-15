@@ -20,7 +20,7 @@ jobs:
         qt_ver: [6.2.2]
         qt_arch: [clang_64]
     env:
-      targetName: HelloActions-Qt
+      targetName: PolyChatApp
     steps:
       # macos 11.0 默认环境变了,要指定
       - name: prepare env
@@ -39,7 +39,7 @@ jobs:
           fetch-depth: 1
       - name: build macos
         run: |
-          qmake -project
+          qmake -makefile
           make
       # 打包
       - name: package

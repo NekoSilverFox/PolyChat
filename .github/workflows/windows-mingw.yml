@@ -21,7 +21,7 @@ jobs:
             qt_tools: "tools_mingw,9.0.0-1-202111221309,qt.tools.win64_mingw900"
             qt_tools_mingw_install: mingw900_64
     env:
-      targetName: HelloActions-Qt.exe
+      targetName: PolyChatApp.exe
     steps:
       - name: Install Qt
         uses: jurplel/install-qt-action@v3
@@ -49,7 +49,7 @@ jobs:
         id: build
         shell: cmd
         run: |
-          qmake
+          qmake -makefile
           mingw32-make
       - name: package
         id: package      
