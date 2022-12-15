@@ -34,12 +34,12 @@ jobs:
         with:
           version: ${{ matrix.qt_ver }}
           cached: 'false'
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
         with:
           fetch-depth: 1
       - name: build macos
         run: |
-          qmake -makefile
+          qmake
           make
       # 打包
       - name: package
@@ -47,7 +47,7 @@ jobs:
           # 拷贝依赖
           macdeployqt bin/release/${targetName}.app -qmldir=. -verbose=1 -dmg
       # 上传artifacts          
-      - uses: actions/upload-artifact@v2
+      - uses: actions/upload-artifact@v3
         with:
           name: ${{ env.targetName }}_${{ matrix.os }}_${{matrix.qt_ver}}.zip
           path: bin/release/${{ env.targetName }}.app
