@@ -39,7 +39,7 @@ jobs:
           fetch-depth: 1
       - name: build macos
         run: |
-          qmake
+          qmake -project
           make
       # 打包
       - name: package
