@@ -29,6 +29,13 @@
 [![License](https://img.shields.io/badge/license-Apache%202.0-brightgreen)](LICENSE)
 
 
+<br>
+
+
+[![Build for MacOS](https://github.com/NekoSilverFox/PolyChat/actions/workflows/macos.yml/badge.svg)](https://github.com/NekoSilverFox/PolyChat/actions/workflows/macos.yml)
+
+[![Build for Windows](https://github.com/NekoSilverFox/PolyChat/actions/workflows/windows.yml/badge.svg)](https://github.com/NekoSilverFox/PolyChat/actions/workflows/windows.yml)
+
 <div align=left>
 
 
