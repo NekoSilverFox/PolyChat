@@ -3,12 +3,12 @@ on:
   push:
     paths:
       - 'PolyChatApp/*.pro'
-      - 'PolyChatApp/**'
+      - '**'
       - '.github/workflows/macos.yml'
   pull_request:
     paths:
       - 'PolyChatApp/*.pro'
-      - 'PolyChatApp/**'
+      - '**'
       - '.github/workflows/macos.yml' 
 jobs:
   build:
