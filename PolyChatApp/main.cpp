@@ -14,7 +14,7 @@ ChatList*    chatList                = nullptr;          // Widget ChatList (Onl
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
-    a.setWindowIcon(QIcon(":/icon/icons/logo_fox.png"));
+    a.setWindowIcon(QIcon(":/icon/icons/logo_fox.png"));              
 
     LoginWidget login;
     login.show();
