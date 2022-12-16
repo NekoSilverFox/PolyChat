@@ -18,9 +18,9 @@ TcpServer::TcpServer(QWidget *parent, QString filePath, QHostAddress ip, qint16 
     appendTextBrowser(Qt::blue, "[INFO] TCP server start");
 
     ///////////////////////////////// ui 图片 /////////////////////////////////
-    movie = new QMovie(":/gif/icons/loading.gif");
-    movie->start();
-    ui->labelPic->setMovie(movie);
+//    movie = new QMovie(":/gif/icons/loading.gif");
+//    movie->start();
+//    ui->labelPic->setMovie(movie);
 
     ///////////////////////////////// 初始化变量 /////////////////////////////////
     appendTextBrowser(Qt::blue, "[INFO] Initializing the TCP server...");
