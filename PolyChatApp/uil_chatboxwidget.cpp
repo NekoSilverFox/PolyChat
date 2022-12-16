@@ -206,14 +206,6 @@ void ChatBoxWidget::sendUDPSignal(const SignalType type)
     dataStream << localUserGroupNumber_5;   // 第5段：当前（本地）用户组号 localUserGroupNumber
     dataStream << localIpAddress_6;         // 第6段：当前（本地）用户ip localIpAddress
 
-    qDebug() << "sizeof(): \n"
-            << sizeof(signalType_1          )
-            << sizeof(chatName_2            )
-            << sizeof(chatPort_3            )
-            << sizeof(localUserName_4       )
-            << sizeof(localUserGroupNumber_5)
-            << sizeof(localIpAddress_6      );
-
     /* 添加消息块 7 的内容 */
     switch (type) {
 

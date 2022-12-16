@@ -19,9 +19,9 @@ TcpClient::TcpClient(QWidget *parent, QString fileName, qint64 fileSizeBytes, QH
 
 
     ///////////////////////////////// ui 图片 /////////////////////////////////
-//    movie = new QMovie(":/gif/icons/eating.gif");
-//    movie->start();
-//    ui->labelPic->setMovie(movie);
+    movie = new QMovie(":/gif/icons/eating.gif");
+    movie->start();
+    ui->labelPic->setMovie(movie);
 
 
     ///////////////////////////////// 初始化变量 /////////////////////////////////
