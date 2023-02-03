@@ -166,6 +166,12 @@
    </item>
   </layout>
  </widget>
+ <tabstops>
+  <tabstop>leUserName</tabstop>
+  <tabstop>leUserGroupNumber</tabstop>
+  <tabstop>btnInfo</tabstop>
+  <tabstop>btnLogin</tabstop>
+ </tabstops>
  <resources/>
  <connections/>
 </ui>

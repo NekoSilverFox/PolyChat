@@ -251,6 +251,16 @@ void ChatBoxWidget::receiveUDPMessage()
     dataStream >> localIpAddress_6;         // 第6段：发送信号用户ip
     dataStream >> msg_7;                    // 第7段：具体内容 QString
 
+    qDebug() << "收到消息："
+    << signalType_1
+    << chatName_2
+    << chatPort_3
+    << localUserName_4
+    << localUserGroupNumber_5
+    << localIpAddress_6
+    << msg_7;
+
+
     switch (signalType_1) {
     case SignalType::Msg:
         // 追加聊天记录
