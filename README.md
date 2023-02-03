@@ -266,100 +266,110 @@ TCP использует специализированный протокол �
 
 # Тестирование
 
+## Примечание
+
+PolyChat будет тестироваться с помощью QTest.
+
+QTestlib — это среда модульного тестирования, предоставляемая Qt для программ или библиотек, написанных на основе Qt. QTestLib предоставляет базовые функции среды модульного тестирования и предоставляет расширенные функции для тестирования графического интерфейса. Ниже перечислены особенности QTestlib:
+
+A. Легкий: QTestlib содержит только 6000 строк кода и 60 экспортируемых символов.
+B. Автономность: для тестов без графического интерфейса QTestlib требуется только несколько символов базовой библиотеки Qt.
+C. Быстрый тест: QTestlib не требует специальной исполнительной программы тестирования и не требует специальной регистрации для тестирования.
+D. Тестирование на основе данных. Тестовая программа может выполняться несколько раз на разных наборах тестовых данных.
+E. Базовое тестирование GUI: QTestlib предоставляет функцию имитации событий мыши и клавиатуры.
+F. Контрольное тестирование: QTestLIB поддерживает контрольное тестирование и предоставляет различные средства измерения.
+G. Совместимость с IDE: выходные данные QTestlib могут быть проанализированы Visual Studio и KDevelop.
+H. Безопасность потоков: отчеты об ошибках являются потокобезопасными и атомарными.
+J. Безопасность типов: шаблон расширен для предотвращения ошибок, вызванных неявным преобразованием типов.
+K. Простота расширения: определяемые пользователем типы могут быть легко добавлены к тестовым данным и тестовым результатам.
+
+Тесты должны выполняться автоматически, когда проект собирается с помощью компоновщика qmake, создающего исполняемый файл. Используя CI/CD на Github, триггеры будут автоматически создаваться и тестироваться на платформах Windows и macOS при изменении кода (одновременное тестирование на обеих платформах обеспечивает кроссплатформенный характер PolyChat).
+
 ## Модульное тестирование
 
-|      | 测试名                           | 所属模块    | 说明（预期结果）                                             |
-| ---- | -------------------------------- | ----------- | ------------------------------------------------------------ |
-| 1    | ut_login_login_empty             | Login       | 登录失败（用户名不能为空）                                   |
-| 2    | ut_login_group_empty             | Login       | 登录失败（班级号不能为空）                                   |
-| 3    | ut_login_login_group_empty       | Login       | 登录失败（用户名和班级号不能为空）                           |
-| 4    | ut_login_init_login              | Login       | 传入正确格式的登录名，本地信息被正确初始化                   |
-| 5    | ut_login_init_group              | Login       | 传入正确格式的班级号，本地信息被正确初始化                   |
-| 6    | ut_login_btnlogin_emit           | Login       | 用户每次点击登录按钮时，保证（按钮点击）信号正确触发，且为一次 |
-| 7    | ut_login_leUserName              | Login       | 模拟用户点击并且通过键盘输入，确保输入内容在 leUserName 输入框中正确显示 |
-| 8    | ut_login_leUserGroupNumber       | Login       | 模拟用户点击并且通过键盘输入，确保输入内容在 leUserGroupNumber 输入框中正确显示 |
-| 9    | ut_addchat_leNameNewChat         | Add Chat    | 模拟用户点击并且通过键盘输入，确保输入内容在 leNameNewChat 输入框中正确显示 |
-| 10   | ut_addchat_btnCancelAddChat      | Add Chat    | 用户每次点击取消按钮时，保证（按钮点击）信号正确触发，且为一次 |
-| 11   | ut_addchat_btnAddChat            | Add Chat    | 用户每次点击添加按钮时，保证（按钮点击）信号正确触发，且为一次 |
-| 12   |                                  |             |                                                              |
-| 13   | ut_chat_init                     | Chat(Class) | 正确初始化（使用构造函数）一个 Chat 对象                     |
-| 14   | ut_chatlist_btnNewChat_emit      | ChatList    | 用户每次点击增加群聊按钮时，保证（按钮点击）信号正确触发，且为一次 |
-| 15   | ut_chatlist_leSearch             | ChatList    | 模拟用户点击并且通过键盘输入，确保输入内容在 leSearch 搜索框中正确显示 |
-| 16   | ut_chatlist_leSearch_change_emit | ChatList    | 当用户改变搜索框中的内容时，触发信号                         |
-| 17   | ut_chatlist_lbName               | ChatList    | lbName 中正确显示本用户的用户名                              |
-| 18   | ut_chatlist_lbGroupNumber        | ChatList    | lbGroupNumber 中正确显示本用户的班级号                       |
-| 19   | ut_chatlist_lbIP                 | ChatList    | lbIP 中正确显示本用户的 ip 地址                              |
-| 20   | ut_addchat_port_exist            | ChatList    | 返回 false（当前端口上已存在群聊）                           |
-| 21   | ut_addchat_port_not_exist        | ChatList    | 返回 true（当前端口上不存在群聊）                            |
-| 22   | ut_addchat_chat_exist            | ChatList    | 返回 false（已存在同名的群聊）                               |
-| 23   | ut_addchat_chat_not_exist        | ChatList    | 返回 true（不存在同名的群聊）                                |
-| 24   | ut_chatlist_chat_not_open        | ChatList    | 返回 false（如果某个名称的群聊没有被打开）                   |
-| 25   | ut_chatlist_chat_open            | ChatList    | 返回 true（如果某个名称的群聊被打开了）                      |
-| 26   | ut_tcpclient_lbClientIP          | TcpClient   | lbClientIP 内容正确解析且显示                                |
-| 27   | ut_tcpclient_lbClientPort        | TcpClient   | lbClientPort 内容正确解析且显示                              |
-| 28   | ut_tcpclient_lbServerIP          | TcpClient   | lbServerIP 内容正确解析且显示                                |
-| 29   | ut_tcpclient_lbServerPort        | TcpClient   | lbServerPort 内容正确解析且显示                              |
-| 30   | ut_tcpclient_lbFileName          | TcpClient   | lbFileName 内容正确解析且显示                                |
-| 31   | ut_tcpclient_lbFileSize          | TcpClient   | lbFileSize 内容正确解析且显示                                |
-| 32   | ut_tcpclient_progressBar         | TcpClient   | progressBar 初始化时为 0                                     |
-| 33   | ut_tcpclient_btnCancel_emit      | TcpClient   | 用户每次点击取消按钮时，保证（按钮点击）信号正确触发，且为一次 |
-| 34   | ut_tcpclient_btnSave_emit        | TcpClient   | 用户每次点击保存按钮时，保证（按钮点击）信号正确触发，且为一次 |
-| 35   | ut_tcclient_closeEvent_emit      | TcpClient   | 用户关闭窗口时触发关闭事件                                   |
-| 36   | ut_tcpserver_lbClientIP          | TcpServer   | lbClientIP 内容正确解析且显示                                |
-| 37   | ut_tcpserver_lbClientPort        | TcpServer   | lbClientPort 内容正确解析且显示                              |
-| 22   | ut_tcpserver_lbServerIP          | TcpServer   | lbServerIP 内容正确解析且显示                                |
-| 38   | ut_tcpserver_lbServerPort        | TcpServer   | lbServerPort 内容正确解析且显示                              |
-| 39   | ut_tcpserver_lbFilePath          | TcpServer   | lbFilePath 内容正确解析且显示                                |
-| 40   | ut_tcpserver_lbFileSize          | TcpServer   | lbFileSize 内容正确解析且显示                                |
-| 41   | ut_tcpserver_btnCancel_emit      | TcpServer   | 用户每次点击取消按钮时，保证（按钮点击）信号正确触发，且为一次 |
-| 42   | ut_tcpserver_progressBar         | TcpServer   | progressBar 初始化时为 0                                     |
-| 43   | ut_tcpserver_closeEvent_emit     | TcpServer   | 用户关闭窗口时触发关闭事件                                   |
-| 44   | ut_chatbox_title                 | ChatBox     | ChatBox 窗口的标题正确初始化（符合格式）                     |
-| 45   | ut_chatbox_btnBold               | ChatBox     | 保证 btnBold 是可选按钮（Checkable-QToolButton），且文字显示被禁用 |
-| 46   | ut_chatbox_btnItalic             | ChatBox     | 保证 btnItalic 是可选按钮（Checkable-QToolButton），且文字显示被禁用 |
-| 47   | ut_chatbox_btnUnderLine          | ChatBox     | 保证 btnUnderLine 是可选按钮（Checkable-QToolButton），且文字显示被禁用 |
-| 48   | ut_chatbox_btnColor              | ChatBox     | 保证 btnColor 不是可选按钮（Checkable-QToolButton），且文字显示被禁用 |
-| 49   | ut_chatbox_btnFileSend           | ChatBox     | 保证 btnFileSend 不是可选按钮（Checkable-QToolButton），且文字显示被禁用 |
-| 50   | ut_chatbox_btnSave               | ChatBox     | 保证 btnSave 不是可选按钮（Checkable-QToolButton），且文字显示被禁用 |
-| 51   | ut_chatbox_btnClean              | ChatBox     | 保证 btnClean 不是可选按钮（Checkable-QToolButton），且文字显示被禁用 |
-| 52   | ut_chatbox_btnExit               | ChatBox     | 保证 btnExit 不是可选按钮（Checkable）                       |
-| 53   | ut_chatbox_btnSend               | ChatBox     | 保证 btnSend 不是可选按钮（Checkable）                       |
-| 54   | ut_chatbox_btnBold_emit          | ChatBox     | 点击 btnBold 触发（按钮点击）信号，且状态改变为 enable；再次点击恢复为初始状态 |
-| 55   | ut_chatbox_btnItalic_emit        | ChatBox     | 点击 btnItalic 触发（按钮点击）信号，且状态改变为 enable；再次点击恢复为初始状态 |
-| 56   | ut_chatbox_btnUnderLine_emit     | ChatBox     | 点击 btnUnderLine 触发（按钮点击）信号，且状态改变为 enable；再次点击恢复为初始状态 |
-| 57   | ut_chatbox_btnColor_emit         | ChatBox     | 点击 btnColor 触发（按钮点击）信号                           |
-| 58   | ut_chatbox_btnFileSend_emit      | ChatBox     | 点击 btnFileSend 触发（按钮点击）信号                        |
-| 59   | ut_chatbox_btnSave_emit          | ChatBox     | 点击 btnSave 触发（按钮点击）信号                            |
-| 60   | ut_chatbox_btnClean_emit         | ChatBox     | 点击 btnClean 触发（按钮点击）信号                           |
-| 61   | ut_chatbox_btnExit_emit          | ChatBox     | 点击 btnExit 触发（按钮点击）信号                            |
-| 62   | ut_chatbox_btnSend_emit          | ChatBox     | 点击 btnSend 触发（按钮点击）信号                            |
-| 63   | ut_chatbox_msgTextBrowser        | ChatBox     | msgTextBrowser 为只读状态                                    |
-| 64   | ut_chatbox_msgTextEdit           | ChatBox     | msgTextEdit 允许写入                                         |
-| 65   | ut_chatbox_init_cbxFontSize      | ChatBox     | 初始字体为 12                                                |
-| 67   | ut_chatbox_cbxFontSize_min_max   | ChatBox     | 最小字体为 10，最大为 28                                     |
-| 68   | ut_chatbox_closeEvent_emit       | ChatBox     | 用户关闭窗口（退出）时触发关闭事件                           |
-|      |                                  |             |                                                              |
+|      | Название Тестирования            | Аффилир ованные модули | Описание (ожидаемые результаты)                              |
+| ---- | -------------------------------- | ---------------------- | ------------------------------------------------------------ |
+| 1    | ut_login_login_empty             | Login                  | Сбой входа в систему (имя пользователя не может быть пустым) |
+| 2    | ut_login_group_empty             | Login                  | Сбой входа в систему (номер класса не мож ет быть пустым)    |
+| 3    | ut_login_login_group_empty       | Login                  | Сбой входа в систему (имя пользователя и н омер класса не могут быть пустыми) |
+| 4    | ut_login_init_login              | Login                  | Локальная информация инициализируется п равильно путем передачи правильного фор мата имени входа в систему |
+| 5    | ut_login_init_group              | Login                  | Передайте номер класса в правильном форм ате, и локальная информация будет инициал изирована правильно |
+| 6    | ut_login_btnlogin_emit           | Login                  | Вход в систему Убедитесь, что сигнал (нажатие кнопки) срабатывает правильно и один раз кажд ый раз, когда пользователь нажимает на кн опку входа в систему, срабатывает правильно и на один раз |
+| 7    | ut_login_leUserName              | Login                  | Имитируйте щелчок пользователя и ввод с клавиатуры, чтобы убедиться, что вводимый контент правильно отображается в поле ввода leUserName. |
+| 8    | ut_login_leUserGroupNumber       | Login                  | Имитируйте щелчок пользователя и ввод с клавиатуры, чтобы убедиться, что вводимый контент правильно отображается в поле ввода leUserGroupNumber. |
+| 9    | ut_addchat_leNameNewChat         | Add Chat               | Имитируйте щелчок пользователя и ввод с клавиатуры, чтобы убедиться, что вводимое содержимое правильно отображается в поле ввода leNameNewChat. |
+| 10   | ut_addchat_btnCancelAddChat      | Add Chat               | Каждый раз, когда пользователь нажимает кнопку отмены, убедитесь, что сигнал (нажатие кнопки) срабатывает правильно, и это один раз |
+| 11   | ut_addchat_btnAddChat            | Add Chat               | Каждый раз, когда пользователь нажимает кнопку добавления, убедитесь, что сигнал (нажатие кнопки) срабатывает правильно, и это один раз |
+| 12   |                                  |                        |                                                              |
+| 13   | ut_chat_init                     | Chat(Class)            | Правильно инициализировать (используя конструктор) объект чата. Смоделируйте, как пользователь нажимает и печатает на клавиатуре, чтобы убедиться, что вводимое содержимое правильно отображается в поле поиска leSearch. |
+| 14   | ut_chatlist_btnNewChat_emit      | ChatList               | Каждый раз, когда пользователь нажимает кнопку, чтобы добавить групповой чат, убедитесь, что сигнал (нажатие кнопки) срабатывает правильно, и это один раз. |
+| 15   | ut_chatlist_leSearch             | ChatList               | Смоделируйте, как пользователь нажимает и печатает на клавиатуре, чтобы убедиться, что вводимое содержимое правильно отображается в поле поиска leSearch |
+| 16   | ut_chatlist_leSearch_change_emit | ChatList               | Инициировать сигнал, когда пользователь меняет содержимое в поле поиска |
+| 17   | ut_chatlist_lbName               | ChatList               | Имя пользователя этого пользователя правильно отображается в lbName |
+| 18   | ut_chatlist_lbGroupNumber        | ChatList               | Номер класса этого пользователя правильно отображается в lbGroupNumber |
+| 19   | ut_chatlist_lbIP                 | ChatList               | IP-адрес пользователя корректно отображается в lbIP          |
+| 20   | ut_addchat_port_exist            | ChatList               | возвращает false (групповой чат уже существует на текущем порту) |
+| 21   | ut_addchat_port_not_exist        | ChatList               | Возвращает true (групповой чат не существует на текущем порту) |
+| 22   | ut_addchat_chat_exist            | ChatList               | возвращает false (групповой чат с таким названием уже существует) |
+| 23   | ut_addchat_chat_not_exist        | ChatList               | Возвращает true (групповой чат с таким именем не существует) |
+| 24   | ut_chatlist_chat_not_open        | ChatList               | Возвращает false (если групповой чат с определенным именем не открыт) |
+| 25   | ut_chatlist_chat_open            | ChatList               | Возвращает true (если открыт групповой чат с именем)         |
+| 26   | ut_tcpclient_lbClientIP          | TcpClient              | Содержимое lbClientIP анализируется правильно и отображается |
+| 27   | ut_tcpclient_lbClientPort        | TcpClient              | Содержимое lbClientPort правильно анализируется и отображается |
+| 28   | ut_tcpclient_lbServerIP          | TcpClient              | Содержимое lbServerIP корректно анализируется и отображается |
+| 29   | ut_tcpclient_lbServerPort        | TcpClient              | Содержимое lbServerPort правильно анализируется и отображается |
+| 30   | ut_tcpclient_lbFileName          | TcpClient              | Содержимое lbFileName правильно анализируется и отображается |
+| 31   | ut_tcpclient_lbFileSize          | TcpClient              | Содержимое lbFileSize правильно анализируется и отображается |
+| 32   | ut_tcpclient_progressBar         | TcpClient              | progressBar инициализирован до 0                             |
+| 33   | ut_tcpclient_btnCancel_emit      | TcpClient              | Каждый раз, когда пользователь нажимает кнопку отмены, убедитесь, что сигнал (нажатие кнопки) срабатывает правильно, и это один раз |
+| 34   | ut_tcpclient_btnSave_emit        | TcpClient              | Каждый раз, когда пользователь нажимает кнопку сохранения, убедитесь, что сигнал (нажатие кнопки) срабатывает правильно, и это один раз |
+| 35   | ut_tcclient_closeEvent_emit      | TcpClient              | Запускает событие закрытия, когда пользователь закрывает окно |
+| 36   | ut_tcpserver_lbClientIP          | TcpServer              | Содержимое lbClientIP анализируется правильно и отображается |
+| 37   | ut_tcpserver_lbClientPort        | TcpServer              | Содержимое lbClientPort правильно анализируется и отображается |
+| 22   | ut_tcpserver_lbServerIP          | TcpServer              | Содержимое lbServerIP корректно анализируется и отображается |
+| 38   | ut_tcpserver_lbServerPort        | TcpServer              | Содержимое lbServerPort правильно анализируется и отображается |
+| 39   | ut_tcpserver_lbFilePath          | TcpServer              | Содержимое lbFilePath правильно анализируется и отображается |
+| 40   | ut_tcpserver_lbFileSize          | TcpServer              | Содержимое lbFileSize правильно анализируется и отображается |
+| 41   | ut_tcpserver_btnCancel_emit      | TcpServer              | Каждый раз, когда пользователь нажимает кнопку отмены, убедитесь, что сигнал (нажатие кнопки) срабатывает правильно, и это один раз |
+| 42   | ut_tcpserver_progressBar         | TcpServer              | progressBar инициализирован до 0                             |
+| 43   | ut_tcpserver_closeEvent_emit     | TcpServer              | Запускает событие закрытия, когда пользователь закрывает окно |
+| 44   | ut_chatbox_title                 | ChatBox                | Заголовок окна ChatBox инициализирован корректно (соответствует формату) |
+| 45   | ut_chatbox_btnBold               | ChatBox                | Убедитесь, что btnBold является отмечаемой кнопкой (Checkable-QToolButton), а отображение текста отключено. |
+| 46   | ut_chatbox_btnItalic             | ChatBox                | Убедитесь, что btnItalic является отмечаемой кнопкой (Checkable-QToolButton), а отображение текста отключено. |
+| 47   | ut_chatbox_btnUnderLine          | ChatBox                | Убедитесь, что btnUnderLine является отмечаемой кнопкой (Checkable-QToolButton), а отображение текста отключено. |
+| 48   | ut_chatbox_btnColor              | ChatBox                | Убедитесь, что btnColor не является отмечаемой кнопкой (Checkable-QToolButton), а отображение текста отключено. |
+| 49   | ut_chatbox_btnFileSend           | ChatBox                | Убедитесь, что btnFileSend не является отмечаемой кнопкой (Checkable-QToolButton), а отображение текста отключено. |
+| 50   | ut_chatbox_btnSave               | ChatBox                | Убедитесь, что btnSave не является отмечаемой кнопкой (Checkable-QToolButton), а отображение текста отключено. |
+| 51   | ut_chatbox_btnClean              | ChatBox                | Убедитесь, что btnClean не является отмечаемой кнопкой (Checkable-QToolButton), а отображение текста отключено. |
+| 52   | ut_chatbox_btnExit               | ChatBox                | Убедитесь, что кнопка btnExit не является проверяемой (проверяемой) |
+| 53   | ut_chatbox_btnSend               | ChatBox                | Убедитесь, что кнопка btnSend не является проверяемой (проверяемой) |
+| 54   | ut_chatbox_btnBold_emit          | ChatBox                | Нажмите btnBold, чтобы активировать сигнал (нажатие кнопки), и состояние изменится на «включено»; нажмите еще раз, чтобы вернуться в исходное состояние. |
+| 55   | ut_chatbox_btnItalic_emit        | ChatBox                | Нажмите btnItalic, чтобы активировать сигнал (нажатие кнопки), и состояние изменится на «включено»; нажмите еще раз, чтобы вернуться в исходное состояние. |
+| 56   | ut_chatbox_btnUnderLine_emit     | ChatBox                | Нажмите btnUnderLine, чтобы активировать сигнал (нажатие кнопки), и состояние изменится на «включено»; нажмите еще раз, чтобы вернуться в исходное состояние. |
+| 57   | ut_chatbox_btnColor_emit         | ChatBox                | Click btnColor запускает сигнал (нажатие кнопки)             |
+| 58   | ut_chatbox_btnFileSend_emit      | ChatBox                | Нажмите btnFileSend триггеры (нажатие кнопки) сигнал         |
+| 59   | ut_chatbox_btnSave_emit          | ChatBox                | Нажатие кнопки btnSave запускает сигнал (нажатие кнопки)     |
+| 60   | ut_chatbox_btnClean_emit         | ChatBox                | Сигнал триггеров Click btnClean (нажатие кнопки)             |
+| 61   | ut_chatbox_btnExit_emit          | ChatBox                | Click btnExit запускает сигнал (нажатие кнопки)              |
+| 62   | ut_chatbox_btnSend_emit          | ChatBox                | Клик btnSend запускает сигнал (нажатие кнопки)               |
+| 63   | ut_chatbox_msgTextBrowser        | ChatBox                | msgTextBrowser доступен только для чтения                    |
+| 64   | ut_chatbox_msgTextEdit           | ChatBox                | msgTextEdit позволяет писать                                 |
+| 65   | ut_chatbox_init_cbxFontSize      | ChatBox                | Начальный шрифт 12                                           |
+| 67   | ut_chatbox_cbxFontSize_min_max   | ChatBox                | Минимальный размер шрифта 10, максимальный размер 28         |
+| 68   | ut_chatbox_closeEvent_emit       | ChatBox                | Событие close срабатывает, когда пользователь закрывает окно (выход). |
+|      |                                  |                        |                                                              |
 
 ## Интеграционное тестирование
 
-| 测试名                    | 所属模块 | 说明（预期结果）                                       |
-| ------------------------- | -------- | ------------------------------------------------------ |
-| mt_login_init_succ        | Login    | 登陆成功，本地用户信息被正确初始化                     |
-|                           |          |                                                        |
-| mt_chatlist_getNewBtn     | ChatList | 根据传入的参数，所创建的新按钮对象中拥有正确的信息     |
-| mt_chatlist_getRandomPort | ChatList | 生成的随机端口介于 PORT_MIN 与 PORT_MAX                |
-| mt_chatlist_setChatState  | ChatList | 正常设置聊天窗口为打开或者关闭                         |
-|                           |          |                                                        |
-| mt_chatbox_btnBold        | ChatBox  | 当 btnBold 为选中状态时，用户输入文字被加粗            |
-| mt_chatbox_btnItalic      | ChatBox  | 当 btnItalic 为选中状态时，用户输入文字被倾斜          |
-| mt_chatbox_btnUnderLine   | ChatBox  | 当 btnUnderLine 为选中状态时，用户输入文字被添加下划线 |
-|                           |          |                                                        |
-|                           |          |                                                        |
-|                           |          |                                                        |
-|                           |          |                                                        |
-|                           |          |                                                        |
-|                           |          |                                                        |
-|                           |          |                                                        |
-|                           |          |                                                        |
-|                           |          |                                                        |
+| Название Тестирования     | Аффилир ованные модули | Описание (ожидаемые результаты)                              |
+| ------------------------- | ---------------------- | ------------------------------------------------------------ |
+| mt_login_init_succ        | Login                  | Вход выполнен успешно, и информация о локальном пользователе правильно инициализирована |
+|                           |                        |                                                              |
+| mt_chatlist_getNewBtn     | ChatList               | В соответствии с переданными параметрами создается новый объект кнопки с правильной информацией |
+| mt_chatlist_getRandomPort | ChatList               | Генерирует случайные порты между PORT_MIN и PORT_MAX         |
+| mt_chatlist_setChatState  | ChatList               | Обычно окно чата открывается или закрывается                 |
+|                           |                        |                                                              |
+| mt_chatbox_btnBold        | ChatBox                | Когда выбрано btnBold, текст, введенный пользователем, выделяется полужирным шрифтом |
+| mt_chatbox_btnItalic      | ChatBox                | Вводимый пользователем текст выделяется курсивом при выборе btnItalic |
+| mt_chatbox_btnUnderLine   | ChatBox                | Когда выбрано btnUnderLine, текст, введенный пользователем, будет подчеркнут |
 
