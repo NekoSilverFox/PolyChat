@@ -1,6 +1,9 @@
 #include "uil_chatboxwidget.h"
 #include "ui_chatboxwidget.h"
 #include "dal_polychat.h"
+#include "tcpserver.h"
+#include "tcpclient.h"
+
 #include <QDataStream>
 #include <QDateTime>
 #include <QFile>
@@ -8,6 +11,7 @@
 #include <QMessageBox>
 #include <QColorDialog>
 #include <QFileDialog>
+#include <QDesktopServices>
 
 ChatBoxWidget::ChatBoxWidget(QWidget* parent, QString name, qint16 port)
     : QWidget(parent)
@@ -17,6 +21,8 @@ ChatBoxWidget::ChatBoxWidget(QWidget* parent, QString name, qint16 port)
 {
     ui->setupUi(this);
     this->setWindowTitle(QString("[Chat] %1 on port %2").arg(name).arg(port));
+    this->setAttribute(Qt::WA_DeleteOnClose);
+    this->setWindowIcon(QIcon(":/icon/icons/user-group.png"));
 
     /* 对所有窗口的同样地址广播 8888 (告诉 ChatList 本窗口存在) */
     this->udpSocketOnPortChatList = new QUdpSocket(this);
@@ -30,6 +36,7 @@ ChatBoxWidget::ChatBoxWidget(QWidget* parent, QString name, qint16 port)
                                        QUdpSocket::ShareAddress | QUdpSocket::ReuseAddressHint);  // 共享地址 + 断线重连
     connect(udpSocketOnPortChatBox, &QUdpSocket::readyRead,
             this, &ChatBoxWidget::receiveUDPMessage);
+
 
     /* 每隔 BORDCAST_TIME_STEP 毫秒就发送一下当前窗口打开的信息 */
     QTimer* timer = new QTimer(this);
@@ -128,6 +135,36 @@ ChatBoxWidget::ChatBoxWidget(QWidget* parent, QString name, qint16 port)
         textStream << ui->msgTextBrowser->toPlainText();
         file.close();
     });
+
+    /* 发送文件 */
+    connect(ui->btnFileSend, &QToolButton::clicked,
+            this, [=](){
+        QString path = QFileDialog::getOpenFileName(this, "Send file", ".");
+
+        if (path.isEmpty())
+        {
+             QMessageBox::warning(this, "Warning", "File sending cancellation");
+             return;
+        }
+
+        QFileInfo info(path);
+        if (info.size() > FILE_SEND_MAX_BYTES)
+        {
+            QMessageBox::critical(this, "Error", "File size cannot exceed 1Gb");
+            return;
+        }
+
+        this->lastSendFilePath = path;
+
+        TcpServer* tcpServer = new TcpServer(nullptr, path, DAL::getLocalIpAddress(), PORT_TCP_FILE);
+        tcpServer->show();
+
+        sendUDPSignal(SignalType::File);  // 同时向所有客户端通过 UDP 广播要发送的文件信息
+    });
+
+    /* 点击聊天框中的链接可以再外部进行打开 */
+    connect(ui->msgTextBrowser, &QTextBrowser::anchorClicked,
+            this, &ChatBoxWidget::openURL);
 }
 
 ChatBoxWidget::~ChatBoxWidget()
@@ -148,7 +185,8 @@ void ChatBoxWidget::sendUDPSignal(const SignalType type)
     *   第4段：当前（本地）用户名 localUserName
     *   第5段：当前（本地）用户组号 localUserGroupNumber
     *   第6段：当前（本地）用户ip localIpAddress
-    *   第7段：具体内容
+    *   第7段：具体内容（当发送文件时：文件名）
+    *   第8段：（当发送文件时才有）文件大小 qint64-bytes
     */
     SignalType      signalType_1            = type;
     QString         chatName_2              = this->name;
@@ -194,21 +232,35 @@ void ChatBoxWidget::sendUDPSignal(const SignalType type)
                                               port);
         break;  // END SignalType::Msg
 
+    case SignalType::File:
+        {
+            QFileInfo info(this->lastSendFilePath);
+            dataStream << info.fileName();  // 第7段：具体内容（当发送文件时：文件名）
+            dataStream << info.size();      // 第8段：（当发送文件时才有）文件大小 qint64-bytes
+        }
+        udpSocketOnPortChatBox->writeDatagram(resByteArray,
+                                              QHostAddress(QHostAddress::Broadcast),
+                                              port);
+        break;  // END SignalType::File
+
     case SignalType::UserJoin:
         dataStream <<  QString("SignalType::UserJoin");
         udpSocketOnPortChatBox->writeDatagram(resByteArray,
                                               QHostAddress(QHostAddress::Broadcast),
                                               port);
-        break;
+        break;  // END SignalType::UserJoin
 
     case UserLeft:
         dataStream <<  QString("SignalType::UserLeft");
         udpSocketOnPortChatBox->writeDatagram(resByteArray,
                                               QHostAddress(QHostAddress::Broadcast),
                                               port);
-        break;
+        break;  // END SignalType::UserLeft
 
     default:
+#if !QT_NO_DEBUG
+        qDebug() << "[ERROR]" << __FILE__ << __LINE__ << "Unkown SignalType";
+#endif
         break;
     }
 }
@@ -219,8 +271,8 @@ void ChatBoxWidget::sendUDPSignal(const SignalType type)
 void ChatBoxWidget::receiveUDPMessage()
 {
     /* 拿到数据报文 */
-    qint64 msgSize = udpSocketOnPortChatBox->pendingDatagramSize();
-    QByteArray resByteArray = QByteArray(msgSize, 0);
+    qint64      msgSize = udpSocketOnPortChatBox->pendingDatagramSize();
+    QByteArray  resByteArray = QByteArray(msgSize, 0);
     udpSocketOnPortChatBox->readDatagram(resByteArray.data(), msgSize);
 
     /** 解析数据 - 消息分为 5 类 (SignalType)，所以要对数据做分段处理
@@ -232,16 +284,17 @@ void ChatBoxWidget::receiveUDPMessage()
     *   第6段：当前（本地）用户ip localIpAddress
     *   第7段：具体内容 QString
     */
-    SignalType      signalType_1            ;
-    QString         chatName_2              ;
-    qint16          chatPort_3              ;
-    QString         localUserName_4         ;
-    QString         localUserGroupNumber_5  ;
-    QHostAddress    localIpAddress_6        ;
-    QString         msg_7;
+    SignalType      signalType_1          ;
+    QString         chatName_2            ;
+    qint16          chatPort_3            ;
+    QString         localUserName_4       ;
+    QString         localUserGroupNumber_5;
+    QHostAddress    localIpAddress_6      ;
+    QString         msg_7                 ;
+    qint64          fileSize_8            ; // 第8段：（当发送文件时才有）文件大小 qint64-bytes
 
-    QDataStream dataStream(&resByteArray, QIODevice::ReadOnly);
-    QString time = QDateTime::currentDateTime().toString("dd-MM-yyyy hh:mm:ss");
+    QDataStream     dataStream(&resByteArray, QIODevice::ReadOnly);
+    QString         time = QDateTime::currentDateTime().toString("dd-MM-yyyy hh:mm:ss");
 
     dataStream >> signalType_1;             // 第1段：数据类型
     dataStream >> chatName_2;               // 第2段：发送信号（本）信号的群组名称
@@ -249,17 +302,19 @@ void ChatBoxWidget::receiveUDPMessage()
     dataStream >> localUserName_4;          // 第4段：发送信号用户名
     dataStream >> localUserGroupNumber_5;   // 第5段：发送信号用户组号
     dataStream >> localIpAddress_6;         // 第6段：发送信号用户ip
-    dataStream >> msg_7;                    // 第7段：具体内容 QString
+    dataStream >> msg_7;                    // 第7段：具体内容 QString（当发送文件时：文件名）
 
-    qDebug() << "收到消息："
-    << signalType_1
-    << chatName_2
-    << chatPort_3
-    << localUserName_4
-    << localUserGroupNumber_5
-    << localIpAddress_6
-    << msg_7;
-
+#if !QT_NO_DEBUG
+    qDebug() << "[UDP-ChatBox] receiveUDPMessage: "
+             << SignalType::Msg
+             << signalType_1
+             << chatName_2
+             << chatPort_3
+             << localUserName_4
+             << localUserGroupNumber_5
+             << localIpAddress_6
+             << msg_7;
+#endif
 
     switch (signalType_1) {
     case SignalType::Msg:
@@ -267,6 +322,34 @@ void ChatBoxWidget::receiveUDPMessage()
         ui->msgTextBrowser->setTextColor(Qt::blue);
         ui->msgTextBrowser->append("[" + localUserName_4 + "] " + time);
         ui->msgTextBrowser->append(msg_7);
+        break;
+
+    case SignalType::File:
+        dataStream >> fileSize_8; // 第8段：（当发送文件时才接收）为文件大小 qint64-bytes
+        ui->msgTextBrowser->setTextColor(Qt::darkCyan);
+        ui->msgTextBrowser->append(QString(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>\n"
+                                           "[%1] on [%2] send a file, file information:\n"
+                                           "Name: %3\n"
+                                           "Size: %4Kb\n"
+                                           ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>").arg(localUserName_4).arg(time).arg(msg_7).arg(fileSize_8 / 1024));
+#if QT_NO_DEBUG
+        /* 判断发送方是不是自己，如果是自己的话，就不用再接收了
+         * 如果是不是自己的话，那么就询问是否接收
+         */
+        if (localIpAddress_6 == DAL::getLocalIpAddress()) { return; }  // 如果文件接收方和发送方都是本机，那么不需要弹出文件接收请求
+#endif
+        if (QMessageBox::Yes == QMessageBox::information(this, "File reception request", QString(
+                                 "[%1] from group [%2] wants to send you a file, do you want to receive it?\n\n"
+                                 "---------------------\n"
+                                 "File information:\n"
+                                 "Name: %3\n"
+                                 "Size: %4Kb").arg(localUserName_4).arg(localUserGroupNumber_5).arg(msg_7).arg(fileSize_8 / 1024),
+                                 QMessageBox::No | QMessageBox::Yes,
+                                 QMessageBox::Yes))
+        {
+            TcpClient* tcpClient = new TcpClient(nullptr, msg_7, fileSize_8, localIpAddress_6, PORT_TCP_FILE);
+            tcpClient->show();
+        }
         break;
 
     case SignalType::UserJoin:
@@ -278,6 +361,9 @@ void ChatBoxWidget::receiveUDPMessage()
         break;
 
     default:
+#if !QT_NO_DEBUG
+        qDebug() << "[ERROR]" << __FILE__ << __LINE__ << "Unkown SignalType";
+#endif
         break;
     }
 }
@@ -316,7 +402,7 @@ void ChatBoxWidget::userLeft(QString name, QString time)
 
         /* 追加聊天记录 */
         ui->msgTextBrowser->setTextColor(Qt::gray);
-        ui->msgTextBrowser->append(QString("%1 left %2 on ").arg(name).arg(time));
+        ui->msgTextBrowser->append(QString("%1 left on %2").arg(name).arg(time));
 
         /* 在线用户更新 */
         ui->lbNumberOnlineUse->setText(QString("Number of online user：%1").arg(ui->tbUser->rowCount()));
@@ -356,4 +442,10 @@ void ChatBoxWidget::closeEvent(QCloseEvent* event)
     udpSocketOnPortChatBox->destroyed();
 
     QWidget::closeEvent(event);
+}
+
+void ChatBoxWidget::openURL(const QUrl& url)
+{
+    QString strUrl = url.toString();
+    QDesktopServices::openUrl(url);
 }
