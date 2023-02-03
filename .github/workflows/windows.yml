@@ -1,4 +1,4 @@
-name: Build for Windows
+name: Windows Build and Test
 on: 
   # push代码时触发workflow
   push:
@@ -45,7 +45,7 @@ jobs:
         with:
           fetch-depth: 1
       # msvc编译
-      - name: msvc-build
+      - name: msvc-build and test
         id: build
         shell: cmd
         run: |

@@ -1,4 +1,4 @@
-name: Build for MacOS
+name: macOS Build and Test
 on: 
   push:
     paths:
@@ -35,7 +35,7 @@ jobs:
       - uses: actions/checkout@v2
         with:
           fetch-depth: 1
-      - name: build macos
+      - name: build and test on macOS 
         run: |
           cd ./PolyChatApp
           qmake
