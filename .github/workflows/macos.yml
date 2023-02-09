@@ -37,7 +37,7 @@ jobs:
       - uses: actions/checkout@v2
         with:
           fetch-depth: 1
-      - name: build on macOS 
+      - name: Build on macOS 
         run: |
           cd ./App
           qmake
@@ -70,7 +70,7 @@ jobs:
       - uses: actions/checkout@v2
         with:
           fetch-depth: 1
-      - name: test on macOS 
+      - name: Test on macOS 
         run: |
           cd ./Tester
           qmake
