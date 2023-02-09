@@ -105,6 +105,7 @@ jobs:
           nmake
           dir
           cd ./release
+          dir
           PolyChatTester -vs -txt
           echo winSdkDir=%WindowsSdkDir% >> %GITHUB_ENV%
           echo winSdkVer=%WindowsSdkVersion% >> %GITHUB_ENV%
