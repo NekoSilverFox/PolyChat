@@ -37,8 +37,43 @@ jobs:
       - uses: actions/checkout@v2
         with:
           fetch-depth: 1
-      - name: build and test on macOS 
+      - name: Build on macOS 
         run: |
           cd ./App
           qmake
           make
+  test:
+    # needs 添加层级关系，上面的执行完了。这个才会执行
+    needs: build
+    name: Test
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [macos-10.15]
+        qt_ver: [6.2.2]
+        qt_arch: [clang_64]
+    env:
+      targetName: PolyChatTester
+    steps:
+      # macos 11.0 默认环境变了,要指定
+      - name: prepare env
+        if: ${{ matrix.os == 'macos-11.0' }}
+        run: |
+          softwareupdate --all --install --force
+          sudo xcode-select --print-path
+          sudo xcode-select --switch /Library/Developer/CommandLineTools       
+      - name: Install Qt
+        uses: jurplel/install-qt-action@v3
+        with:
+          version: ${{ matrix.qt_ver }}
+          cached: 'false'
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 1
+      - name: Test on macOS 
+        run: |
+          cd ./Tester
+          qmake
+          make
+          ls
+          ./PolyChatTester -vs -txt
