@@ -2,11 +2,13 @@ name: macOS Build and Test
 on: 
   push:
     paths:
-      - 'PolyChatApp/**'
+      - 'App/**'
+      - 'Tester/**'
       - '.github/workflows/macos.yml'
   pull_request:
     paths:
-      - 'PolyChatApp/**'
+      - 'App/**'
+      - 'Tester/**'
       - '.github/workflows/macos.yml' 
 jobs:
   build:
@@ -37,6 +39,6 @@ jobs:
           fetch-depth: 1
       - name: build and test on macOS 
         run: |
-          cd ./PolyChatApp
+          cd ./App
           qmake
           make

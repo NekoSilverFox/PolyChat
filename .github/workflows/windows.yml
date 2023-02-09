@@ -3,11 +3,13 @@ on:
   # push代码时触发workflow
   push:
     paths:
-      - 'PolyChatApp/**'
+      - 'App/**'
+      - 'Tester/**'
       - '.github/workflows/windows.yml'
   pull_request:
     paths:
-      - 'PolyChatApp/**'
+      - 'App/**'
+      - 'Tester/**'
       - '.github/workflows/windows.yml' 
 jobs:
   build:
@@ -50,7 +52,7 @@ jobs:
         shell: cmd
         run: |
           call "C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\VC\Auxiliary\Build\vcvarsall.bat" ${{ matrix.msvc_arch }}
-          cd ./PolyChatApp
+          cd ./App
           qmake
           nmake
           echo winSdkDir=%WindowsSdkDir% >> %GITHUB_ENV%
