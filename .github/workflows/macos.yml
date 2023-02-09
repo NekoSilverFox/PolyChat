@@ -12,7 +12,7 @@ on:
       - '.github/workflows/macos.yml' 
 jobs:
   build:
-    name: Build
+    name: Build on macOS
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
@@ -43,7 +43,9 @@ jobs:
           qmake
           make
   test:
-    name: Test
+    # needs 添加层级关系，上面的执行完了。这个才会执行
+    needs: build
+    name: Test on macOS
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
