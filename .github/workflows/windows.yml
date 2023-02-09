@@ -103,7 +103,7 @@ jobs:
           cd ./Tester
           qmake
           nmake
-          PolyChatTester.exe -vs -txt
+          PolyChatTester -vs -txt
           echo winSdkDir=%WindowsSdkDir% >> %GITHUB_ENV%
           echo winSdkVer=%WindowsSdkVersion% >> %GITHUB_ENV%
           echo vcToolsInstallDir=%VCToolsInstallDir% >> %GITHUB_ENV%
