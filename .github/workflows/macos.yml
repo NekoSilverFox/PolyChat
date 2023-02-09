@@ -75,4 +75,5 @@ jobs:
           cd ./Tester
           qmake
           make
-          PolyChatTester -vs -txt
+          ls
+          ./PolyChatTester -vs -txt
