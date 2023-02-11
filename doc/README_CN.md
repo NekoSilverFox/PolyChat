@@ -321,7 +321,7 @@ K、易扩展：用户自定义类型可以容易地加入到测试数据和测�
 | 32   | ut_tcpclient_progressBar         | TcpClient   | progressBar 初始化时为 0                                     |
 | 33   | ut_tcpclient_btnCancel_emit      | TcpClient   | 用户每次点击取消按钮时，保证（按钮点击）信号正确触发，且为一次 |
 | 34   | ut_tcpclient_btnSave_emit        | TcpClient   | 用户每次点击保存按钮时，保证（按钮点击）信号正确触发，且为一次 |
-| 35   | ut_tcclient_closeEvent_emit      | TcpClient   | 用户关闭窗口时触发关闭事件                                   |
+| 35   | ut_tcplient_closeEvent_emit      | TcpClient   | 用户关闭窗口时触发关闭事件                                   |
 | 36   | ut_tcpserver_lbClientIP          | TcpServer   | lbClientIP 内容正确解析且显示                                |
 | 37   | ut_tcpserver_lbClientPort        | TcpServer   | lbClientPort 内容正确解析且显示                              |
 | 22   | ut_tcpserver_lbServerIP          | TcpServer   | lbServerIP 内容正确解析且显示                                |
