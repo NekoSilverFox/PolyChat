@@ -1,12 +1,14 @@
 #include <QTest>  // 单元测试必须包含，但是包含后会拖慢编译速度。因为他们包含了所有模块。注意不要写成 QtTest！
 
 // add necessary includes here
+#include <QSignalSpy>
 #include <QLineEdit>
 #include <QPushButton>
 
 #include "../App/db_localdata.h"
 #include "../App/bll_polychat.h"
 #include "../App/dal_polychat.h"
+#include "../App/uil_loginwidget.h"
 #include "../App/uil_addchat.h"
 #include "../App/uil_chatboxwidget.h"
 #include "../App/uil_chatlist.h"
@@ -43,22 +45,28 @@ private slots:
     void ut_login_btnlogin_emit          ();
     void ut_login_leUserName             ();
     void ut_login_leUserGroupNumber      ();
+
     void ut_addchat_leNameNewChat        ();
     void ut_addchat_btnCancelAddChat     ();
     void ut_addchat_btnAddChat           ();
+
     void ut_chat_init                    ();
+
+    void ut_chatlist_init                ();
     void ut_chatlist_btnNewChat_emit     ();
     void ut_chatlist_leSearch            ();
     void ut_chatlist_leSearch_change_emit();
     void ut_chatlist_lbName              ();
     void ut_chatlist_lbGroupNumber       ();
     void ut_chatlist_lbIP                ();
+    void ut_chatlist_chat_not_open       ();
+    void ut_chatlist_chat_open           ();
+
     void ut_addchat_port_exist           ();
     void ut_addchat_port_not_exist       ();
     void ut_addchat_chat_exist           ();
     void ut_addchat_chat_not_exist       ();
-    void ut_chatlist_chat_not_open       ();
-    void ut_chatlist_chat_open           ();
+
     void ut_tcpclient_lbClientIP         ();
     void ut_tcpclient_lbClientPort       ();
     void ut_tcpclient_lbServerIP         ();
@@ -68,7 +76,8 @@ private slots:
     void ut_tcpclient_progressBar        ();
     void ut_tcpclient_btnCancel_emit     ();
     void ut_tcpclient_btnSave_emit       ();
-    void ut_tcclient_closeEvent_emit     ();
+    void ut_tcplient_closeEvent_emit     ();
+
     void ut_tcpserver_lbClientIP         ();
     void ut_tcpserver_lbClientPort       ();
     void ut_tcpserver_lbServerIP         ();
@@ -78,6 +87,7 @@ private slots:
     void ut_tcpserver_btnCancel_emit     ();
     void ut_tcpserver_progressBar        ();
     void ut_tcpserver_closeEvent_emit    ();
+
     void ut_chatbox_title                ();
     void ut_chatbox_btnBold              ();
     void ut_chatbox_btnItalic            ();
@@ -102,6 +112,7 @@ private slots:
     void ut_chatbox_init_cbxFontSize     ();
     void ut_chatbox_cbxFontSize_min_max  ();
     void ut_chatbox_closeEvent_emit      ();
+
     void mt_login_init_succ              ();
     void mt_chatlist_getNewBtn           ();
     void mt_chatlist_getRandomPort       ();
@@ -149,7 +160,7 @@ void PolyChatTester::ut_login_login_group_empty()
 
 /** 传入正确格式的登录名，本地信息被正确初始化
  *  Локальная информация инициализируется правильно путем передачи имени пользователя в правильном формате.
- *  @brief PolyChatTester::
+ *  @brief PolyChatTester::ut_login_init_login
  */
 void PolyChatTester::ut_login_init_login()
 {
@@ -159,7 +170,7 @@ void PolyChatTester::ut_login_init_login()
 
 /** 传入正确格式的班级号，本地信息被正确初始化
  *  Локальная информация инициализируется правильно путем передачи номера группы в правильном формате.
- *  @brief PolyChatTester::
+ *  @brief PolyChatTester::ut_login_init_group
  */
 void PolyChatTester::ut_login_init_group()
 {
@@ -169,11 +180,22 @@ void PolyChatTester::ut_login_init_group()
 
 /** 用户每次点击登录按钮时，保证（按钮点击）信号正确触发，且为一次
  *  Вход в систему. Сигнал (нажатие кнопки) входа в систему каждый раз срабатывает правильно и единожды.
- *  @brief PolyChatTester::
+ *  @brief PolyChatTester::ut_login_btnlogin_emit
  */
 void PolyChatTester::ut_login_btnlogin_emit()
 {
+    LoginWidget loginWidget;
 
+    QLineEdit* leUserName = loginWidget.findChild<QLineEdit*>("leUserName");
+    QLineEdit* leUserGroupNumber = loginWidget.findChild<QLineEdit*>("leUserGroupNumber");
+    QPushButton* pushButton = loginWidget.findChild<QPushButton*>("btnLogin");
+
+    QTest::keyClicks(leUserName, "Fox");
+    QTest::keyClicks(leUserGroupNumber, "3530904/90102");
+
+    QSignalSpy spy(pushButton, &QPushButton::clicked);
+    pushButton->click();
+    QCOMPARE(spy.count(), 1);  // 确保信号被准确地发射了一次
 }
 
 /** 模拟用户点击并且通过键盘输入，确保输入内容在 leUserName 输入框中正确显示
@@ -182,7 +204,11 @@ void PolyChatTester::ut_login_btnlogin_emit()
  */
 void PolyChatTester::ut_login_leUserName()
 {
+    LoginWidget loginWidget;
 
+    QLineEdit* leUserName = loginWidget.findChild<QLineEdit*>("leUserName");
+    QTest::keyClicks(leUserName, "Fox");
+    QCOMPARE(leUserName->text(), "Fox");
 }
 
 /** 模拟用户点击并且通过键盘输入，确保输入内容在 leUserGroupNumber 输入框中正确显示
@@ -191,7 +217,11 @@ void PolyChatTester::ut_login_leUserName()
  */
 void PolyChatTester::ut_login_leUserGroupNumber()
 {
+    LoginWidget loginWidget;
 
+    QLineEdit* leUserGroupNumber = loginWidget.findChild<QLineEdit*>("leUserName");
+    QTest::keyClicks(leUserGroupNumber, "3530904/90102");
+    QCOMPARE(leUserGroupNumber->text(), "3530904/90102");
 }
 
 /** 模拟用户点击并且通过键盘输入，确保输入内容在 leNameNewChat 输入框中正确显示
@@ -200,7 +230,10 @@ void PolyChatTester::ut_login_leUserGroupNumber()
  */
 void PolyChatTester::ut_addchat_leNameNewChat()
 {
-
+    AddChat widget;
+    QLineEdit* lineEdit = widget.findChild<QLineEdit*>("leNameNewChat");
+    QTest::keyClicks(lineEdit, "3530904/90102");
+    QCOMPARE(lineEdit->text(), "3530904/90102");
 }
 
 /** 用户每次点击取消按钮时，保证（按钮点击）信号正确触发，且为一次
@@ -209,25 +242,56 @@ void PolyChatTester::ut_addchat_leNameNewChat()
  */
 void PolyChatTester::ut_addchat_btnCancelAddChat()
 {
+    AddChat widget;
 
+    QPushButton* pushButton = widget.findChild<QPushButton*>("btnCancelAddChat");
+
+    QSignalSpy spy(pushButton, &QPushButton::clicked);
+    pushButton->click();
+    QCOMPARE(spy.count(), 1);  // 确保信号被准确地发射了一次
 }
 
 /** 用户每次点击添加按钮时，保证（按钮点击）信号正确触发，且为一次
  *  Каждый раз, когда пользователь нажимает кнопку добавления, сигнал (нажатие кнопки) срабатывает правильно и единожды.
- *  @brief PolyChatTester::
+ *  @brief PolyChatTester::ut_addchat_btnAddChat
  */
 void PolyChatTester::ut_addchat_btnAddChat()
 {
+    AddChat widget;
 
+    QLineEdit* lineEdit = widget.findChild<QLineEdit*>("leNameNewChat");
+    QPushButton* pushButton = widget.findChild<QPushButton*>("btnAddChat");
+
+    QTest::keyClicks(lineEdit, "3530904/90102");
+
+    QSignalSpy spy(pushButton, &QPushButton::clicked);
+    pushButton->click();
+    QCOMPARE(spy.count(), 1);  // 确保信号被准确地发射了一次
 }
 
 /** 正确初始化（使用构造函数）一个 Chat 对象
- *  Правильно инициализируется (используя конструктор) объект чата. Смоделируйте, как пользователь нажимает и печатает на клавиатуре, чтобы убедитьс
- *  @brief PolyChatTester::
+ *  Правильно инициализируется (используя конструктор) объект чата.
+ *  @brief PolyChatTester::ut_chat_init
  */
 void PolyChatTester::ut_chat_init()
 {
+    Chat chat("3530904/90102", 6666, true);
+    QCOMPARE(chat.name, "3530904/90102");
+    QCOMPARE(chat.port, 6666);
+    QCOMPARE(chat.isOpen, true);
+}
 
+/** 正确初始化（使用构造函数）一个 Chat 对象
+ *  Правильно инициализируется (используя конструктор) объект чата.
+ *  @brief PolyChatTester::ut_chatlist_init
+ */
+void PolyChatTester::ut_chatlist_init()
+{
+    DAL::initLocalUser("Fox", "3530904/90102");
+    ChatList widget("3530904/90102", );
+    QCOMPARE(chat.name, "3530904/90102");
+    QCOMPARE(chat.port, 6666);
+    QCOMPARE(chat.isOpen, true);
 }
 
 /** 用户每次点击增加群聊按钮时，保证（按钮点击）信号正确触发，且为一次
@@ -236,7 +300,15 @@ void PolyChatTester::ut_chat_init()
  */
 void PolyChatTester::ut_chatlist_btnNewChat_emit()
 {
+    ChatList widget;
 
+    QPushButton* pushButton = widget.findChild<QPushButton*>("btnAddChat");
+
+    QTest::keyClicks(lineEdit, "3530904/90102");
+
+    QSignalSpy spy(pushButton, &QPushButton::clicked);
+    pushButton->click();
+    QCOMPARE(spy.count(), 1);  // 确保信号被准确地发射了一次
 }
 
 /** 模拟用户点击并且通过键盘输入，确保输入内容在 leSearch 搜索框中正确显示
@@ -284,6 +356,24 @@ void PolyChatTester::ut_chatlist_lbIP()
 
 }
 
+/** 返回 false（如果某个名称的群聊没有被打开）
+ *  Возвращает false (если групповой чат с таким названием не открыт).
+ *  @brief PolyChatTester::
+ */
+void PolyChatTester::ut_chatlist_chat_not_open()
+{
+
+}
+
+/** 返回 true（如果某个名称的群聊被打开了）
+ *  Возвращает true (если открыт групповой чат с таким названием).
+ *  @brief PolyChatTester::
+ */
+void PolyChatTester::ut_chatlist_chat_open()
+{
+
+}
+
 /** 返回 false（当前端口上已存在群聊）
  *  Возвращает false (групповой чат уже существует на текущем порту).
  *  @brief PolyChatTester::
@@ -320,23 +410,6 @@ void PolyChatTester::ut_addchat_chat_not_exist()
 
 }
 
-/** 返回 false（如果某个名称的群聊没有被打开）
- *  Возвращает false (если групповой чат с таким названием не открыт).
- *  @brief PolyChatTester::
- */
-void PolyChatTester::ut_chatlist_chat_not_open()
-{
-
-}
-
-/** 返回 true（如果某个名称的群聊被打开了）
- *  Возвращает true (если открыт групповой чат с таким названием).
- *  @brief PolyChatTester::
- */
-void PolyChatTester::ut_chatlist_chat_open()
-{
-
-}
 
 /** lbClientIP 内容正确解析且显示
  *  Содержимое lbClientIP анализируется правильно и отображается
@@ -423,7 +496,7 @@ void PolyChatTester::ut_tcpclient_btnSave_emit()
  *  Запускает событие закрытия, когда пользователь закрывает окно.
  *  @brief PolyChatTester::
  */
-void PolyChatTester::ut_tcclient_closeEvent_emit()
+void PolyChatTester::ut_tcplient_closeEvent_emit()
 {
 
 }
