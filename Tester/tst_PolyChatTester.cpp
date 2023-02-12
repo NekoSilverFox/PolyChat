@@ -4,6 +4,7 @@
 #include <QSignalSpy>
 #include <QLineEdit>
 #include <QPushButton>
+#include <QLabel>
 
 #include "../App/db_localdata.h"
 #include "../App/bll_polychat.h"
@@ -288,36 +289,41 @@ void PolyChatTester::ut_chat_init()
 void PolyChatTester::ut_chatlist_init()
 {
     DAL::initLocalUser("Fox", "3530904/90102");
-    ChatList widget("3530904/90102", );
-    QCOMPARE(chat.name, "3530904/90102");
-    QCOMPARE(chat.port, 6666);
-    QCOMPARE(chat.isOpen, true);
+
+    ChatList widget(nullptr, DAL::getLocalUserName(), DAL::getLocalUserGroupNumber(), DAL::getLocalIpAddress());
+    QCOMPARE("Fox", localUserName);
+    QCOMPARE("3530904/90102", localUserGroupNumber);
+    QCOMPARE(DAL::getLocalIpAddress(), localIpAddress);
 }
 
 /** 用户每次点击增加群聊按钮时，保证（按钮点击）信号正确触发，且为一次
  *  Каждый раз, когда пользователь нажимает кнопку, чтобы добавить групповой чат, сигнал (нажатие кнопки) срабатывает правильно и единожды.
- *  @brief PolyChatTester::
+ *  @brief PolyChatTester::ut_chatlist_btnNewChat_emit
  */
 void PolyChatTester::ut_chatlist_btnNewChat_emit()
 {
-    ChatList widget;
+    DAL::initLocalUser("Fox", "3530904/90102");
+    ChatList widget(nullptr, DAL::getLocalUserName(), DAL::getLocalUserGroupNumber(), DAL::getLocalIpAddress());
+    QToolButton* pushButton = widget.findChild<QToolButton*>("btnNewChat");
 
-    QPushButton* pushButton = widget.findChild<QPushButton*>("btnAddChat");
-
-    QTest::keyClicks(lineEdit, "3530904/90102");
-
-    QSignalSpy spy(pushButton, &QPushButton::clicked);
+    QSignalSpy spy(pushButton, &QToolButton::clicked);
     pushButton->click();
-    QCOMPARE(spy.count(), 1);  // 确保信号被准确地发射了一次
+    pushButton->click();
+    QCOMPARE(spy.count(), 2);
 }
 
 /** 模拟用户点击并且通过键盘输入，确保输入内容在 leSearch 搜索框中正确显示
  *  Смоделируйте, как пользователь нажимает и печатает на клавиатуре, чтобы убедиться, что вводимое содержимое правильно отображается в поле поиска
- *  @brief PolyChatTester::
+ *  @brief PolyChatTester::ut_chatlist_leSearch
  */
 void PolyChatTester::ut_chatlist_leSearch()
 {
+    DAL::initLocalUser("Fox", "3530904/90102");
+    ChatList widget(nullptr, DAL::getLocalUserName(), DAL::getLocalUserGroupNumber(), DAL::getLocalIpAddress());
+    QLineEdit* lineEdit = widget.findChild<QLineEdit*>("leSearch");
 
+    QTest::keyClicks(lineEdit, "3530904/90102");
+    QCOMPARE(lineEdit->text(), "3530904/90102");
 }
 
 /** 当用户改变搜索框中的内容时，触发信号
@@ -326,43 +332,65 @@ void PolyChatTester::ut_chatlist_leSearch()
  */
 void PolyChatTester::ut_chatlist_leSearch_change_emit()
 {
+    DAL::initLocalUser("Fox", "3530904/90102");
+    ChatList widget(nullptr, DAL::getLocalUserName(), DAL::getLocalUserGroupNumber(), DAL::getLocalIpAddress());
+    QLineEdit* lineEdit = widget.findChild<QLineEdit*>("leSearch");
 
+    QSignalSpy spy(lineEdit, &QLineEdit::textEdited);
+    QTest::keyClicks(lineEdit, "90111");
+    QCOMPARE(spy.count(), 5);
 }
 
 /** lbName 中正确显示本用户的用户名
  *  Имя пользователя этого пользователя правильно отображается в lbName.
- *  @brief PolyChatTester::
+ *  @brief PolyChatTester::ut_chatlist_lbName
  */
 void PolyChatTester::ut_chatlist_lbName()
 {
+    DAL::initLocalUser("Fox", "3530904/90102");
+    ChatList widget(nullptr, DAL::getLocalUserName(), DAL::getLocalUserGroupNumber(), DAL::getLocalIpAddress());
+    QLabel* label = widget.findChild<QLabel*>("lbName");
 
+    QCOMPARE(label->text(), "Fox");
 }
 
 /** lbGroupNumber 中正确显示本用户的班级号
  *  Номер группы этого пользователя правильно отображается в lbGroupNumber.
- *  @brief PolyChatTester::
+ *  @brief PolyChatTester::ut_chatlist_lbGroupNumber
  */
 void PolyChatTester::ut_chatlist_lbGroupNumber()
 {
+    DAL::initLocalUser("Fox", "3530904/90102");
+    ChatList widget(nullptr, DAL::getLocalUserName(), DAL::getLocalUserGroupNumber(), DAL::getLocalIpAddress());
+    QLabel* label = widget.findChild<QLabel*>("lbGroupNumber");
 
+    QCOMPARE(label->text(), "3530904/90102");
 }
 
 /** lbIP 中正确显示本用户的 ip 地址
  *  IP-адрес этого пользователя корректно отображается в lbIP.
- *  @brief PolyChatTester::
+ *  @brief PolyChatTester::ut_chatlist_lbIP
  */
 void PolyChatTester::ut_chatlist_lbIP()
 {
+    DAL::initLocalUser("Fox", "3530904/90102");
+    ChatList widget(nullptr, DAL::getLocalUserName(), DAL::getLocalUserGroupNumber(), DAL::getLocalIpAddress());
+    QLabel* label = widget.findChild<QLabel*>("lbIP");
 
+    QCOMPARE(label->text(), localIpAddress.toString());
 }
 
 /** 返回 false（如果某个名称的群聊没有被打开）
  *  Возвращает false (если групповой чат с таким названием не открыт).
- *  @brief PolyChatTester::
+ *  @brief PolyChatTester::ut_chatlist_chat_not_open
  */
 void PolyChatTester::ut_chatlist_chat_not_open()
 {
+    DAL::initLocalUser("Fox", "3530904/90102");
+    ChatList widget(nullptr, DAL::getLocalUserName(), DAL::getLocalUserGroupNumber(), DAL::getLocalIpAddress());
 
+    Chat chat("3530904/90102", 6666, false);
+    QCOMPARE(chat.isOpen, false);
 }
 
 /** 返回 true（如果某个名称的群聊被打开了）

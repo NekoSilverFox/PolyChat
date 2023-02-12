@@ -20,8 +20,11 @@ public:
     explicit ChatList(QWidget *parent, QString localUserName, QString localUserGroupNumber, QHostAddress localIpAddress);
     ~ChatList();
 
-
+#if !QT_NO_DEBUG  // 用于开放权限给单元测试
+public:
+#else
 private:
+#endif
     void receiveMessage();  // 接收 UDP 消息
 
     bool isPortExist(const qint16 port);  // 查找一个端口号是否被占用
@@ -38,6 +41,8 @@ private:
     bool updateBtnInvPair(QString name, QToolButton* btn);
 
     bool isNeedHideBtn(QString textOnBtn);  // 根据正则表达式，判断是否需要隐藏按钮
+
+
 private:
     Ui::ChatList *ui;
 
