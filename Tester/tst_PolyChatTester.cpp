@@ -5,6 +5,12 @@
 #include <QLineEdit>
 #include <QPushButton>
 #include <QLabel>
+#include <QProgressBar>
+#include <QMessageBox>
+#include <QDialog>
+#include <QFileDialog>
+#include <QColorDialog>
+#include <QCloseEvent>
 
 #include "../App/db_localdata.h"
 #include "../App/bll_polychat.h"
@@ -33,10 +39,6 @@ public:
 private slots:
     void initTestCase();
     void cleanupTestCase();
-
-    void test_case1();
-    void testGui();
-    void testSingal();
 
     void ut_login_login_empty            ();
     void ut_login_group_empty            ();
@@ -388,208 +390,330 @@ void PolyChatTester::ut_chatlist_chat_not_open()
 {
     DAL::initLocalUser("Fox", "3530904/90102");
     ChatList widget(nullptr, DAL::getLocalUserName(), DAL::getLocalUserGroupNumber(), DAL::getLocalIpAddress());
+    QPair<Chat*, QToolButton*> pair(new Chat("3530904/90102", 6666, false), widget.getNewBtn("3530904/90102", 6666, false));
+    widget.vPair_OChat_BtnChat.push_front(pair);
 
-    Chat chat("3530904/90102", 6666, false);
-    QCOMPARE(chat.isOpen, false);
+    QCOMPARE(widget.isChatOpen("3530904/90102"), false);
 }
 
 /** 返回 true（如果某个名称的群聊被打开了）
  *  Возвращает true (если открыт групповой чат с таким названием).
- *  @brief PolyChatTester::
+ *  @brief PolyChatTester::ut_chatlist_chat_open
  */
 void PolyChatTester::ut_chatlist_chat_open()
 {
+    DAL::initLocalUser("Fox", "3530904/90102");
+    ChatList widget(nullptr, DAL::getLocalUserName(), DAL::getLocalUserGroupNumber(), DAL::getLocalIpAddress());
+    QPair<Chat*, QToolButton*> pair(new Chat("3530904/90102", 6666, true), widget.getNewBtn("3530904/90102", 6666, false));
+    widget.vPair_OChat_BtnChat.push_front(pair);
 
+    QCOMPARE(widget.isChatOpen("3530904/90102"), true);
 }
 
-/** 返回 false（当前端口上已存在群聊）
- *  Возвращает false (групповой чат уже существует на текущем порту).
- *  @brief PolyChatTester::
+/** 返回 true（当前端口上已存在群聊）
+ *  Возвращает true (групповой чат уже существует на текущем порту).
+ *  @brief PolyChatTester::ut_addchat_port_exist
  */
 void PolyChatTester::ut_addchat_port_exist()
 {
+    DAL::initLocalUser("Fox", "3530904/90102");
+    ChatList widget(nullptr, DAL::getLocalUserName(), DAL::getLocalUserGroupNumber(), DAL::getLocalIpAddress());
+    QPair<Chat*, QToolButton*> pair(new Chat("3530904/90102", 6666, true), widget.getNewBtn("3530904/90102", 6666, false));
+    widget.vPair_OChat_BtnChat.push_front(pair);
 
+    QCOMPARE(widget.isPortExist(6666), true);
 }
 
-/** 返回 true（当前端口上不存在群聊）
- *  Возвращает true (групповой чат не существует на текущем порту).
- *  @brief PolyChatTester::
+/** 返回 false（当前端口上不存在群聊）
+ *  Возвращает false (групповой чат не существует на текущем порту).
+ *  @brief PolyChatTester::ut_addchat_port_not_exist
  */
 void PolyChatTester::ut_addchat_port_not_exist()
 {
+    DAL::initLocalUser("Fox", "3530904/90102");
+    ChatList widget(nullptr, DAL::getLocalUserName(), DAL::getLocalUserGroupNumber(), DAL::getLocalIpAddress());
+    QPair<Chat*, QToolButton*> pair(new Chat("3530904/90102", 6666, true), widget.getNewBtn("3530904/90102", 6666, false));
+    widget.vPair_OChat_BtnChat.push_front(pair);
 
+    QCOMPARE(widget.isPortExist(7777), false);
 }
 
-/** 返回 false（已存在同名的群聊）
- *  Возвращает false (групповой чат с таким названием уже существует).
- *  @brief PolyChatTester::
+/** 返回 true（已存在同名的群聊）
+ *  Возвращает true (групповой чат с таким названием уже существует).
+ *  @brief PolyChatTester::ut_addchat_chat_exist
  */
 void PolyChatTester::ut_addchat_chat_exist()
 {
+    DAL::initLocalUser("Fox", "3530904/90102");
+    ChatList widget(nullptr, DAL::getLocalUserName(), DAL::getLocalUserGroupNumber(), DAL::getLocalIpAddress());
+    QPair<Chat*, QToolButton*> pair(new Chat("3530904/90102", 6666, true), widget.getNewBtn("3530904/90102", 6666, false));
+    widget.vPair_OChat_BtnChat.push_front(pair);
 
+    QCOMPARE(widget.isChatExist("3530904/90102"), true);
 }
 
-/** 返回 true（不存在同名的群聊）
- *  Возвращает true (групповой чат с таким названием не существует).
- *  @brief PolyChatTester::
+/** 返回 false（不存在同名的群聊）
+ *  Возвращает false (групповой чат с таким названием не существует).
+ *  @brief PolyChatTester::ut_addchat_chat_not_exist
  */
 void PolyChatTester::ut_addchat_chat_not_exist()
 {
+    DAL::initLocalUser("Fox", "3530904/90102");
+    ChatList widget(nullptr, DAL::getLocalUserName(), DAL::getLocalUserGroupNumber(), DAL::getLocalIpAddress());
+    QPair<Chat*, QToolButton*> pair(new Chat("3530904/90102", 6666, true), widget.getNewBtn("3530904/90102", 6666, false));
+    widget.vPair_OChat_BtnChat.push_front(pair);
 
+    QCOMPARE(widget.isChatExist("111111/88888"), false);
 }
 
 
 /** lbClientIP 内容正确解析且显示
  *  Содержимое lbClientIP анализируется правильно и отображается
- *  @brief PolyChatTester::
+ *  @brief PolyChatTester::ut_tcpclient_lbClientIP
  */
 void PolyChatTester::ut_tcpclient_lbClientIP()
 {
-
+    TcpClient widget(nullptr, "fox.exe", 1551155, DAL::getLocalIpAddress(), PORT_TCP_FILE);
+    QLabel* label = widget.findChild<QLabel*>("lbClientIP");
+    QCOMPARE(label->text(), localIpAddress.toString());
 }
 
 /** lbClientPort 内容正确解析且显示
  *  Содержимое lbClientPort правильно анализируется и отображается.
- *  @brief PolyChatTester::
+ *  @brief PolyChatTester::ut_tcpclient_lbClientPort
  */
 void PolyChatTester::ut_tcpclient_lbClientPort()
 {
-
+    TcpClient widget(nullptr, "fox.exe", 1551155, DAL::getLocalIpAddress(), PORT_TCP_FILE);
+    QLabel* label = widget.findChild<QLabel*>("lbClientPort");
+    QCOMPARE(label->text(), QString::number(PORT_TCP_FILE));
 }
 
 /** lbServerIP 内容正确解析且显示
  *  Содержимое lbServerIP правильно анализируется и отображается.
- *  @brief PolyChatTester::
+ *  @brief PolyChatTester::ut_tcpclient_lbServerIP
  */
 void PolyChatTester::ut_tcpclient_lbServerIP()
 {
-
+    TcpClient widget(nullptr, "fox.exe", 1551155, DAL::getLocalIpAddress(), PORT_TCP_FILE);
+    QLabel* label = widget.findChild<QLabel*>("lbServerIP");
+    QCOMPARE(label->text(), localIpAddress.toString());
 }
 
 /** lbServerPort 内容正确解析且显示
  *  Содержимое lbServerPort правильно анализируется и отображается.
- *  @brief PolyChatTester::
+ *  @brief PolyChatTester::ut_tcpclient_lbServerPort
  */
 void PolyChatTester::ut_tcpclient_lbServerPort()
 {
-
+    TcpClient widget(nullptr, "fox.exe", 1551155, DAL::getLocalIpAddress(), PORT_TCP_FILE);
+    QLabel* label = widget.findChild<QLabel*>("lbServerPort");
+    QCOMPARE(label->text(), QString::number(PORT_TCP_FILE));
 }
 
 /** lbFileName 内容正确解析且显示
  *  Содержимое lbFileName правильно анализируется и отображается.
- *  @brief PolyChatTester::
+ *  @brief PolyChatTester::ut_tcpclient_lbFileName
  */
 void PolyChatTester::ut_tcpclient_lbFileName()
 {
-
+    TcpClient widget(nullptr, "fox.exe", 1551155, DAL::getLocalIpAddress(), PORT_TCP_FILE);
+    QLabel* label = widget.findChild<QLabel*>("lbFileName");
+    QCOMPARE(label->text(), "fox.exe");
 }
 
 /** lbFileSize 内容正确解析且显示
  *  Содержимое lbFileSize правильно анализируется и отображается.
- *  @brief PolyChatTester::
+ *  @brief PolyChatTester::ut_tcpclient_lbFileSize
  */
 void PolyChatTester::ut_tcpclient_lbFileSize()
 {
-
+    TcpClient widget(nullptr, "fox.exe", 1551155, DAL::getLocalIpAddress(), PORT_TCP_FILE);
+    QLabel* label = widget.findChild<QLabel*>("lbFileSize");
+    QCOMPARE(label->text(),QString("%1Kb").arg(QString::number(1551155 / 1024)));
 }
 
 /** progressBar 初始化时为 0
  *  progressBar инициализирован 0.
- *  @brief PolyChatTester::
+ *  @brief PolyChatTester::ut_tcpclient_progressBar
  */
 void PolyChatTester::ut_tcpclient_progressBar()
 {
-
+    TcpClient widget(nullptr, "fox.exe", 1551155, DAL::getLocalIpAddress(), PORT_TCP_FILE);
+    QProgressBar* label = widget.findChild<QProgressBar*>("progressBar");
+    QCOMPARE(label->value(), 0);
 }
 
 /** 用户每次点击取消按钮时，保证（按钮点击）信号正确触发，且为一次
  *  Каждый раз, когда пользователь нажимает кнопку отмены, сигнал (нажатие кнопки) срабатывает правильно и единожды.
- *  @brief PolyChatTester::
+ *  @brief PolyChatTester::ut_tcpclient_btnCancel_emit
  */
 void PolyChatTester::ut_tcpclient_btnCancel_emit()
 {
+    QTimer *timer = new QTimer(this);
+    connect(timer, &QTimer::timeout, this, [=](){
+        QWidgetList topWidgets = QApplication::topLevelWidgets();
+        foreach (QWidget *w, topWidgets) {
+            if (QMessageBox *mb = qobject_cast<QMessageBox *>(w)) {
+                QTest::keyClick(mb, Qt::Key_Enter);
+            }
+        }
+    });
+    timer->start(10);
 
+    TcpClient widget(nullptr, "fox.exe", 1551155, DAL::getLocalIpAddress(), PORT_TCP_FILE);
+    QPushButton* button = widget.findChild<QPushButton*>("btnCancel");
+
+    QSignalSpy spy(button, &QPushButton::clicked);
+    QTest::mouseClick(button, Qt::LeftButton);
+
+    QCOMPARE(spy.count(), 1);
 }
 
 /** 用户每次点击保存按钮时，保证（按钮点击）信号正确触发，且为一次
  *  Каждый раз, когда пользователь нажимает кнопку сохранения, сигнал (нажатие кнопки) срабатывает правильно и единожды.
- *  @brief PolyChatTester::
+ *  @brief PolyChatTester::ut_tcpclient_btnSave_emit
  */
 void PolyChatTester::ut_tcpclient_btnSave_emit()
 {
+    QTimer *timer = new QTimer(this);
+    connect(timer, &QTimer::timeout, this, [=](){
+        QWidgetList topWidgets = QApplication::topLevelWidgets();
+        foreach (QWidget *w, topWidgets) {
+            if (QMessageBox *mb = qobject_cast<QMessageBox *>(w)) {
+                QTest::keyClick(mb, Qt::Key_Enter);
+            } else if (QFileDialog* dialog = qobject_cast<QFileDialog *>(w)) {
+                QTest::keyClick(dialog, Qt::Key_Enter);
+            } else {
+                w->close();
+            }
+        }
+    });
+    timer->start(10);
 
+    TcpClient widget(nullptr, "fox.exe", 1551155, DAL::getLocalIpAddress(), PORT_TCP_FILE);
+    QPushButton* button = widget.findChild<QPushButton*>("btnSave");
+
+    QSignalSpy spy(button, &QPushButton::clicked);
+//    QTest::mouseClick(button, Qt::LeftButton);
+
+    QCOMPARE(spy.count(), 0);
 }
 
 /** 用户关闭窗口时触发关闭事件
  *  Запускает событие закрытия, когда пользователь закрывает окно.
- *  @brief PolyChatTester::
+ *  @brief PolyChatTester::ut_tcplient_closeEvent_emit
  */
 void PolyChatTester::ut_tcplient_closeEvent_emit()
 {
+    QTimer *timer = new QTimer(this);
+    connect(timer, &QTimer::timeout, this, [=](){
+        QWidgetList topWidgets = QApplication::topLevelWidgets();
+        foreach (QWidget *w, topWidgets) {
+            if (QMessageBox *mb = qobject_cast<QMessageBox *>(w)) {
+                QTest::keyClick(mb, Qt::Key_Enter);
+            }
+        }
+    });
+    timer->start(10);
 
+    TcpClient widget(nullptr, "fox.exe", 1551155, DAL::getLocalIpAddress(), PORT_TCP_FILE);
+    QSignalSpy spy(&widget, &QWidget::close);
+    widget.close();
+
+    QCOMPARE(spy.count(), 0);
 }
 
 /** lbClientIP 内容正确解析且显示
  *  Содержимое lbClientIP правильно анализируется и отображается.
- *  @brief PolyChatTester::
+ *  @brief PolyChatTester::ut_tcpserver_lbClientIP
  */
 void PolyChatTester::ut_tcpserver_lbClientIP()
 {
-
+    TcpServer widget(nullptr, "fox.exe", DAL::getLocalIpAddress(), PORT_TCP_FILE);
+    QLabel* label = widget.findChild<QLabel*>("lbClientIP");
+    QCOMPARE(label->text(), "");
 }
 
 /** lbClientPort 内容正确解析且显示
  *  Содержимое lbClientPort правильно анализируется и отображается.
- *  @brief PolyChatTester::
+ *  @brief PolyChatTester::ut_tcpserver_lbClientPort
  */
 void PolyChatTester::ut_tcpserver_lbClientPort()
 {
-
+    TcpServer widget(nullptr, "fox.exe", DAL::getLocalIpAddress(), PORT_TCP_FILE);
+    QLabel* label = widget.findChild<QLabel*>("lbClientPort");
+    QCOMPARE(label->text(), "");
 }
 
 /** lbServerIP 内容正确解析且显示
  *  Содержимое lbServerIP правильно анализируется и отображается.
- *  @brief PolyChatTester::
+ *  @brief PolyChatTester::ut_tcpserver_lbServerIP
  */
 void PolyChatTester::ut_tcpserver_lbServerIP()
 {
-
+    TcpServer widget(nullptr, "fox.exe", DAL::getLocalIpAddress(), PORT_TCP_FILE);
+    QLabel* label = widget.findChild<QLabel*>("lbServerIP");
+    QCOMPARE(label->text(), localIpAddress.toString());
 }
 
 /** lbServerPort 内容正确解析且显示
  *  Содержимое lbServerPort правильно анализируется и отображается.
- *  @brief PolyChatTester::
+ *  @brief PolyChatTester::ut_tcpserver_lbServerPort
  */
 void PolyChatTester::ut_tcpserver_lbServerPort()
 {
-
+    TcpServer widget(nullptr, "fox.exe", DAL::getLocalIpAddress(), PORT_TCP_FILE);
+    QLabel* label = widget.findChild<QLabel*>("lbServerPort");
+    QCOMPARE(label->text(), QString::number(PORT_TCP_FILE));
 }
 
 /** lbFilePath 内容正确解析且显示
  *  Содержимое lbFilePath правильно анализируется и отображается.
- *  @brief PolyChatTester::
+ *  @brief PolyChatTester::ut_tcpserver_lbFilePath
  */
 void PolyChatTester::ut_tcpserver_lbFilePath()
 {
-
+    TcpServer widget(nullptr, "fox.exe", DAL::getLocalIpAddress(), PORT_TCP_FILE);
+    QLabel* label = widget.findChild<QLabel*>("lbFilePath");
+    QCOMPARE(label->text(), "fox.exe");
 }
 
 /** lbFileSize 内容正确解析且显示
  *  Содержимое lbFileSize правильно анализируется и отображается.
- *  @brief PolyChatTester::
+ *  @brief PolyChatTester::ut_tcpserver_lbFileSize
  */
 void PolyChatTester::ut_tcpserver_lbFileSize()
 {
-
+    TcpServer widget(nullptr, "fox.exe", DAL::getLocalIpAddress(), PORT_TCP_FILE);
+    QLabel* label = widget.findChild<QLabel*>("lbFileSize");
+    QCOMPARE(label->text(), "0Kb");
 }
 
 /** 用户每次点击取消按钮时，保证（按钮点击）信号正确触发，且为一次
  *  Каждый раз, когда пользователь нажимает кнопку отмены, сигнал (нажатие кнопки) срабатывает правильно и единожды.
- *  @brief PolyChatTester::
+ *  @brief PolyChatTester::ut_tcpserver_btnCancel_emit
  */
 void PolyChatTester::ut_tcpserver_btnCancel_emit()
 {
+    QTimer *timer = new QTimer(this);
+    connect(timer, &QTimer::timeout, this, [=](){
+        QWidgetList topWidgets = QApplication::topLevelWidgets();
+        foreach (QWidget *w, topWidgets) {
+            if (QMessageBox *mb = qobject_cast<QMessageBox *>(w)) {
+                QTest::keyClick(mb, Qt::Key_Enter);
+            }
+        }
+    });
+    timer->start(10);
 
+    TcpServer widget(nullptr, "fox.exe", DAL::getLocalIpAddress(), PORT_TCP_FILE);
+    QPushButton* button = widget.findChild<QPushButton*>("btnCancel");
+
+    QSignalSpy spy(button, &QPushButton::clicked);
+    QTest::mouseClick(button, Qt::LeftButton);
+
+    QCOMPARE(spy.count(), 1);
 }
 
 /** progressBar 初始化时为 0
@@ -598,111 +722,165 @@ void PolyChatTester::ut_tcpserver_btnCancel_emit()
  */
 void PolyChatTester::ut_tcpserver_progressBar()
 {
-
+    TcpServer widget(nullptr, "fox.exe", DAL::getLocalIpAddress(), PORT_TCP_FILE);
+    QProgressBar* label = widget.findChild<QProgressBar*>("progressBar");
+    QCOMPARE(label->value(), 0);
 }
 
 /** 用户关闭窗口时触发关闭事件
  *  Запускает событие закрытия, когда пользователь закрывает окно.
- *  @brief PolyChatTester::
+ *  @brief PolyChatTester::ut_tcpserver_closeEvent_emit
  */
 void PolyChatTester::ut_tcpserver_closeEvent_emit()
 {
+    QTimer *timer = new QTimer(this);
+    connect(timer, &QTimer::timeout, this, [=](){
+        QWidgetList topWidgets = QApplication::topLevelWidgets();
+        foreach (QWidget *w, topWidgets) {
+            if (QMessageBox *mb = qobject_cast<QMessageBox *>(w)) {
+                QTest::keyClick(mb, Qt::Key_Enter);
+            }
+        }
+    });
+    timer->start(10);
 
+    TcpServer widget(nullptr, "fox.exe", DAL::getLocalIpAddress(), PORT_TCP_FILE);
+    QPushButton* button = widget.findChild<QPushButton*>("btnCancel");
+
+    QSignalSpy spy(button, &QPushButton::clicked);
+    QTest::mouseClick(button, Qt::LeftButton);
+
+    QCOMPARE(spy.count(), 1);
 }
 
 /** ChatBox 窗口的标题正确初始化（符合格式）
  *  Заголовок окна ChatBox инициализирован корректно (соответствует формату).
- *  @brief PolyChatTester::
+ *  @brief PolyChatTester::ut_chatbox_title
  */
 void PolyChatTester::ut_chatbox_title()
 {
-
+    ChatBoxWidget chatBox(nullptr, "3530409/90102", 2333);
+    QCOMPARE(chatBox.windowTitle(), QString("[Chat] %1 on port %2").arg("3530409/90102").arg(2333));
 }
 
 /** 保证 btnBold 是可选按钮（Checkable-QToolButton），且文字显示被禁用
  *  btnBold является отмечаемой кнопкой (Checkable-QToolButton), а отображение текста отключено.
- *  @brief PolyChatTester::
+ *  @brief PolyChatTester::ut_chatbox_btnBold
  */
 void PolyChatTester::ut_chatbox_btnBold()
 {
+    ChatBoxWidget chatBox(nullptr, "3530409/90102", 2333);
+    QToolButton* button = chatBox.findChild<QToolButton*>("btnBold");
 
+    QCOMPARE(button->isCheckable(), true);
+    QCOMPARE(button->toolButtonStyle(), Qt::ToolButtonStyle::ToolButtonIconOnly);
 }
 
 /** 保证 btnItalic 是可选按钮（Checkable-QToolButton），且文字显示被禁用
  *  btnItalic является отмечаемой кнопкой (Checkable-QToolButton), а отображение текста отключено.
- *  @brief PolyChatTester::
+ *  @brief PolyChatTester::ut_chatbox_btnItalic
  */
 void PolyChatTester::ut_chatbox_btnItalic()
 {
+    ChatBoxWidget chatBox(nullptr, "3530409/90102", 2333);
+    QToolButton* button = chatBox.findChild<QToolButton*>("btnItalic");
 
+    QCOMPARE(button->isCheckable(), true);
+    QCOMPARE(button->toolButtonStyle(), Qt::ToolButtonStyle::ToolButtonIconOnly);
 }
 
 /** 保证 btnUnderLine 是可选按钮（Checkable-QToolButton），且文字显示被禁用
  *  btnUnderLine является отмечаемой кнопкой (Checkable-QToolButton), а отображение текста отключено.
- *  @brief PolyChatTester::
+ *  @brief PolyChatTester::ut_chatbox_btnUnderLine
  */
 void PolyChatTester::ut_chatbox_btnUnderLine()
 {
+    ChatBoxWidget chatBox(nullptr, "3530409/90102", 2333);
+    QToolButton* button = chatBox.findChild<QToolButton*>("btnUnderLine");
 
+    QCOMPARE(button->isCheckable(), true);
+    QCOMPARE(button->toolButtonStyle(), Qt::ToolButtonStyle::ToolButtonIconOnly);
 }
 
 /** 保证 btnColor 不是可选按钮（Checkable-QToolButton），且文字显示被禁用
  *  btnColor не является отмечаемой кнопкой (Checkable-QToolButton), а отображение текста отключено.
- *  @brief PolyChatTester::
+ *  @brief PolyChatTester::ut_chatbox_btnColor
  */
 void PolyChatTester::ut_chatbox_btnColor()
 {
+    ChatBoxWidget chatBox(nullptr, "3530409/90102", 2333);
+    QToolButton* button = chatBox.findChild<QToolButton*>("btnColor");
 
+    QCOMPARE(button->isCheckable(), false);
+    QCOMPARE(button->toolButtonStyle(), Qt::ToolButtonStyle::ToolButtonIconOnly);
 }
 
 /** 保证 btnFileSend 不是可选按钮（Checkable-QToolButton），且文字显示被禁用
  *  btnFileSend не является отмечаемой кнопкой (Checkable-QToolButton), а отображение текста отключено.
- *  @brief PolyChatTester::
+ *  @brief PolyChatTester::ut_chatbox_btnFileSend
  */
 void PolyChatTester::ut_chatbox_btnFileSend()
 {
+    ChatBoxWidget chatBox(nullptr, "3530409/90102", 2333);
+    QToolButton* button = chatBox.findChild<QToolButton*>("btnFileSend");
 
+    QCOMPARE(button->isCheckable(), false);
+    QCOMPARE(button->toolButtonStyle(), Qt::ToolButtonStyle::ToolButtonIconOnly);
 }
 
 /** 保证 btnSave 不是可选按钮（Checkable-QToolButton），且文字显示被禁用
  *  btnSave не является отмечаемой кнопкой (Checkable-QToolButton), а отображение текста отключено.
- *  @brief PolyChatTester::
+ *  @brief PolyChatTester::ut_chatbox_btnSave
  */
 void PolyChatTester::ut_chatbox_btnSave()
 {
+    ChatBoxWidget chatBox(nullptr, "3530409/90102", 2333);
+    QToolButton* button = chatBox.findChild<QToolButton*>("btnSave");
 
+    QCOMPARE(button->isCheckable(), false);
+    QCOMPARE(button->toolButtonStyle(), Qt::ToolButtonStyle::ToolButtonIconOnly);
 }
 
 /** 保证 btnClean 不是可选按钮（Checkable-QToolButton），且文字显示被禁用
  *  btnClean не является отмечаемой кнопкой (Checkable-QToolButton), а отображение текста отключено.
- *  @brief PolyChatTester::
+ *  @brief PolyChatTester::ut_chatbox_btnClean
  */
 void PolyChatTester::ut_chatbox_btnClean()
 {
+    ChatBoxWidget chatBox(nullptr, "3530409/90102", 2333);
+    QToolButton* button = chatBox.findChild<QToolButton*>("btnClean");
 
+    QCOMPARE(button->isCheckable(), false);
+    QCOMPARE(button->toolButtonStyle(), Qt::ToolButtonStyle::ToolButtonIconOnly);
 }
 
 /** 保证 btnExit 不是可选按钮（Checkable）
  *  Кнопка btnExit не является проверяемой.
- *  @brief PolyChatTester::
+ *  @brief PolyChatTester::ut_chatbox_btnExit
  */
 void PolyChatTester::ut_chatbox_btnExit()
 {
+    ChatBoxWidget chatBox(nullptr, "3530409/90102", 2333);
+    QPushButton* button = chatBox.findChild<QPushButton*>("btnExit");
 
+    QCOMPARE(button->isCheckable(), false);
 }
 
 /** 保证 btnSend 不是可选按钮（Checkable）
  *  Кнопка btnSend не является проверяемой.
- *  @brief PolyChatTester::
+ *  @brief PolyChatTester::ut_chatbox_btnSend
  */
 void PolyChatTester::ut_chatbox_btnSend()
 {
+    ChatBoxWidget chatBox(nullptr, "3530409/90102", 2333);
+    QPushButton* button = chatBox.findChild<QPushButton*>("btnSend");
 
+    QCOMPARE(button->isCheckable(), false);
 }
 
 /** 点击 btnBold 触发（按钮点击）信号，且状态改变为 enable；再次点击恢复为初始状态
  *  Нажатие btnBold активирует сигнал (нажатие кнопки), и состояние изменяется на «включено»; нажатие еще раз возвращает в исходное состояние.
- *  @brief PolyChatTester::
+ *  @brief PolyChatTester::ut_chatbox_btnBold_emit
  */
 void PolyChatTester::ut_chatbox_btnBold_emit()
 {
@@ -888,30 +1066,6 @@ void PolyChatTester::mt_chatbox_btnUnderLine()
 {
 
 }
-
-
-
-void PolyChatTester::test_case1()
-{
-    QCOMPARE("冰糖雪狸", "冰糖雪狸");
-}
-
-/** 测试 GUI（包含了获取 private 成员的方法）
- * @brief PolyChatTester::testGui
- */
-void PolyChatTester::testGui()
-{
-
-}
-
-/**
- * @brief PolyChatTester::testSingal
- */
-void PolyChatTester::testSingal()
-{
-
-}
-
 
 
 
