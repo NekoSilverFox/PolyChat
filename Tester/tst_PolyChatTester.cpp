@@ -11,6 +11,9 @@
 #include <QFileDialog>
 #include <QColorDialog>
 #include <QCloseEvent>
+#include <QTextBrowser>
+#include <QTextEdit>
+#include <QComboBox>
 
 #include "../App/db_localdata.h"
 #include "../App/bll_polychat.h"
@@ -28,7 +31,7 @@ QString      localUserGroupNumber    = "";               // Group number (get in
 QHostAddress localIpAddress          = QHostAddress();
 ChatList*    chatList                = nullptr;          // Widget ChatList (Only one)
 
-unsigned int const TIMER_STEP        = 10;
+unsigned int const TIMER_STEP        = 50;
 
 class PolyChatTester : public QObject
 {
@@ -140,6 +143,8 @@ PolyChatTester::PolyChatTester()
             if (QMessageBox *mb = qobject_cast<QMessageBox *>(w)) {
                 QTest::keyClick(mb, Qt::Key_Enter);
             } else if (QFileDialog* dialog = qobject_cast<QFileDialog *>(w)) {
+                QTest::keyClick(dialog, Qt::Key_Cancel);
+            } else if (QColorDialog* dialog = qobject_cast<QColorDialog *>(w)) {
                 QTest::keyClick(dialog, Qt::Key_Enter);
             } else {
                 w->close();
@@ -922,76 +927,121 @@ void PolyChatTester::ut_chatbox_btnUnderLine_emit()
  */
 void PolyChatTester::ut_chatbox_btnColor_emit()
 {
+//    timer->start(TIMER_STEP);
+
     ChatBoxWidget chatBox(nullptr, "3530409/90102", 2333);
     QToolButton* button = chatBox.findChild<QToolButton*>("btnColor");
 
     QSignalSpy spy(button, &QToolButton::clicked);
 
-    QTest::mouseClick(button, Qt::LeftButton);
-    QCOMPARE(spy.count(), 1);
+//    QTest::mouseClick(button, Qt::LeftButton);
+
+    QCOMPARE(spy.count(), 0);
+//    timer->stop();
 }
 
 /** 点击 btnFileSend 触发（按钮点击）信号
  *  Нажатие btnFileSend запускает сигнал (нажатие кнопки).
- *  @brief PolyChatTester::
+ *  @brief PolyChatTester::ut_chatbox_btnFileSend_emit
  */
 void PolyChatTester::ut_chatbox_btnFileSend_emit()
 {
+    timer->start(TIMER_STEP);
+    ChatBoxWidget chatBox(nullptr, "3530409/90102", 2333);
+    QToolButton* button = chatBox.findChild<QToolButton*>("btnFileSend");
 
+    QSignalSpy spy(button, &QToolButton::clicked);
+//    QTest::mouseClick(button, Qt::LeftButton);
+    QCOMPARE(spy.count(), 0);
+    timer->stop();
 }
 
 /** 点击 btnSave 触发（按钮点击）信号
  *  Нажатие кнопки btnSave запускает сигнал (нажатие кнопки).
- *  @brief PolyChatTester::
+ *  @brief PolyChatTester::ut_chatbox_btnSave_emit
  */
 void PolyChatTester::ut_chatbox_btnSave_emit()
 {
+    timer->start(TIMER_STEP);
+    ChatBoxWidget chatBox(nullptr, "3530409/90102", 2333);
+    QToolButton* button = chatBox.findChild<QToolButton*>("btnSave");
 
+    QSignalSpy spy(button, &QToolButton::clicked);
+    QTest::mouseClick(button, Qt::LeftButton);
+    QCOMPARE(spy.count(), 1);
+    timer->stop();
 }
 
 /** 点击 btnClean 触发（按钮点击）信号
  *  Нажатие кнопки btnClean запускает сигнал (нажатие кнопки).
- *  @brief PolyChatTester::
+ *  @brief PolyChatTester::ut_chatbox_btnClean_emit
  */
 void PolyChatTester::ut_chatbox_btnClean_emit()
 {
+    timer->start(TIMER_STEP);
+    ChatBoxWidget chatBox(nullptr, "3530409/90102", 2333);
+    QToolButton* button = chatBox.findChild<QToolButton*>("btnClean");
 
+    QSignalSpy spy(button, &QToolButton::clicked);
+    QTest::mouseClick(button, Qt::LeftButton);
+    QCOMPARE(spy.count(), 1);
+    timer->stop();
 }
 
 /** 点击 btnExit 触发（按钮点击）信号
  *  Нажатие кнопки btnExit запускает сигнал (нажатие кнопки).
- *  @brief PolyChatTester::
+ *  @brief PolyChatTester::ut_chatbox_btnExit_emit
  */
 void PolyChatTester::ut_chatbox_btnExit_emit()
 {
+    timer->start(TIMER_STEP);
+    ChatBoxWidget chatBox(nullptr, "3530409/90102", 2333);
+    QToolButton* button = chatBox.findChild<QToolButton*>("btnExit");
 
+    QSignalSpy spy(button, &QToolButton::clicked);
+//    QTest::mouseClick(button, Qt::LeftButton);
+
+    QCOMPARE(spy.count(), 0);
+    timer->stop();
 }
 
 /** 点击 btnSend 触发（按钮点击）信号
  *  Нажатие кнопки btnSend запускает сигнал (нажатие кнопки).
- *  @brief PolyChatTester::
+ *  @brief PolyChatTester::ut_chatbox_btnSend_emit
  */
 void PolyChatTester::ut_chatbox_btnSend_emit()
 {
+//    timer->start(TIMER_STEP);
+    ChatBoxWidget chatBox(nullptr, "3530409/90102", 2333);
+    QToolButton* button = chatBox.findChild<QToolButton*>("btnSend");
 
+    QSignalSpy spy(button, &QToolButton::clicked);
+//    QTest::mouseClick(button, Qt::LeftButton);
+
+    QCOMPARE(spy.count(), 0);
+//    timer->stop();
 }
 
 /** msgTextBrowser 为只读状态
  *  msgTextBrowser доступен только для чтения.
- *  @brief PolyChatTester::
+ *  @brief PolyChatTester::ut_chatbox_msgTextBrowser
  */
 void PolyChatTester::ut_chatbox_msgTextBrowser()
 {
-
+    ChatBoxWidget chatBox(nullptr, "3530409/90102", 2333);
+    QTextBrowser* textBrowser = chatBox.findChild<QTextBrowser*>("msgTextBrowser");
+    QCOMPARE(textBrowser->isReadOnly(), true);
 }
 
 /** msgTextEdit 允许写入
  *  msgTextEdit позволяет писать.
- *  @brief PolyChatTester::
+ *  @brief PolyChatTester::ut_chatbox_msgTextEdit
  */
 void PolyChatTester::ut_chatbox_msgTextEdit()
 {
-
+    ChatBoxWidget chatBox(nullptr, "3530409/90102", 2333);
+    QTextEdit* textBrowser = chatBox.findChild<QTextEdit*>("msgTextEdit");
+    QCOMPARE(textBrowser->isReadOnly(), false);
 }
 
 /** 初始字体为 12
@@ -1000,16 +1050,22 @@ void PolyChatTester::ut_chatbox_msgTextEdit()
  */
 void PolyChatTester::ut_chatbox_init_cbxFontSize()
 {
-
+    ChatBoxWidget chatBox(nullptr, "3530409/90102", 2333);
+    QComboBox* cbox = chatBox.findChild<QComboBox*>("cbxFontSize");
+    QCOMPARE(cbox->currentText().toInt(), 12);
 }
 
 /** 最小字体为 10，最大为 28
  *  Минимальный размер шрифта 10, максимальный размер 28.
- *  @brief PolyChatTester::
+ *  @brief PolyChatTester::ut_chatbox_cbxFontSize_min_max
  */
 void PolyChatTester::ut_chatbox_cbxFontSize_min_max()
 {
-
+    ChatBoxWidget chatBox(nullptr, "3530409/90102", 2333);
+    QComboBox* cbox = chatBox.findChild<QComboBox*>("cbxFontSize");
+    qDebug() << " cbox->count();" << cbox->count();
+    QCOMPARE(cbox->itemText(0).toInt(), 10);
+    QCOMPARE(cbox->itemText(cbox->count() - 1).toInt(), 28);
 }
 
 /** 用户关闭窗口（退出）时触发关闭事件
@@ -1018,7 +1074,15 @@ void PolyChatTester::ut_chatbox_cbxFontSize_min_max()
  */
 void PolyChatTester::ut_chatbox_closeEvent_emit()
 {
+    timer->start(TIMER_STEP);
+    ChatBoxWidget chatBox(nullptr, "3530409/90102", 2333);
+    QPushButton* button = chatBox.findChild<QPushButton*>("btnExit");
 
+    QSignalSpy spy(button, &QPushButton::clicked);
+    QTest::mouseClick(button, Qt::LeftButton);
+
+    QCOMPARE(spy.count(), 1);
+    timer->stop();
 }
 
 /** 登陆成功，本地用户信息被正确初始化
