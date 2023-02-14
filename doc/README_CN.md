@@ -25,7 +25,6 @@
 <!-- SPbSTU 最后一行 -->
 
 <div align=center>
-
 [![License](https://img.shields.io/badge/license-Apache%202.0-brightgreen)](LICENSE)
 
 [![Build for MacOS](https://github.com/NekoSilverFox/PolyChat/actions/workflows/macos.yml/badge.svg)](https://github.com/NekoSilverFox/PolyChat/actions/workflows/macos.yml)
@@ -292,6 +291,7 @@ K、易扩展：用户自定义类型可以容易地加入到测试数据和测�
 | 3    | ut_login_login_group_empty       | Login       | 登录失败（用户名和班级号不能为空）                           |
 | 4    | ut_login_init_login              | Login       | 传入正确格式的登录名，本地信息被正确初始化                   |
 | 5    | ut_login_init_group              | Login       | 传入正确格式的班级号，本地信息被正确初始化                   |
+|      |                                  |             | 保证 btnlogin 是非可选按钮，且图标显示被禁用                 |
 | 6    | ut_login_btnlogin_emit           | Login       | 用户每次点击登录按钮时，保证（按钮点击）信号正确触发，且为一次 |
 | 7    | ut_login_leUserName              | Login       | 模拟用户点击并且通过键盘输入，确保输入内容在 leUserName 输入框中正确显示 |
 | 8    | ut_login_leUserGroupNumber       | Login       | 模拟用户点击并且通过键盘输入，确保输入内容在 leUserGroupNumber 输入框中正确显示 |
@@ -300,18 +300,19 @@ K、易扩展：用户自定义类型可以容易地加入到测试数据和测�
 | 11   | ut_addchat_btnAddChat            | Add Chat    | 用户每次点击添加按钮时，保证（按钮点击）信号正确触发，且为一次 |
 | 12   | ut_chat_init                     | Chat(Class) | 正确初始化（使用构造函数）一个 Chat 对象                     |
 | 13   | ut_chatlist_init                 | ChatList    | 正确初始化（使用构造函数）一个 ChatList 对象                 |
+|      |                                  |             | 保证 btnNewChat 是可选按钮（Checkable-QToolButton），且文字显示被禁用 |
 | 14   | ut_chatlist_btnNewChat_emit      | ChatList    | 用户每次点击增加群聊按钮时，保证（按钮点击）信号正确触发，且为一次 |
 | 15   | ut_chatlist_leSearch             | ChatList    | 模拟用户点击并且通过键盘输入，确保输入内容在 leSearch 搜索框中正确显示 |
 | 16   | ut_chatlist_leSearch_change_emit | ChatList    | 当用户改变搜索框中的内容时，触发信号                         |
 | 17   | ut_chatlist_lbName               | ChatList    | lbName 中正确显示本用户的用户名                              |
 | 18   | ut_chatlist_lbGroupNumber        | ChatList    | lbGroupNumber 中正确显示本用户的班级号                       |
 | 19   | ut_chatlist_lbIP                 | ChatList    | lbIP 中正确显示本用户的 ip 地址                              |
-| 20   | ut_addchat_port_exist            | ChatList    | 返回 false（当前端口上已存在群聊）                           |
-| 21   | ut_addchat_port_not_exist        | ChatList    | 返回 true（当前端口上不存在群聊）                            |
-| 22   | ut_addchat_chat_exist            | ChatList    | 返回 false（已存在同名的群聊）                               |
-| 23   | ut_addchat_chat_not_exist        | ChatList    | 返回 true（不存在同名的群聊）                                |
-| 24   | ut_chatlist_chat_not_open        | ChatList    | 返回 false（如果某个名称的群聊没有被打开）                   |
-| 25   | ut_chatlist_chat_open            | ChatList    | 返回 true（如果某个名称的群聊被打开了）                      |
+| 20   | ut_addchat_port_exist            | ChatList    | 返回 true（当前端口上已存在群聊）                            |
+| 21   | ut_addchat_port_not_exist        | ChatList    | 返回 false（当前端口上不存在群聊）                           |
+| 22   | ut_addchat_chat_exist            | ChatList    | 返回 true（已存在同名的群聊）                                |
+| 23   | ut_addchat_chat_not_exist        | ChatList    | 返回 false（不存在同名的群聊）                               |
+| 24   | ut_chatlist_chat_not_open        | ChatList    | 返回 true（如果某个名称的群聊没有被打开）                    |
+| 25   | ut_chatlist_chat_open            | ChatList    | 返回 false（如果某个名称的群聊被打开了）                     |
 | 26   | ut_tcpclient_lbClientIP          | TcpClient   | lbClientIP 内容正确解析且显示                                |
 | 27   | ut_tcpclient_lbClientPort        | TcpClient   | lbClientPort 内容正确解析且显示                              |
 | 28   | ut_tcpclient_lbServerIP          | TcpClient   | lbServerIP 内容正确解析且显示                                |

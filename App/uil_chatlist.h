@@ -20,7 +20,7 @@ public:
     explicit ChatList(QWidget *parent, QString localUserName, QString localUserGroupNumber, QHostAddress localIpAddress);
     ~ChatList();
 
-#if !QT_NO_DEBUG  // 用于开放权限给单元测试
+#if !QT_NO_DEBUG  // 用于开放 public 权限给单元测试
 public:
 #else
 private:
@@ -47,6 +47,13 @@ private:
     Ui::ChatList *ui;
 
     QUdpSocket* udpSocket;
+
+
+#if !QT_NO_DEBUG  // 用于开放 public 权限给单元测试
+public:
+#else
+private:
+#endif
     QVector<QPair<Chat*, QToolButton*>> vPair_OChat_BtnChat;  // 第一个是 Chat 对象，第二个是 按钮对象
 };
 
