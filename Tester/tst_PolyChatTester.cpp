@@ -28,6 +28,8 @@ QString      localUserGroupNumber    = "";               // Group number (get in
 QHostAddress localIpAddress          = QHostAddress();
 ChatList*    chatList                = nullptr;          // Widget ChatList (Only one)
 
+unsigned int const TIMER_STEP        = 10;
+
 class PolyChatTester : public QObject
 {
     Q_OBJECT
@@ -36,6 +38,7 @@ public:
     PolyChatTester();
     ~PolyChatTester();
 
+    // TODO 增加其他窗口按钮可选状态验证
 private slots:
     void initTestCase();
     void cleanupTestCase();
@@ -123,9 +126,27 @@ private slots:
     void mt_chatbox_btnBold              ();
     void mt_chatbox_btnItalic            ();
     void mt_chatbox_btnUnderLine         ();
+
+private:
+    QTimer* timer;
 };
 
-PolyChatTester::PolyChatTester() { }
+PolyChatTester::PolyChatTester()
+{
+    this->timer = new QTimer(this);
+    connect(timer, &QTimer::timeout, this, [=](){
+        QWidgetList topWidgets = QApplication::topLevelWidgets();
+        foreach (QWidget *w, topWidgets) {
+            if (QMessageBox *mb = qobject_cast<QMessageBox *>(w)) {
+                QTest::keyClick(mb, Qt::Key_Enter);
+            } else if (QFileDialog* dialog = qobject_cast<QFileDialog *>(w)) {
+                QTest::keyClick(dialog, Qt::Key_Enter);
+            } else {
+                w->close();
+            }
+        }
+    });
+}
 
 PolyChatTester::~PolyChatTester() { }
 
@@ -550,16 +571,7 @@ void PolyChatTester::ut_tcpclient_progressBar()
  */
 void PolyChatTester::ut_tcpclient_btnCancel_emit()
 {
-    QTimer *timer = new QTimer(this);
-    connect(timer, &QTimer::timeout, this, [=](){
-        QWidgetList topWidgets = QApplication::topLevelWidgets();
-        foreach (QWidget *w, topWidgets) {
-            if (QMessageBox *mb = qobject_cast<QMessageBox *>(w)) {
-                QTest::keyClick(mb, Qt::Key_Enter);
-            }
-        }
-    });
-    timer->start(10);
+    timer->start(TIMER_STEP);
 
     TcpClient widget(nullptr, "fox.exe", 1551155, DAL::getLocalIpAddress(), PORT_TCP_FILE);
     QPushButton* button = widget.findChild<QPushButton*>("btnCancel");
@@ -568,6 +580,7 @@ void PolyChatTester::ut_tcpclient_btnCancel_emit()
     QTest::mouseClick(button, Qt::LeftButton);
 
     QCOMPARE(spy.count(), 1);
+    timer->stop();
 }
 
 /** 用户每次点击保存按钮时，保证（按钮点击）信号正确触发，且为一次
@@ -576,20 +589,7 @@ void PolyChatTester::ut_tcpclient_btnCancel_emit()
  */
 void PolyChatTester::ut_tcpclient_btnSave_emit()
 {
-    QTimer *timer = new QTimer(this);
-    connect(timer, &QTimer::timeout, this, [=](){
-        QWidgetList topWidgets = QApplication::topLevelWidgets();
-        foreach (QWidget *w, topWidgets) {
-            if (QMessageBox *mb = qobject_cast<QMessageBox *>(w)) {
-                QTest::keyClick(mb, Qt::Key_Enter);
-            } else if (QFileDialog* dialog = qobject_cast<QFileDialog *>(w)) {
-                QTest::keyClick(dialog, Qt::Key_Enter);
-            } else {
-                w->close();
-            }
-        }
-    });
-    timer->start(10);
+    timer->start(TIMER_STEP);
 
     TcpClient widget(nullptr, "fox.exe", 1551155, DAL::getLocalIpAddress(), PORT_TCP_FILE);
     QPushButton* button = widget.findChild<QPushButton*>("btnSave");
@@ -598,6 +598,7 @@ void PolyChatTester::ut_tcpclient_btnSave_emit()
 //    QTest::mouseClick(button, Qt::LeftButton);
 
     QCOMPARE(spy.count(), 0);
+    timer->stop();
 }
 
 /** 用户关闭窗口时触发关闭事件
@@ -606,22 +607,14 @@ void PolyChatTester::ut_tcpclient_btnSave_emit()
  */
 void PolyChatTester::ut_tcplient_closeEvent_emit()
 {
-    QTimer *timer = new QTimer(this);
-    connect(timer, &QTimer::timeout, this, [=](){
-        QWidgetList topWidgets = QApplication::topLevelWidgets();
-        foreach (QWidget *w, topWidgets) {
-            if (QMessageBox *mb = qobject_cast<QMessageBox *>(w)) {
-                QTest::keyClick(mb, Qt::Key_Enter);
-            }
-        }
-    });
-    timer->start(10);
+    timer->start(TIMER_STEP);
 
     TcpClient widget(nullptr, "fox.exe", 1551155, DAL::getLocalIpAddress(), PORT_TCP_FILE);
     QSignalSpy spy(&widget, &QWidget::close);
     widget.close();
 
     QCOMPARE(spy.count(), 0);
+    timer->stop();
 }
 
 /** lbClientIP 内容正确解析且显示
@@ -696,16 +689,7 @@ void PolyChatTester::ut_tcpserver_lbFileSize()
  */
 void PolyChatTester::ut_tcpserver_btnCancel_emit()
 {
-    QTimer *timer = new QTimer(this);
-    connect(timer, &QTimer::timeout, this, [=](){
-        QWidgetList topWidgets = QApplication::topLevelWidgets();
-        foreach (QWidget *w, topWidgets) {
-            if (QMessageBox *mb = qobject_cast<QMessageBox *>(w)) {
-                QTest::keyClick(mb, Qt::Key_Enter);
-            }
-        }
-    });
-    timer->start(10);
+    timer->start(TIMER_STEP);
 
     TcpServer widget(nullptr, "fox.exe", DAL::getLocalIpAddress(), PORT_TCP_FILE);
     QPushButton* button = widget.findChild<QPushButton*>("btnCancel");
@@ -714,6 +698,7 @@ void PolyChatTester::ut_tcpserver_btnCancel_emit()
     QTest::mouseClick(button, Qt::LeftButton);
 
     QCOMPARE(spy.count(), 1);
+    timer->stop();
 }
 
 /** progressBar 初始化时为 0
@@ -733,16 +718,7 @@ void PolyChatTester::ut_tcpserver_progressBar()
  */
 void PolyChatTester::ut_tcpserver_closeEvent_emit()
 {
-    QTimer *timer = new QTimer(this);
-    connect(timer, &QTimer::timeout, this, [=](){
-        QWidgetList topWidgets = QApplication::topLevelWidgets();
-        foreach (QWidget *w, topWidgets) {
-            if (QMessageBox *mb = qobject_cast<QMessageBox *>(w)) {
-                QTest::keyClick(mb, Qt::Key_Enter);
-            }
-        }
-    });
-    timer->start(10);
+    timer->start(TIMER_STEP);
 
     TcpServer widget(nullptr, "fox.exe", DAL::getLocalIpAddress(), PORT_TCP_FILE);
     QPushButton* button = widget.findChild<QPushButton*>("btnCancel");
@@ -751,6 +727,7 @@ void PolyChatTester::ut_tcpserver_closeEvent_emit()
     QTest::mouseClick(button, Qt::LeftButton);
 
     QCOMPARE(spy.count(), 1);
+    timer->stop();
 }
 
 /** ChatBox 窗口的标题正确初始化（符合格式）
@@ -884,34 +861,74 @@ void PolyChatTester::ut_chatbox_btnSend()
  */
 void PolyChatTester::ut_chatbox_btnBold_emit()
 {
+    ChatBoxWidget chatBox(nullptr, "3530409/90102", 2333);
+    QToolButton* button = chatBox.findChild<QToolButton*>("btnBold");
+
+    QSignalSpy spy(button, &QToolButton::clicked);
+
+    QTest::mouseClick(button, Qt::LeftButton);
+    QCOMPARE(button->isChecked(), true);
+
+    QTest::mouseClick(button, Qt::LeftButton);
+    QCOMPARE(button->isChecked(), false);
+
+    QCOMPARE(spy.count(), 2);
 
 }
 
 /** 点击 btnItalic 触发（按钮点击）信号，且状态改变为 enable；再次点击恢复为初始状态
  *  Нажатие btnItalic активирует сигнал (нажатие кнопки), и состояние изменяется на «включено»; нажатие еще раз возвращает в исходное состояние.
- *  @brief PolyChatTester::
+ *  @brief PolyChatTester::ut_chatbox_btnItalic_emit
  */
 void PolyChatTester::ut_chatbox_btnItalic_emit()
 {
+    ChatBoxWidget chatBox(nullptr, "3530409/90102", 2333);
+    QToolButton* button = chatBox.findChild<QToolButton*>("btnItalic");
 
+    QSignalSpy spy(button, &QToolButton::clicked);
+
+    QTest::mouseClick(button, Qt::LeftButton);
+    QCOMPARE(button->isChecked(), true);
+
+    QTest::mouseClick(button, Qt::LeftButton);
+    QCOMPARE(button->isChecked(), false);
+
+    QCOMPARE(spy.count(), 2);
 }
 
 /** 点击 btnUnderLine 触发（按钮点击）信号，且状态改变为 enable；再次点击恢复为初始状态
  *  Нажатие btnUnderLine активирует сигнал (нажатие кнопки), и состояние изменяется на «включено»; нажатие еще раз возвращает в исходное состояние.
- *  @brief PolyChatTester::
+ *  @brief PolyChatTester::ut_chatbox_btnUnderLine_emit
  */
 void PolyChatTester::ut_chatbox_btnUnderLine_emit()
 {
+    ChatBoxWidget chatBox(nullptr, "3530409/90102", 2333);
+    QToolButton* button = chatBox.findChild<QToolButton*>("btnUnderLine");
 
+    QSignalSpy spy(button, &QToolButton::clicked);
+
+    QTest::mouseClick(button, Qt::LeftButton);
+    QCOMPARE(button->isChecked(), true);
+
+    QTest::mouseClick(button, Qt::LeftButton);
+    QCOMPARE(button->isChecked(), false);
+
+    QCOMPARE(spy.count(), 2);
 }
 
 /** 点击 btnColor 触发（按钮点击）信号
  *  Нажатие btnColor запускает сигнал (нажатие кнопки).
- *  @brief PolyChatTester::
+ *  @brief PolyChatTester::ut_chatbox_btnColor_emit
  */
 void PolyChatTester::ut_chatbox_btnColor_emit()
 {
+    ChatBoxWidget chatBox(nullptr, "3530409/90102", 2333);
+    QToolButton* button = chatBox.findChild<QToolButton*>("btnColor");
 
+    QSignalSpy spy(button, &QToolButton::clicked);
+
+    QTest::mouseClick(button, Qt::LeftButton);
+    QCOMPARE(spy.count(), 1);
 }
 
 /** 点击 btnFileSend 触发（按钮点击）信号
