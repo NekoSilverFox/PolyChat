@@ -14,6 +14,7 @@
 #include <QTextBrowser>
 #include <QTextEdit>
 #include <QComboBox>
+#include <QTableWidget>
 
 #include "../App/db_localdata.h"
 #include "../App/bll_polychat.h"
@@ -31,7 +32,7 @@ QString      localUserGroupNumber    = "";               // Group number (get in
 QHostAddress localIpAddress          = QHostAddress();
 ChatList*    chatList                = nullptr;          // Widget ChatList (Only one)
 
-unsigned int const TIMER_STEP        = 50;
+unsigned int const TIMER_STEP        = 1000;
 
 class PolyChatTester : public QObject
 {
@@ -51,9 +52,12 @@ private slots:
     void ut_login_login_group_empty      ();
     void ut_login_init_login             ();
     void ut_login_init_group             ();
+    void ut_login_btnlogin               ();
     void ut_login_btnlogin_emit          ();
     void ut_login_leUserName             ();
     void ut_login_leUserGroupNumber      ();
+    void ut_login_btnInfo_emit           ();
+    void ut_login_window                 ();
 
     void ut_addchat_leNameNewChat        ();
     void ut_addchat_btnCancelAddChat     ();
@@ -62,6 +66,7 @@ private slots:
     void ut_chat_init                    ();
 
     void ut_chatlist_init                ();
+    void ut_chatlist_btnNewChat          ();
     void ut_chatlist_btnNewChat_emit     ();
     void ut_chatlist_leSearch            ();
     void ut_chatlist_leSearch_change_emit();
@@ -83,9 +88,12 @@ private slots:
     void ut_tcpclient_lbFileName         ();
     void ut_tcpclient_lbFileSize         ();
     void ut_tcpclient_progressBar        ();
+    void ut_tcpclient_btnCancel          ();
     void ut_tcpclient_btnCancel_emit     ();
+    void ut_tcpclient_btnSave            ();
     void ut_tcpclient_btnSave_emit       ();
-    void ut_tcplient_closeEvent_emit     ();
+    void ut_tcpclient_closeEvent_emit    ();
+    void ut_tcpclient_textBrowser        ();
 
     void ut_tcpserver_lbClientIP         ();
     void ut_tcpserver_lbClientPort       ();
@@ -93,9 +101,12 @@ private slots:
     void ut_tcpserver_lbServerPort       ();
     void ut_tcpserver_lbFilePath         ();
     void ut_tcpserver_lbFileSize         ();
+    void ut_tcpserver_btnCancel          ();
     void ut_tcpserver_btnCancel_emit     ();
     void ut_tcpserver_progressBar        ();
     void ut_tcpserver_closeEvent_emit    ();
+
+    void ut_tcpserver_textBrowser        ();
 
     void ut_chatbox_title                ();
     void ut_chatbox_btnBold              ();
@@ -121,6 +132,8 @@ private slots:
     void ut_chatbox_init_cbxFontSize     ();
     void ut_chatbox_cbxFontSize_min_max  ();
     void ut_chatbox_closeEvent_emit      ();
+    void ut_chatbox_tbUser               ();
+    void ut_chatbox_lbNumberOnlineUse    ();
 
     void mt_login_init_succ              ();
     void mt_chatlist_getNewBtn           ();
@@ -207,6 +220,17 @@ void PolyChatTester::ut_login_init_group()
     QCOMPARE(localUserGroupNumber, "3530904/90102");
 }
 
+/** 保证 btnlogin 是非可选按钮，且图标显示被禁用
+ *  btnlogin является отмечаемой кнопкой (Checkable-QToolButton), а отображение icon отключено.
+ *  @brief PolyChatTester::ut_login_btnlogin
+ */
+void PolyChatTester::ut_login_btnlogin()
+{
+    LoginWidget loginWidget;
+    QPushButton* pushButton = loginWidget.findChild<QPushButton*>("btnLogin");
+    QCOMPARE(pushButton->isCheckable(), false);
+}
+
 /** 用户每次点击登录按钮时，保证（按钮点击）信号正确触发，且为一次
  *  Вход в систему. Сигнал (нажатие кнопки) входа в систему каждый раз срабатывает правильно и единожды.
  *  @brief PolyChatTester::ut_login_btnlogin_emit
@@ -229,7 +253,7 @@ void PolyChatTester::ut_login_btnlogin_emit()
 
 /** 模拟用户点击并且通过键盘输入，确保输入内容在 leUserName 输入框中正确显示
  *  Имитация щелчка пользователя и ввода с клавиатуры, чтобы убедиться, что вводимый контент правильно отображается в поле ввода leUserName.
- *  @brief PolyChatTester::
+ *  @brief PolyChatTester::ut_login_leUserName
  */
 void PolyChatTester::ut_login_leUserName()
 {
@@ -242,7 +266,7 @@ void PolyChatTester::ut_login_leUserName()
 
 /** 模拟用户点击并且通过键盘输入，确保输入内容在 leUserGroupNumber 输入框中正确显示
  *  Имитация щелчка пользователя и ввода с клавиатуры, чтобы убедиться, что вводимый контент правильно отображается в поле ввода leUserGroupNumber.
- *  @brief PolyChatTester::
+ *  @brief PolyChatTester::ut_login_leUserGroupNumber
  */
 void PolyChatTester::ut_login_leUserGroupNumber()
 {
@@ -253,9 +277,35 @@ void PolyChatTester::ut_login_leUserGroupNumber()
     QCOMPARE(leUserGroupNumber->text(), "3530904/90102");
 }
 
+/** 用户每次点击 btnInfo 时，保证（按钮点击）信号正确触发，且为一次
+ *  btnlogin является отмечаемой кнопкой (Checkable-QToolButton), а отображение icon отключено.
+ *  @brief PolyChatTester::ut_login_btnInfo_emit
+ */
+void PolyChatTester::ut_login_btnInfo_emit()
+{
+    LoginWidget widget;
+
+    QPushButton* pushButton = widget.findChild<QPushButton*>("btnInfo");
+
+    QSignalSpy spy(pushButton, &QPushButton::clicked);
+    pushButton->click();
+    QCOMPARE(spy.count(), 1);  // 确保信号被准确地发射了一次
+}
+
+/** Login 窗口的大小被禁止缩放，并且为 400x250
+ *  Размер Login отключен и составляет 400x250
+ *  @brief PolyChatTester::ut_addchat_leNameNewChat
+ */
+void PolyChatTester::ut_login_window()
+{
+    LoginWidget widget;
+    QCOMPARE(widget.minimumSize(), QSize(400, 250));
+    QCOMPARE(widget.minimumSize(), widget.maximumSize());
+}
+
 /** 模拟用户点击并且通过键盘输入，确保输入内容在 leNameNewChat 输入框中正确显示
  *  Имитация щелчка пользователя и ввода с клавиатуры, чтобы убедиться, что вводимое содержимое правильно отображается в поле ввода leNameNewChat.
- *  @brief PolyChatTester::
+ *  @brief PolyChatTester::ut_addchat_leNameNewChat
  */
 void PolyChatTester::ut_addchat_leNameNewChat()
 {
@@ -322,6 +372,21 @@ void PolyChatTester::ut_chatlist_init()
     QCOMPARE("Fox", localUserName);
     QCOMPARE("3530904/90102", localUserGroupNumber);
     QCOMPARE(DAL::getLocalIpAddress(), localIpAddress);
+}
+
+
+/** 保证 btnNewChat 是可选按钮（Checkable-QToolButton），且文字显示被禁用
+ *  btnNewChat является отмечаемой кнопкой (Checkable-QToolButton), а отображение текста отключено
+ *  @brief PolyChatTester::ut_chatlist_btnNewChat
+ */
+void PolyChatTester::ut_chatlist_btnNewChat()
+{
+    DAL::initLocalUser("Fox", "3530904/90102");
+    ChatList widget(nullptr, DAL::getLocalUserName(), DAL::getLocalUserGroupNumber(), DAL::getLocalIpAddress());
+    QToolButton* button = widget.findChild<QToolButton*>("btnNewChat");
+
+    QCOMPARE(button->isCheckable(), false);
+    QCOMPARE(button->toolButtonStyle(), Qt::ToolButtonStyle::ToolButtonIconOnly);
 }
 
 /** 用户每次点击增加群聊按钮时，保证（按钮点击）信号正确触发，且为一次
@@ -570,6 +635,18 @@ void PolyChatTester::ut_tcpclient_progressBar()
     QCOMPARE(label->value(), 0);
 }
 
+/** 保证 btnCancel 是非可选按钮
+ *  btnCancel является отмечаемой кнопкой (Checkable-QToolButton) и выделено жирным шрифтом
+ *  @brief PolyChatTester::ut_tcpclient_btnCancel
+ */
+void PolyChatTester::ut_tcpclient_btnCancel()
+{
+    TcpClient widget(nullptr, "fox.exe", 1551155, DAL::getLocalIpAddress(), PORT_TCP_FILE);
+    QPushButton* button = widget.findChild<QPushButton*>("btnCancel");
+    QCOMPARE(button->isCheckable(), false);
+}
+
+
 /** 用户每次点击取消按钮时，保证（按钮点击）信号正确触发，且为一次
  *  Каждый раз, когда пользователь нажимает кнопку отмены, сигнал (нажатие кнопки) срабатывает правильно и единожды.
  *  @brief PolyChatTester::ut_tcpclient_btnCancel_emit
@@ -586,6 +663,17 @@ void PolyChatTester::ut_tcpclient_btnCancel_emit()
 
     QCOMPARE(spy.count(), 1);
     timer->stop();
+}
+
+/** 保证 btnSave 是非可选按钮
+ *  btnSave является отмечаемой кнопкой (Checkable-QToolButton) и выделено жирным шрифтом
+ *  @brief PolyChatTester::ut_tcpclient_btnSave
+ */
+void PolyChatTester::ut_tcpclient_btnSave()
+{
+    TcpClient widget(nullptr, "fox.exe", 1551155, DAL::getLocalIpAddress(), PORT_TCP_FILE);
+    QPushButton* button = widget.findChild<QPushButton*>("btnSave");
+    QCOMPARE(button->isCheckable(), false);
 }
 
 /** 用户每次点击保存按钮时，保证（按钮点击）信号正确触发，且为一次
@@ -608,9 +696,9 @@ void PolyChatTester::ut_tcpclient_btnSave_emit()
 
 /** 用户关闭窗口时触发关闭事件
  *  Запускает событие закрытия, когда пользователь закрывает окно.
- *  @brief PolyChatTester::ut_tcplient_closeEvent_emit
+ *  @brief PolyChatTester::ut_tcpclient_closeEvent_emit
  */
-void PolyChatTester::ut_tcplient_closeEvent_emit()
+void PolyChatTester::ut_tcpclient_closeEvent_emit()
 {
     timer->start(TIMER_STEP);
 
@@ -620,6 +708,17 @@ void PolyChatTester::ut_tcplient_closeEvent_emit()
 
     QCOMPARE(spy.count(), 0);
     timer->stop();
+}
+
+/** textBrowser 为只读状态，禁止写入
+ *  textBrowser доступен только для чтения, запись запрещена
+ *  @brief PolyChatTester::ut_tcpclient_textBrowser
+ */
+void PolyChatTester::ut_tcpclient_textBrowser()
+{
+    TcpClient widget(nullptr, "fox.exe", 1551155, DAL::getLocalIpAddress(), PORT_TCP_FILE);
+    QTextBrowser* textBrowser = widget.findChild<QTextBrowser*>("textBrowser");
+    QCOMPARE(textBrowser->isReadOnly(), true);
 }
 
 /** lbClientIP 内容正确解析且显示
@@ -688,6 +787,17 @@ void PolyChatTester::ut_tcpserver_lbFileSize()
     QCOMPARE(label->text(), "0Kb");
 }
 
+/** 保证 btnCancel 是非可选按钮
+ *  btnCancel является отмечаемой кнопкой (Checkable-QToolButton) и выделено жирным шрифтом
+ *  @brief PolyChatTester::ut_tcpserver_btnCancel
+ */
+void PolyChatTester::ut_tcpserver_btnCancel()
+{
+    TcpServer widget(nullptr, "fox.exe", DAL::getLocalIpAddress(), PORT_TCP_FILE);
+    QPushButton* button = widget.findChild<QPushButton*>("btnCancel");
+    QCOMPARE(button->isCheckable(), false);
+}
+
 /** 用户每次点击取消按钮时，保证（按钮点击）信号正确触发，且为一次
  *  Каждый раз, когда пользователь нажимает кнопку отмены, сигнал (нажатие кнопки) срабатывает правильно и единожды.
  *  @brief PolyChatTester::ut_tcpserver_btnCancel_emit
@@ -733,6 +843,17 @@ void PolyChatTester::ut_tcpserver_closeEvent_emit()
 
     QCOMPARE(spy.count(), 1);
     timer->stop();
+}
+
+/** textBrowser 为只读状态，禁止写入
+ *  textBrowser доступен только для чтения, запись запрещена
+ *  @brief PolyChatTester::ut_tcpserver_textBrowser
+ */
+void PolyChatTester::ut_tcpserver_textBrowser()
+{
+    TcpServer widget(nullptr, "fox.exe", DAL::getLocalIpAddress(), PORT_TCP_FILE);
+    QTextBrowser* textBrowser = widget.findChild<QTextBrowser*>("textBrowser");
+    QCOMPARE(textBrowser->isReadOnly(), true);
 }
 
 /** ChatBox 窗口的标题正确初始化（符合格式）
@@ -1046,7 +1167,7 @@ void PolyChatTester::ut_chatbox_msgTextEdit()
 
 /** 初始字体为 12
  *  Начальный шрифт 12.
- *  @brief PolyChatTester::
+ *  @brief PolyChatTester::ut_chatbox_init_cbxFontSize
  */
 void PolyChatTester::ut_chatbox_init_cbxFontSize()
 {
@@ -1070,7 +1191,7 @@ void PolyChatTester::ut_chatbox_cbxFontSize_min_max()
 
 /** 用户关闭窗口（退出）时触发关闭事件
  *  Событие close срабатывает, когда пользователь закрывает окно (выход).
- *  @brief PolyChatTester::
+ *  @brief PolyChatTester::ut_chatbox_closeEvent_emit
  */
 void PolyChatTester::ut_chatbox_closeEvent_emit()
 {
@@ -1083,6 +1204,30 @@ void PolyChatTester::ut_chatbox_closeEvent_emit()
 
     QCOMPARE(spy.count(), 1);
     timer->stop();
+}
+
+
+/** 用户列表的宽度为 150-350
+ *  Ширина списка пользователей составляет 150 - 350
+ *  @brief PolyChatTester::ut_chatbox_tbUser
+ */
+void PolyChatTester::ut_chatbox_tbUser()
+{
+    ChatBoxWidget chatBox(nullptr, "3530409/90102", 2333);
+    QTableWidget* table = chatBox.findChild<QTableWidget*>("tbUser");
+    QCOMPARE(table->minimumWidth(), 150);
+    QCOMPARE(table->maximumWidth(), 350);
+}
+
+/** 在线人数的 UI 初始化为正确格式
+ *  UI инициализация онлайн-расчета численности в правильный формат
+ *  @brief PolyChatTester::ut_chatbox_lbNumberOnlineUse
+ */
+void PolyChatTester::ut_chatbox_lbNumberOnlineUse()
+{
+    ChatBoxWidget chatBox(nullptr, "3530409/90102", 2333);
+    QLabel* label = chatBox.findChild<QLabel*>("lbNumberOnlineUse");
+    QCOMPARE(label->text(), QString("Number of online user: %1").arg(0));
 }
 
 /** 登陆成功，本地用户信息被正确初始化
