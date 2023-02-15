@@ -237,6 +237,7 @@ void PolyChatTester::ut_login_btnlogin()
  */
 void PolyChatTester::ut_login_btnlogin_emit()
 {
+    timer->start(TIMER_STEP);
     LoginWidget loginWidget;
 
     QLineEdit* leUserName = loginWidget.findChild<QLineEdit*>("leUserName");
@@ -249,6 +250,7 @@ void PolyChatTester::ut_login_btnlogin_emit()
     QSignalSpy spy(pushButton, &QPushButton::clicked);
     pushButton->click();
     QCOMPARE(spy.count(), 1);  // 确保信号被准确地发射了一次
+    timer->stop();
 }
 
 /** 模拟用户点击并且通过键盘输入，确保输入内容在 leUserName 输入框中正确显示
@@ -395,6 +397,7 @@ void PolyChatTester::ut_chatlist_btnNewChat()
  */
 void PolyChatTester::ut_chatlist_btnNewChat_emit()
 {
+    timer->start(TIMER_STEP);
     DAL::initLocalUser("Fox", "3530904/90102");
     ChatList widget(nullptr, DAL::getLocalUserName(), DAL::getLocalUserGroupNumber(), DAL::getLocalIpAddress());
     QToolButton* pushButton = widget.findChild<QToolButton*>("btnNewChat");
@@ -403,6 +406,7 @@ void PolyChatTester::ut_chatlist_btnNewChat_emit()
     pushButton->click();
     pushButton->click();
     QCOMPARE(spy.count(), 2);
+    timer->stop();
 }
 
 /** 模拟用户点击并且通过键盘输入，确保输入内容在 leSearch 搜索框中正确显示
