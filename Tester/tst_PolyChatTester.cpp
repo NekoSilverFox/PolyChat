@@ -42,7 +42,6 @@ public:
     PolyChatTester();
     ~PolyChatTester();
 
-    // TODO 增加其他窗口按钮可选状态验证
 private slots:
     void initTestCase();
     void cleanupTestCase();
@@ -105,7 +104,6 @@ private slots:
     void ut_tcpserver_btnCancel_emit     ();
     void ut_tcpserver_progressBar        ();
     void ut_tcpserver_closeEvent_emit    ();
-
     void ut_tcpserver_textBrowser        ();
 
     void ut_chatbox_title                ();
@@ -137,11 +135,9 @@ private slots:
 
     void mt_login_init_succ              ();
     void mt_chatlist_getNewBtn           ();
-    void mt_chatlist_getRandomPort       ();
+    bool mt_chatlist_getRandomPort       ();
     void mt_chatlist_setChatState        ();
-    void mt_chatbox_btnBold              ();
-    void mt_chatbox_btnItalic            ();
-    void mt_chatbox_btnUnderLine         ();
+
 
 private:
     QTimer* timer;
@@ -221,6 +217,7 @@ void PolyChatTester::ut_login_login_group_empty()
 void PolyChatTester::ut_login_init_login()
 {
     bool isSuccInitLocalUser = DAL::initLocalUser("Fox", "3530904/90102");
+    QCOMPARE(isSuccInitLocalUser, true);
     QCOMPARE(localUserName, "Fox");
 }
 
@@ -231,6 +228,7 @@ void PolyChatTester::ut_login_init_login()
 void PolyChatTester::ut_login_init_group()
 {
     bool isSuccInitLocalUser = DAL::initLocalUser("Fox", "3530904/90102");
+    QCOMPARE(isSuccInitLocalUser, true);
     QCOMPARE(localUserGroupNumber, "3530904/90102");
 }
 
@@ -1250,7 +1248,7 @@ void PolyChatTester::ut_chatbox_lbNumberOnlineUse()
 
 /** 登陆成功，本地用户信息被正确初始化
  *  Вход выполнен успешно, и информация о локальном пользователе правильно инициализирована.
- *  @brief PolyChatTester::
+ *  @brief PolyChatTester::mt_login_init_succ
  */
 void PolyChatTester::mt_login_init_succ()
 {
@@ -1265,62 +1263,59 @@ void PolyChatTester::mt_login_init_succ()
 
     QCOMPARE(DAL::getLocalUserName(), "Fox");
     QCOMPARE(DAL::getLocalUserGroupNumber(), "3530409/90102");
-
 }
 
 /** 根据传入的参数，所创建的新按钮对象中拥有正确的信息
  *  В соответствии с переданными параметрами создается новый объект кнопки с правильной информацией.
- *  @brief PolyChatTester::
+ *  @brief PolyChatTester::mt_chatlist_getNewBtn
  */
 void PolyChatTester::mt_chatlist_getNewBtn()
 {
+    DAL::initLocalUser("Fox", "3530904/90102");
+    ChatList widget(nullptr, DAL::getLocalUserName(), DAL::getLocalUserGroupNumber(), DAL::getLocalIpAddress());
 
+    QToolButton* btn = widget.getNewBtn("3530904/90102", 6666, false);
+    QPair<Chat*, QToolButton*> pair(new Chat("3530904/90102", 6666, false), btn);
+    widget.vPair_OChat_BtnChat.push_front(pair);
+
+    widget.updateBtnInvPair("3530904/90102", btn);
+    QCOMPARE(widget.isChatOpen("3530904/90102"), false);
 }
 
 /** 生成的随机端口介于 PORT_MIN 与 PORT_MAX
  *  Генерирует случайные порты между PORT_MIN и PORT_MAX.
- *  @brief PolyChatTester::
+ *  @brief PolyChatTester::mt_chatlist_getRandomPort
  */
-void PolyChatTester::mt_chatlist_getRandomPort()
+bool PolyChatTester::mt_chatlist_getRandomPort()
 {
-
+    ChatList widget(nullptr, DAL::getLocalUserName(), DAL::getLocalUserGroupNumber(), DAL::getLocalIpAddress());
+    for (int i = 0; i < PORT_MAX - PORT_MIN; i++)
+    {
+        qint16 port = widget.getRandomPort();
+        if (port > PORT_MAX || port < PORT_MIN) return false;
+    }
+    return true;
 }
 
 /** 正常设置聊天窗口为打开或者关闭
  *  Окно чата открыто или закрыто.
- *  @brief PolyChatTester::
+ *  @brief PolyChatTester::mt_chatlist_setChatState
  */
 void PolyChatTester::mt_chatlist_setChatState()
 {
+    DAL::initLocalUser("Fox", "3530904/90102");
+    ChatList widget(nullptr, DAL::getLocalUserName(), DAL::getLocalUserGroupNumber(), DAL::getLocalIpAddress());
+    QPair<Chat*, QToolButton*> pair1(new Chat("3530904/90102", 6666, true), widget.getNewBtn("3530904/90102", 6666, false));
+    widget.vPair_OChat_BtnChat.push_front(pair1);
+    QCOMPARE(widget.isChatOpen("3530904/90102"), true);
 
+    QPair<Chat*, QToolButton*> pair2(new Chat("3530904/90103", 7777, false), widget.getNewBtn("3530904/90103", 7777, false));
+    widget.vPair_OChat_BtnChat.push_front(pair2);
+
+    QCOMPARE(widget.isChatOpen("3530904/90103"), false);
 }
 
-/** 当 btnBold 为选中状态时，用户输入文字被加粗
- *  Когда выбрано btnBold, текст, введенный пользователем, выделяется полужирным шрифтом.
- *  @brief PolyChatTester::
- */
-void PolyChatTester::mt_chatbox_btnBold()
-{
 
-}
-
-/** 当 btnItalic 为选中状态时，用户输入文字被倾斜
- *  Когда выбрано btnItalic, текст, введенный пользователем, выделяется курсивом.
- *  @brief PolyChatTester::
- */
-void PolyChatTester::mt_chatbox_btnItalic()
-{
-
-}
-
-/** 当 btnUnderLine 为选中状态时，用户输入文字被添加下划线
- *  Когда выбрано btnUnderLine, текст, введенный пользователем, будет подчеркнут.
- *  @brief PolyChatTester::
- */
-void PolyChatTester::mt_chatbox_btnUnderLine()
-{
-
-}
 
 
 
