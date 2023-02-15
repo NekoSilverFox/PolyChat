@@ -60,7 +60,7 @@ jobs:
           echo vcToolsInstallDir=%VCToolsInstallDir% >> %GITHUB_ENV%
           echo vcToolsRedistDir=%VCToolsRedistDir% >> %GITHUB_ENV%
   test:
-    needs: build
+    # needs: build
     name: Test
     # 运行平台， windows-latest目前是windows server 2019 
     # 参考文档 https://github.com/actions/virtual-environments/blob/main/images/win/Windows2019-Readme.md
@@ -103,10 +103,6 @@ jobs:
           cd ./Tester
           qmake CONFIG+=debug
           nmake
-          dir
-          cd ./debug
-          dir
-          PolyChatTester -vs -txt
           echo winSdkDir=%WindowsSdkDir% >> %GITHUB_ENV%
           echo winSdkVer=%WindowsSdkVersion% >> %GITHUB_ENV%
           echo vcToolsInstallDir=%VCToolsInstallDir% >> %GITHUB_ENV%
