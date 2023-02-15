@@ -32,7 +32,7 @@ QString      localUserGroupNumber    = "";               // Group number (get in
 QHostAddress localIpAddress          = QHostAddress();
 ChatList*    chatList                = nullptr;          // Widget ChatList (Only one)
 
-unsigned int const TIMER_STEP        = 1000;
+unsigned int const TIMER_STEP        = 50;
 
 class PolyChatTester : public QObject
 {
@@ -166,7 +166,21 @@ PolyChatTester::PolyChatTester()
     });
 }
 
-PolyChatTester::~PolyChatTester() { }
+PolyChatTester::~PolyChatTester()
+{
+    QWidgetList topWidgets = QApplication::topLevelWidgets();
+    foreach (QWidget *w, topWidgets) {
+        if (QMessageBox *mb = qobject_cast<QMessageBox *>(w)) {
+            QTest::keyClick(mb, Qt::Key_Enter);
+        } else if (QFileDialog* dialog = qobject_cast<QFileDialog *>(w)) {
+            QTest::keyClick(dialog, Qt::Key_Cancel);
+        } else if (QColorDialog* dialog = qobject_cast<QColorDialog *>(w)) {
+            QTest::keyClick(dialog, Qt::Key_Enter);
+        } else {
+            w->close();
+        }
+    }
+}
 
 void PolyChatTester::initTestCase()
 {
@@ -1240,6 +1254,17 @@ void PolyChatTester::ut_chatbox_lbNumberOnlineUse()
  */
 void PolyChatTester::mt_login_init_succ()
 {
+    LoginWidget widget;
+    QLineEdit* name  = widget.findChild<QLineEdit*>("leUserName");
+    QLineEdit* group = widget.findChild<QLineEdit*>("leUserGroupNumber");
+    QPushButton* button = widget.findChild<QPushButton*>("btnLogin");
+
+    QTest::keyClicks(name, "Fox");
+    QTest::keyClicks(group, "3530409/90102");
+    QTest::mouseClick(button, Qt::LeftButton);
+
+    QCOMPARE(DAL::getLocalUserName(), "Fox");
+    QCOMPARE(DAL::getLocalUserGroupNumber(), "3530409/90102");
 
 }
 
