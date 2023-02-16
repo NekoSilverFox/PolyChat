@@ -405,7 +405,7 @@ void ChatBoxWidget::userLeft(QString name, QString time)
         ui->msgTextBrowser->append(QString("%1 left on %2").arg(name).arg(time));
 
         /* 在线用户更新 */
-        ui->lbNumberOnlineUse->setText(QString("Number of online user：%1").arg(ui->tbUser->rowCount()));
+        ui->lbNumberOnlineUse->setText(QString("Number of online user: %1").arg(ui->tbUser->rowCount()));
     }
 }
 

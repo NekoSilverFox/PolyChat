@@ -138,6 +138,13 @@ private slots:
     bool mt_chatlist_getRandomPort       ();
     void mt_chatlist_setChatState        ();
 
+    void mt_chatbox_userjoin_list           ();
+    void mt_chatbox_userjoin_conter         ();
+    void mt_chatbox_userjoin_msgTextBrowser ();
+    void mt_chatbox_userleft_list           ();
+    void mt_chatbox_userleft_conter         ();
+    void mt_chatbox_userleft_msgTextBrowser ();
+
 
 private:
     QTimer* timer;
@@ -1316,15 +1323,182 @@ void PolyChatTester::mt_chatlist_setChatState()
 }
 
 
+/** 用户加入（用户列表正确刷新）
+ *  Присоединение пользователя (список пользователей обновляется корректно)
+ *  @brief PolyChatTester::mt_chatbox_userjoin_list
+ */
+void PolyChatTester::mt_chatbox_userjoin_list          ()
+{
+    ChatBoxWidget chatBox(nullptr, "3530409/90102", 2333);
+    QTableWidget* table = chatBox.findChild<QTableWidget*>("tbUser");
 
+    QCOMPARE(table->rowCount(), 0);
 
+    chatBox.userJoin("Fox", "3530904/90102", DAL::getLocalIpAddress());
+    QCOMPARE(table->rowCount(), 1);
+    QCOMPARE(table->item(0, 0)->text(), "Fox");
+    QCOMPARE(table->item(0, 1)->text(), "3530904/90102");
 
+    chatBox.userJoin("Fox2", "3530904/90102", DAL::getLocalIpAddress());
+    QCOMPARE(table->rowCount(), 2);
+    QCOMPARE(table->item(0, 0)->text(), "Fox2");
+    QCOMPARE(table->item(0, 1)->text(), "3530904/90102");
 
+    chatBox.userJoin("Fox3", "3530904/90103", DAL::getLocalIpAddress());
+    QCOMPARE(table->rowCount(), 3);
+    QCOMPARE(table->item(0, 0)->text(), "Fox3");
+    QCOMPARE(table->item(0, 1)->text(), "3530904/90103");
+}
 
+/** 用户加入（计数器正确增加，并且ui的显示格式及内容正确）
+ *  Присоединение пользователя (счетчик правильно увеличивается и ui отображается в правильном формате и с правильным содержанием)
+ *  @brief PolyChatTester::mt_chatbox_userjoin_conter
+ */
+void PolyChatTester::mt_chatbox_userjoin_conter        ()
+{
+    ChatBoxWidget chatBox(nullptr, "3530409/90102", 2333);
+    QTableWidget* table = chatBox.findChild<QTableWidget*>("tbUser");
+    QLabel* label = chatBox.findChild<QLabel*>("lbNumberOnlineUse");
+
+    QCOMPARE(table->rowCount(), 0);
+    QCOMPARE(label->text(), QString("Number of online user: %1").arg(table->rowCount()));
+
+    chatBox.userJoin("Fox", "3530904/90102", DAL::getLocalIpAddress());
+    QCOMPARE(table->rowCount(), 1);
+    QCOMPARE(label->text(), QString("Number of online user: %1").arg(table->rowCount()));
+
+    chatBox.userJoin("Fox2", "3530904/90102", DAL::getLocalIpAddress());
+    QCOMPARE(table->rowCount(), 2);
+    QCOMPARE(label->text(), QString("Number of online user: %1").arg(table->rowCount()));
+
+    chatBox.userJoin("Fox3", "3530904/90103", DAL::getLocalIpAddress());
+    QCOMPARE(table->rowCount(), 3);
+    QCOMPARE(label->text(), QString("Number of online user: %1").arg(table->rowCount()));
+}
+
+/** 用户加入（msgTextBrowser 被刷新）
+ *  Пользователь присоединился (msgTextBrowser обновляется)
+ *  @brief PolyChatTester::mt_chatbox_userjoin_msgTextBrowser
+ */
+void PolyChatTester::mt_chatbox_userjoin_msgTextBrowser()
+{
+    ChatBoxWidget chatBox(nullptr, "3530409/90102", 2333);
+    QTextBrowser* msgTextBrowser = chatBox.findChild<QTextBrowser*>("msgTextBrowser");
+
+    QString initString = msgTextBrowser->toPlainText();
+    chatBox.userJoin("Fox", "3530904/90102", DAL::getLocalIpAddress());
+    QVERIFY(initString != msgTextBrowser->toPlainText());
+
+    QCOMPARE(msgTextBrowser->toPlainText(), QString("%1 online！").arg("Fox"));
+}
+
+/** 用户离开（用户列表正确刷新）
+ *  Вылет пользователя (список пользователей обновляется корректно)
+ *  @brief PolyChatTester::mt_chatbox_userleft_list
+ */
+void PolyChatTester::mt_chatbox_userleft_list          ()
+{
+    ChatBoxWidget chatBox(nullptr, "3530409/90102", 2333);
+    QTableWidget* table = chatBox.findChild<QTableWidget*>("tbUser");
+
+    QCOMPARE(table->rowCount(), 0);
+
+    chatBox.userJoin("Fox", "3530904/90102", DAL::getLocalIpAddress());
+    QCOMPARE(table->rowCount(), 1);
+    QCOMPARE(table->item(0, 0)->text(), "Fox");
+    QCOMPARE(table->item(0, 1)->text(), "3530904/90102");
+
+    chatBox.userJoin("Fox2", "3530904/90102", DAL::getLocalIpAddress());
+    QCOMPARE(table->rowCount(), 2);
+    QCOMPARE(table->item(0, 0)->text(), "Fox2");
+    QCOMPARE(table->item(0, 1)->text(), "3530904/90102");
+
+    chatBox.userJoin("Fox3", "3530904/90103", DAL::getLocalIpAddress());
+    QCOMPARE(table->rowCount(), 3);
+    QCOMPARE(table->item(0, 0)->text(), "Fox3");
+    QCOMPARE(table->item(0, 1)->text(), "3530904/90103");
+
+    QString time = QDateTime::currentDateTime().toString("dd-MM-yyyy hh:mm:ss");
+
+    chatBox.userLeft("Fox", time);
+    QCOMPARE(table->rowCount(), 2);
+    QCOMPARE(table->item(0, 0)->text(), "Fox3");
+    QCOMPARE(table->item(0, 1)->text(), "3530904/90103");
+
+    chatBox.userLeft("Fox3", time);
+    QCOMPARE(table->rowCount(), 1);
+    QCOMPARE(table->item(0, 0)->text(), "Fox2");
+    QCOMPARE(table->item(0, 1)->text(), "3530904/90102");
+
+    chatBox.userLeft("Fox2", time);
+    QCOMPARE(table->rowCount(), 0);
+}
+
+/** 用户离开（计数器正确增加，并且ui的显示格式及内容正确）
+ *  Пользователь уходит (счетчик правильно увеличивается и ui отображается в правильном формате и с правильным содержанием)
+ *  @brief Polmt_chatbox_userleft_conter        yChatTester::
+ */
+void PolyChatTester::mt_chatbox_userleft_conter        ()
+{
+    ChatBoxWidget chatBox(nullptr, "3530409/90102", 2333);
+    QTableWidget* table = chatBox.findChild<QTableWidget*>("tbUser");
+    QLabel* label = chatBox.findChild<QLabel*>("lbNumberOnlineUse");
+
+    QCOMPARE(table->rowCount(), 0);
+    QCOMPARE(label->text(), QString("Number of online user: %1").arg(table->rowCount()));
+
+    chatBox.userJoin("Fox", "3530904/90102", DAL::getLocalIpAddress());
+    QCOMPARE(table->rowCount(), 1);
+    QCOMPARE(label->text(), QString("Number of online user: %1").arg(table->rowCount()));
+
+    chatBox.userJoin("Fox2", "3530904/90102", DAL::getLocalIpAddress());
+    QCOMPARE(table->rowCount(), 2);
+    QCOMPARE(label->text(), QString("Number of online user: %1").arg(table->rowCount()));
+
+    chatBox.userJoin("Fox3", "3530904/90103", DAL::getLocalIpAddress());
+    QCOMPARE(table->rowCount(), 3);
+    QCOMPARE(label->text(), QString("Number of online user: %1").arg(table->rowCount()));
+
+    QString time = QDateTime::currentDateTime().toString("dd-MM-yyyy hh:mm:ss");
+
+    chatBox.userLeft("Fox2", time);
+    QCOMPARE(table->rowCount(), 2);
+    QCOMPARE(label->text(), QString("Number of online user: %1").arg(table->rowCount()));
+
+    chatBox.userLeft("Fox", time);
+    QCOMPARE(table->rowCount(), 1);
+    QCOMPARE(label->text(), QString("Number of online user: %1").arg(table->rowCount()));
+
+    chatBox.userLeft("Fox3", time);
+    QCOMPARE(table->rowCount(), 0);
+    QCOMPARE(label->text(), QString("Number of online user: %1").arg(table->rowCount()));
+}
+
+/** 用户离开（msgTextBrowser 被刷新）
+ *  Пользователь уходит (msgTextBrowser обновляется)
+ *  @brief PolyChatTester::mt_chatbox_userleft_msgTextBrowser
+ */
+void PolyChatTester::mt_chatbox_userleft_msgTextBrowser()
+{
+    ChatBoxWidget chatBox(nullptr, "3530409/90102", 2333);
+    QTextBrowser* msgTextBrowser = chatBox.findChild<QTextBrowser*>("msgTextBrowser");
+
+    QString curString = msgTextBrowser->toPlainText();
+    chatBox.userJoin("Fox", "3530904/90102", DAL::getLocalIpAddress());
+    QVERIFY(curString != msgTextBrowser->toPlainText());
+
+    QCOMPARE(msgTextBrowser->toPlainText(), QString("%1 online！").arg("Fox"));
+
+    QString time = QDateTime::currentDateTime().toString("dd-MM-yyyy hh:mm:ss");
+    curString = msgTextBrowser->toPlainText();
+    chatBox.userLeft("Fox", time);
+    QVERIFY(curString != msgTextBrowser->toPlainText());
+
+}
 
 
 
 //QTEST_APPLESS_MAIN(PolyChatTester)
-QTEST_MAIN(PolyChatTester)  // 自动为我们创建用于测试的 main 函
+QTEST_MAIN(PolyChatTester)  // 自动为我们创建用于测试的 main 函数（带 GUI）
 
 #include "tst_PolyChatTester.moc"  // 编译或者生成一个额外的 cpp 文件，其中包含您需要的所有元结构 (因为 Qt 的信号和槽不属于 C++标准的内容)。以进行Qt的内省工作
