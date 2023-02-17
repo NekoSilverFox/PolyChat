@@ -130,7 +130,7 @@ private slots:
     void ut_chatbox_tbUser               ();
     void ut_chatbox_lbNumberOnlineUse    ();
 
-    void mt_login_init_succ              ();
+    void mt_login_init_success           ();
     void mt_login_leUserName             ();
     void mt_login_leUserGroupNumber      ();
 
@@ -141,10 +141,10 @@ private slots:
     void mt_chatlist_btnchat_exist       ();
 
     void mt_chatbox_userjoin_list           ();
-    void mt_chatbox_userjoin_conter         ();
+    void mt_chatbox_userjoin_counter        ();
     void mt_chatbox_userjoin_msgTextBrowser ();
     void mt_chatbox_userleft_list           ();
-    void mt_chatbox_userleft_conter         ();
+    void mt_chatbox_userleft_counter        ();
     void mt_chatbox_userleft_msgTextBrowser ();
     void mt_chatbox_clean                   ();
     void mt_chatbox_save_empty              ();
@@ -1250,9 +1250,9 @@ void PolyChatTester::ut_chatbox_lbNumberOnlineUse()
 
 /** 登陆成功，本地用户信息被正确初始化
  *  Вход выполнен успешно, и информация о локальном пользователе правильно инициализирована.
- *  @brief PolyChatTester::mt_login_init_succ
+ *  @brief PolyChatTester::mt_login_init_success
  */
-void PolyChatTester::mt_login_init_succ()
+void PolyChatTester::mt_login_init_success()
 {
     LoginWidget widget;
     QLineEdit* name  = widget.findChild<QLineEdit*>("leUserName");
@@ -1354,7 +1354,7 @@ void PolyChatTester::mt_chatlist_btnchat_exist()
  *  Присоединение пользователя (список пользователей обновляется корректно)
  *  @brief PolyChatTester::mt_chatbox_userjoin_list
  */
-void PolyChatTester::mt_chatbox_userjoin_list          ()
+void PolyChatTester::mt_chatbox_userjoin_list()
 {
     ChatBoxWidget chatBox(nullptr, "3530409/90102", 2333);
     QTableWidget* table = chatBox.findChild<QTableWidget*>("tbUser");
@@ -1379,9 +1379,9 @@ void PolyChatTester::mt_chatbox_userjoin_list          ()
 
 /** 用户加入（计数器正确增加，并且ui的显示格式及内容正确）
  *  Присоединение пользователя (счетчик правильно увеличивается и ui отображается в правильном формате и с правильным содержанием)
- *  @brief PolyChatTester::mt_chatbox_userjoin_conter
+ *  @brief PolyChatTester::mt_chatbox_userjoin_counter
  */
-void PolyChatTester::mt_chatbox_userjoin_conter        ()
+void PolyChatTester::mt_chatbox_userjoin_counter()
 {
     ChatBoxWidget chatBox(nullptr, "3530409/90102", 2333);
     QTableWidget* table = chatBox.findChild<QTableWidget*>("tbUser");
@@ -1423,7 +1423,7 @@ void PolyChatTester::mt_chatbox_userjoin_msgTextBrowser()
  *  Вылет пользователя (список пользователей обновляется корректно)
  *  @brief PolyChatTester::mt_chatbox_userleft_list
  */
-void PolyChatTester::mt_chatbox_userleft_list          ()
+void PolyChatTester::mt_chatbox_userleft_list()
 {
     ChatBoxWidget chatBox(nullptr, "3530409/90102", 2333);
     QTableWidget* table = chatBox.findChild<QTableWidget*>("tbUser");
@@ -1463,9 +1463,9 @@ void PolyChatTester::mt_chatbox_userleft_list          ()
 
 /** 用户离开（计数器正确增加，并且ui的显示格式及内容正确）
  *  Пользователь уходит (счетчик правильно увеличивается и ui отображается в правильном формате и с правильным содержанием)
- *  @brief Polmt_chatbox_userleft_conter        yChatTester::
+ *  @brief PolyChatTester::mt_chatbox_userleft_counter
  */
-void PolyChatTester::mt_chatbox_userleft_conter        ()
+void PolyChatTester::mt_chatbox_userleft_counter()
 {
     ChatBoxWidget chatBox(nullptr, "3530409/90102", 2333);
     QTableWidget* table = chatBox.findChild<QTableWidget*>("tbUser");
