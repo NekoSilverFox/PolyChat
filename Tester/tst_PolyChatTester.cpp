@@ -53,12 +53,9 @@ private slots:
     void ut_login_init_group             ();
     void ut_login_btnlogin               ();
     void ut_login_btnlogin_emit          ();
-    void ut_login_leUserName             ();
-    void ut_login_leUserGroupNumber      ();
     void ut_login_btnInfo_emit           ();
     void ut_login_window                 ();
 
-    void ut_addchat_leNameNewChat        ();
     void ut_addchat_btnCancelAddChat     ();
     void ut_addchat_btnAddChat           ();
 
@@ -68,7 +65,7 @@ private slots:
     void ut_chatlist_btnNewChat          ();
     void ut_chatlist_btnNewChat_emit     ();
     void ut_chatlist_leSearch            ();
-    void ut_chatlist_leSearch_change_emit();
+    void mt_chatlist_leSearch_change_emit();
     void ut_chatlist_lbName              ();
     void ut_chatlist_lbGroupNumber       ();
     void ut_chatlist_lbIP                ();
@@ -134,9 +131,14 @@ private slots:
     void ut_chatbox_lbNumberOnlineUse    ();
 
     void mt_login_init_succ              ();
+    void mt_login_leUserName             ();
+    void mt_login_leUserGroupNumber      ();
+
+    void mt_addchat_leNameNewChat        ();
     void mt_chatlist_getNewBtn           ();
     bool mt_chatlist_getRandomPort       ();
     void mt_chatlist_setChatState        ();
+    void mt_chatlist_btnchat_exist       ();
 
     void mt_chatbox_userjoin_list           ();
     void mt_chatbox_userjoin_conter         ();
@@ -144,6 +146,11 @@ private slots:
     void mt_chatbox_userleft_list           ();
     void mt_chatbox_userleft_conter         ();
     void mt_chatbox_userleft_msgTextBrowser ();
+    void mt_chatbox_clean                   ();
+    void mt_chatbox_save_empty              ();
+    void mt_chatbox_send_success            ();
+    void mt_tcpclient                       ();
+    void mt_tcpserver                       ();
 
 
 private:
@@ -272,24 +279,12 @@ void PolyChatTester::ut_login_btnlogin_emit()
     timer->stop();
 }
 
-/** 模拟用户点击并且通过键盘输入，确保输入内容在 leUserName 输入框中正确显示
- *  Имитация щелчка пользователя и ввода с клавиатуры, чтобы убедиться, что вводимый контент правильно отображается в поле ввода leUserName.
- *  @brief PolyChatTester::ut_login_leUserName
- */
-void PolyChatTester::ut_login_leUserName()
-{
-    LoginWidget loginWidget;
-
-    QLineEdit* leUserName = loginWidget.findChild<QLineEdit*>("leUserName");
-    QTest::keyClicks(leUserName, "Fox");
-    QCOMPARE(leUserName->text(), "Fox");
-}
 
 /** 模拟用户点击并且通过键盘输入，确保输入内容在 leUserGroupNumber 输入框中正确显示
  *  Имитация щелчка пользователя и ввода с клавиатуры, чтобы убедиться, что вводимый контент правильно отображается в поле ввода leUserGroupNumber.
- *  @brief PolyChatTester::ut_login_leUserGroupNumber
+ *  @brief PolyChatTester::mt_login_leUserGroupNumber
  */
-void PolyChatTester::ut_login_leUserGroupNumber()
+void PolyChatTester::mt_login_leUserGroupNumber()
 {
     LoginWidget loginWidget;
 
@@ -315,7 +310,7 @@ void PolyChatTester::ut_login_btnInfo_emit()
 
 /** Login 窗口的大小被禁止缩放，并且为 400x250
  *  Размер Login отключен и составляет 400x250
- *  @brief PolyChatTester::ut_addchat_leNameNewChat
+ *  @brief PolyChatTester::mt_addchat_leNameNewChat
  */
 void PolyChatTester::ut_login_window()
 {
@@ -326,9 +321,9 @@ void PolyChatTester::ut_login_window()
 
 /** 模拟用户点击并且通过键盘输入，确保输入内容在 leNameNewChat 输入框中正确显示
  *  Имитация щелчка пользователя и ввода с клавиатуры, чтобы убедиться, что вводимое содержимое правильно отображается в поле ввода leNameNewChat.
- *  @brief PolyChatTester::ut_addchat_leNameNewChat
+ *  @brief PolyChatTester::mt_addchat_leNameNewChat
  */
-void PolyChatTester::ut_addchat_leNameNewChat()
+void PolyChatTester::mt_addchat_leNameNewChat()
 {
     AddChat widget;
     QLineEdit* lineEdit = widget.findChild<QLineEdit*>("leNameNewChat");
@@ -446,7 +441,7 @@ void PolyChatTester::ut_chatlist_leSearch()
  *  Инициировать сигнал, когда пользователь меняет содержимое в поле поиска.
  *  @brief PolyChatTester::
  */
-void PolyChatTester::ut_chatlist_leSearch_change_emit()
+void PolyChatTester::mt_chatlist_leSearch_change_emit()
 {
     DAL::initLocalUser("Fox", "3530904/90102");
     ChatList widget(nullptr, DAL::getLocalUserName(), DAL::getLocalUserGroupNumber(), DAL::getLocalIpAddress());
@@ -1289,6 +1284,20 @@ void PolyChatTester::mt_chatlist_getNewBtn()
     QCOMPARE(widget.isChatOpen("3530904/90102"), false);
 }
 
+
+/** 模拟用户点击并且通过键盘输入，确保输入内容在 leUserName 输入框中正确显示
+ *  Имитация щелчка пользователя и ввода с клавиатуры, чтобы убедиться, что вводимый контент правильно отображается в поле ввода leUserName.
+ *  @brief PolyChatTester::mt_login_leUserName
+ */
+void PolyChatTester::mt_login_leUserName()
+{
+    LoginWidget loginWidget;
+
+    QLineEdit* leUserName = loginWidget.findChild<QLineEdit*>("leUserName");
+    QTest::keyClicks(leUserName, "Fox");
+    QCOMPARE(leUserName->text(), "Fox");
+}
+
 /** 生成的随机端口介于 PORT_MIN 与 PORT_MAX
  *  Генерирует случайные порты между PORT_MIN и PORT_MAX.
  *  @brief PolyChatTester::mt_chatlist_getRandomPort
@@ -1322,6 +1331,24 @@ void PolyChatTester::mt_chatlist_setChatState()
     QCOMPARE(widget.isChatOpen("3530904/90103"), false);
 }
 
+/** 当增加新的聊天群组时，ui 界面正确刷新
+ *  ui интерфейс обновляется корректно при добавлении новой группы чата
+ * @brief mt_chatlist_btnchat_exist
+ */
+void PolyChatTester::mt_chatlist_btnchat_exist()
+{
+    DAL::initLocalUser("Fox", "3530904/90102");
+    DAL::initLocalUser("Fox", "3530904/90102");
+    ChatList widget(nullptr, DAL::getLocalUserName(), DAL::getLocalUserGroupNumber(), DAL::getLocalIpAddress());
+
+    QToolButton* btn = widget.getNewBtn("3530904/90102", 6666, false);
+    QPair<Chat*, QToolButton*> pair(new Chat("3530904/90102", 6666, false), btn);
+    widget.vPair_OChat_BtnChat.push_front(pair);
+
+    widget.updateBtnInvPair("3530904/90102", btn);
+    QCOMPARE(widget.isChatOpen("3530904/90102"), false);
+
+}
 
 /** 用户加入（用户列表正确刷新）
  *  Присоединение пользователя (список пользователей обновляется корректно)
@@ -1493,6 +1520,132 @@ void PolyChatTester::mt_chatbox_userleft_msgTextBrowser()
     curString = msgTextBrowser->toPlainText();
     chatBox.userLeft("Fox", time);
     QVERIFY(curString != msgTextBrowser->toPlainText());
+
+}
+
+/** 当清空聊天框的时候提示警告信息
+ *  Предупреждающее сообщение при очистке окна чата
+ *
+ */
+void PolyChatTester::mt_chatbox_clean()
+{
+    timer->start(TIMER_STEP);
+    ChatBoxWidget chatBox(nullptr, "3530409/90102", 2333);
+    QToolButton* button = chatBox.findChild<QToolButton*>("btnClean");
+
+    QTest::mouseClick(button, Qt::LeftButton);
+    timer->stop();
+}
+
+/** 当清空聊天框中无内容时，模拟模拟用户点击“保存聊天记录”按钮（提示警告信息）
+ *  Имитация нажатия симулированным пользователем кнопки "Save", когда в пустом поле чата нет содержимого (с предупреждающим сообщением)
+ *
+ */
+void PolyChatTester::mt_chatbox_save_empty()
+{
+    timer->start(TIMER_STEP);
+    ChatBoxWidget chatBox(nullptr, "3530409/90102", 2333);
+
+    QTextBrowser* msgTextBrowser = chatBox.findChild<QTextBrowser*>("msgTextBrowser");
+    QCOMPARE(msgTextBrowser->toPlainText(), "");
+
+
+    QToolButton* button = chatBox.findChild<QToolButton*>("btnSave");
+    QTest::mouseClick(button, Qt::LeftButton);
+    timer->stop();
+}
+
+/** 模拟用户在使用键盘在聊天框中输入内容，然后点击发送按钮。输入的信息正确显示在消息框汇总（消息成功发送）
+ *  Имитирует ввод пользователем текста в поле чата с помощью клавиатуры и последующее нажатие кнопки отправки. Введенная информация правильно отображается в сводке окна сообщения (сообщение успешно отправлено)
+ *
+ */
+void PolyChatTester::mt_chatbox_send_success()
+{
+    ChatBoxWidget chatBox(nullptr, "3530409/90102", 2333);
+
+    QTextEdit* textEdit = chatBox.findChild<QTextEdit*>("msgTextEdit");
+    QTest::keyClicks(textEdit, "HelloThere");
+    QCOMPARE(textEdit->toPlainText(), "HelloThere");
+
+    QTextBrowser* msgTextBrowser = chatBox.findChild<QTextBrowser*>("msgTextBrowser");
+    QCOMPARE(msgTextBrowser->toPlainText(), "");
+
+    QPushButton* button = chatBox.findChild<QPushButton*>("btnSend");
+    QTest::mouseClick(button, Qt::LeftButton);
+
+    QCOMPARE(textEdit->toPlainText(), "");
+    QTest::qSleep(TIMER_STEP);
+    QCOMPARE(msgTextBrowser->toPlainText(), "");
+}
+
+/** ui 界面的所有控件经过接口初始化为正确内容
+ *  Все элементы управления интерфейса ui инициализируются правильным содержимым через интерфейс
+ * @brief PolyChatTester::mt_tcpclient
+ */
+void PolyChatTester::mt_tcpclient()
+{
+    TcpClient widget(nullptr, "fox.exe", 1551155, DAL::getLocalIpAddress(), PORT_TCP_FILE);
+
+    QLabel* lbClientIP = widget.findChild<QLabel*>("lbClientIP");
+    QCOMPARE(lbClientIP->text(), localIpAddress.toString());
+
+    QLabel* lbClientPort = widget.findChild<QLabel*>("lbClientPort");
+    QCOMPARE(lbClientPort->text(), QString::number(PORT_TCP_FILE));
+
+    QLabel* lbServerIP = widget.findChild<QLabel*>("lbServerIP");
+    QCOMPARE(lbServerIP->text(), localIpAddress.toString());
+
+    QLabel* lbServerPort = widget.findChild<QLabel*>("lbServerPort");
+    QCOMPARE(lbServerPort->text(), QString::number(PORT_TCP_FILE));
+
+    QLabel* lbFileName = widget.findChild<QLabel*>("lbFileName");
+    QCOMPARE(lbFileName->text(), "fox.exe");
+
+    QLabel* lbFileSize = widget.findChild<QLabel*>("lbFileSize");
+    QCOMPARE(lbFileSize->text(),QString("%1Kb").arg(QString::number(1551155 / 1024)));
+
+    QProgressBar* progressBar = widget.findChild<QProgressBar*>("progressBar");
+    QCOMPARE(progressBar->value(), 0);
+
+    QPushButton* btnCancel = widget.findChild<QPushButton*>("btnCancel");
+    QCOMPARE(btnCancel->isCheckable(), false);
+
+}
+
+/** ui 界面的所有控件经过接口初始化为正确内容
+ *  Все элементы управления интерфейса ui инициализируются правильным содержимым через интерфейс
+ * @brief PolyChatTester::mt_tcpclient
+ */
+void PolyChatTester::mt_tcpserver()
+{
+    TcpServer widget(nullptr, "fox.exe", DAL::getLocalIpAddress(), PORT_TCP_FILE);
+
+    QLabel* lbClientIP = widget.findChild<QLabel*>("lbClientIP");
+    QCOMPARE(lbClientIP->text(), "");
+
+    QLabel* lbClientPort = widget.findChild<QLabel*>("lbClientPort");
+    QCOMPARE(lbClientPort->text(), "");
+
+    QLabel* lbServerIP = widget.findChild<QLabel*>("lbServerIP");
+    QCOMPARE(lbServerIP->text(), localIpAddress.toString());
+
+    QLabel* lbServerPort = widget.findChild<QLabel*>("lbServerPort");
+    QCOMPARE(lbServerPort->text(), QString::number(PORT_TCP_FILE));
+
+    QLabel* lbFilePath = widget.findChild<QLabel*>("lbFilePath");
+    QCOMPARE(lbFilePath->text(), "fox.exe");
+
+    QLabel* lbFileSize = widget.findChild<QLabel*>("lbFileSize");
+    QCOMPARE(lbFileSize->text(), "0Kb");
+
+    QPushButton* btnCancel = widget.findChild<QPushButton*>("btnCancel");
+    QCOMPARE(btnCancel->isCheckable(), false);
+
+    QProgressBar* progressBar = widget.findChild<QProgressBar*>("progressBar");
+    QCOMPARE(progressBar->value(), 0);
+
+    QTextBrowser* textBrowser = widget.findChild<QTextBrowser*>("textBrowser");
+    QCOMPARE(textBrowser->isReadOnly(), true);
 
 }
 
