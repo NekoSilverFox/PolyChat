@@ -152,6 +152,24 @@ private slots:
     void mt_tcpclient                       ();
     void mt_tcpserver                       ();
 
+    void pt_Login_load               ();
+    void pt_AddChat_load             ();
+    void pt_ChatList_load            ();
+    void pt_TcpClient_load           ();
+    void pt_TcpServer_load           ();
+    void pt_ChatBox_load             ();
+    void pt_ChatBox_userjoin         ();
+    void pt_ChatBox_userjoin_left    ();
+    void pt_ChatBox_msgTextEdit_input();
+    void pt_Login_to_system          ();
+    void pt_AddChat_ui               ();
+    void lt_ChatBox_x100             ();
+    void lt_ChatBox_200user          ();
+    void lt_ChatBox_2000char         ();
+    void lt_ChatBox_msg_change       ();
+    void lt_TcpServer_x10            ();
+    void lt_TcpCerver_x10            ();
+    void ct_ChatBox_code_normal      ();
 
 private:
     QTimer* timer;
@@ -1649,6 +1667,354 @@ void PolyChatTester::mt_tcpserver()
 
 }
 
+
+/** 窗口加载/调用的性能
+ *  Производительность загрузки/вызова окон
+ * @brief PolyChatTester::pt_Login_load
+ */
+void PolyChatTester::pt_Login_load()
+{
+    QBENCHMARK
+    {
+        LoginWidget widget;
+        widget.show();
+        widget.close();
+    }
+}
+
+/** 窗口加载/调用的性能
+ *  Производительность загрузки/вызова окон
+ * @brief PolyChatTester::pt_AddChat_load
+ */
+void PolyChatTester::pt_AddChat_load()
+{
+    QBENCHMARK
+    {
+        AddChat widget;
+        widget.show();
+        widget.close();
+    }
+}
+
+/** 窗口加载/调用的性能
+ *  Производительность загрузки/вызова окон
+ * @brief PolyChatTester::pt_ChatList_load
+ */
+void PolyChatTester::pt_ChatList_load()
+{
+    QBENCHMARK
+    {
+        DAL::initLocalUser("Fox", "3530904/90102");
+        ChatList widget(nullptr, DAL::getLocalUserName(), DAL::getLocalUserGroupNumber(), DAL::getLocalIpAddress());
+        widget.show();
+        widget.close();
+    }
+}
+
+/** 窗口加载/调用的性能
+ *  Производительность загрузки/вызова окон
+ * @brief PolyChatTester::pt_TcpClient_load
+ */
+void PolyChatTester::pt_TcpClient_load()
+{
+    QBENCHMARK
+    {
+        TcpClient widget(nullptr, "fox.exe", 1551155, DAL::getLocalIpAddress(), PORT_TCP_FILE);
+        widget.show();
+        widget.destroyed();
+    }
+}
+
+/** 窗口加载/调用的性能
+ *  Производительность загрузки/вызова окон
+ * @brief PolyChatTester::pt_TcpServer_load
+ */
+void PolyChatTester::pt_TcpServer_load()
+{
+    QBENCHMARK
+    {
+        TcpServer widget(nullptr, "fox.exe", DAL::getLocalIpAddress(), PORT_TCP_FILE);
+        widget.show();
+        widget.destroyed();
+    }
+}
+
+/** 窗口加载/调用的性能
+ *  Производительность загрузки/вызова окон
+ * @brief PolyChatTester::pt_ChatBox_load
+ */
+void PolyChatTester::pt_ChatBox_load()
+{
+    QBENCHMARK
+    {
+        ChatBoxWidget widget(nullptr, "3530409/90102", 2333);
+        widget.show();
+        widget.close();
+    }
+}
+
+/** 用户进入群聊
+ *  Доступ пользователей в групповой чат
+ * @brief PolyChatTester::pt_ChatBox_userjoin
+ */
+void PolyChatTester::pt_ChatBox_userjoin()
+{
+    ChatBoxWidget chatBox(nullptr, "3530409/90102", 2333);
+    QString time = QDateTime::currentDateTime().toString("dd-MM-yyyy hh:mm:ss");
+
+    QBENCHMARK
+    {
+        chatBox.userJoin("Fox2", "3530904/90102", DAL::getLocalIpAddress());
+    }
+}
+
+/** 用户进入群聊并伴随其他用户离开
+ *  Пользователи входят в групповой чат и выходят из него вместе с другими пользователями
+ * @brief PolyChatTester::pt_ChatBox_userjoin_left
+ */
+void PolyChatTester::pt_ChatBox_userjoin_left()
+{
+    ChatBoxWidget chatBox(nullptr, "3530409/90102", 2333);
+    QString time = QDateTime::currentDateTime().toString("dd-MM-yyyy hh:mm:ss");
+
+    QBENCHMARK
+    {
+        chatBox.userJoin("Fox1", "3530904/90102", DAL::getLocalIpAddress());
+        chatBox.userJoin("Fox2", "3530904/90102", DAL::getLocalIpAddress());
+        chatBox.userLeft("Fox1", time);
+        chatBox.userJoin("Fox1", "3530904/90102", DAL::getLocalIpAddress());
+    }
+
+
+}
+
+/** 模拟用户键盘在 msgTextEdit 中输入100 个字符，然后点击发送按钮
+ *  Имитирует ввод пользователем с клавиатуры 100 символов в msgTextEdit и последующее нажатие кнопки отправить
+ * @brief PolyChatTester::pt_ChatBox_msgTextEdit_input
+ */
+void PolyChatTester::pt_ChatBox_msgTextEdit_input()
+{
+    ChatBoxWidget chatBox(nullptr, "3530409/90102", 2333);
+    QTextEdit* textBrowser = chatBox.findChild<QTextEdit*>("msgTextEdit");
+    QPushButton* button = chatBox.findChild<QPushButton*>("btnSend");
+
+    int nLen = 100;
+    srand(QDateTime::currentMSecsSinceEpoch());
+    const char ch[] = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    int size = sizeof(ch);
+    char* str = new char[nLen + 1];
+    int num = 0;
+    for (int nIndex = 0; nIndex < nLen; ++nIndex)
+    {
+        num = rand() % (size - 1);
+        str[nIndex] = ch[num];
+    }
+    str[nLen] = '\0';
+    QString res(str);
+
+
+    QBENCHMARK
+    {
+        QTest::keyClicks(textBrowser, res);
+        QTest::mouseClick(button, Qt::LeftButton);
+    }
+}
+
+/** 用户通过键盘输入姓名和班级编号，然后点击登录按钮进入系统（ChatList）
+ *  Пользователи вводят свое имя и номер класса с клавиатуры, а затем нажимают кнопку входа для доступа к системе (ChatList).
+ * @brief PolyChatTester::pt_Login_to_system
+ */
+void PolyChatTester::pt_Login_to_system()
+{
+    QBENCHMARK
+    {
+        LoginWidget widget;
+        QLineEdit* name  = widget.findChild<QLineEdit*>("leUserName");
+        QLineEdit* group = widget.findChild<QLineEdit*>("leUserGroupNumber");
+        QPushButton* button = widget.findChild<QPushButton*>("btnLogin");
+
+        QTest::keyClicks(name, "Fox");
+        QTest::keyClicks(group, "3530409/90102");
+        QTest::mouseClick(button, Qt::LeftButton);
+    }
+}
+
+/** 通过 Add Chat 模拟用户输入，然后点击确认按钮来增加新的群聊（测试创建新的群聊窗口性能）
+ *  Добавление нового группового чата путем имитации ввода пользователем команды `Add Chat` и последующего нажатия кнопки Подтвердить (Тестирование производительности при создании нового окна группового чата)
+ * @brief PolyChatTester::pt_AddChat_ui
+ */
+void PolyChatTester::pt_AddChat_ui()
+{
+    AddChat widget;
+    QLineEdit* lineEdit = widget.findChild<QLineEdit*>("leNameNewChat");
+    QPushButton* button = widget.findChild<QPushButton*>("btnAddChat");
+
+    QBENCHMARK
+    {
+        QTest::keyClicks(lineEdit, "3530904/90102");
+        QTest::mouseClick(button, Qt::LeftButton);
+    }
+}
+
+/** 用户**进入** 100 个群聊
+ *  Пользователь **Доступ** 100 групповых чатов
+ * @brief PolyChatTester::lt_ChatBox_x100
+ */
+void PolyChatTester::lt_ChatBox_x100()
+{
+    ChatBoxWidget chatBox(nullptr, "3530409/90102", 2333);
+    QString time = QDateTime::currentDateTime().toString("dd-MM-yyyy hh:mm:ss");
+    QVector<ChatBoxWidget*> vectorChat;
+
+    QBENCHMARK
+    {
+        for (int i = 0; i < 100; i++)
+        {
+            vectorChat.push_back(new ChatBoxWidget(nullptr, QString("3530409/9010%1").arg(i), i));
+            vectorChat[i]->userJoin("Fox1", "3530904/90102", DAL::getLocalIpAddress());
+        }
+    }
+}
+
+/** 保证每个聊天中可以存在 200 位用户
+ *  Гарантированные 200 пользователей на один чат
+ * @brief PolyChatTester::lt_ChatBox_200user
+ */
+void PolyChatTester::lt_ChatBox_200user()
+{
+    ChatBoxWidget chatBox(nullptr, "3530409/90102", 2333);
+    QString time = QDateTime::currentDateTime().toString("dd-MM-yyyy hh:mm:ss");
+
+    QBENCHMARK
+    {
+        for (int i = 0; i < 200; i++)
+        {
+            chatBox.userJoin(QString("Fox%1").arg(i), "3530904/90102", DAL::getLocalIpAddress());
+        }
+    }
+}
+
+/** 用户发送 2000 个字符
+ *  Пользователь отправляет 2000 символов
+ * @brief PolyChatTester::lt_ChatBox_2000char
+ */
+void PolyChatTester::lt_ChatBox_2000char()
+{
+    ChatBoxWidget chatBox(nullptr, "3530409/90102", 2333);
+    QTextEdit* textBrowser = chatBox.findChild<QTextEdit*>("msgTextEdit");
+    QPushButton* button = chatBox.findChild<QPushButton*>("btnSend");
+
+    int nLen = 2000;
+    srand(QDateTime::currentMSecsSinceEpoch());
+    const char ch[] = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    int size = sizeof(ch);
+    char* str = new char[nLen + 1];
+    int num = 0;
+    for (int nIndex = 0; nIndex < nLen; ++nIndex)
+    {
+        num = rand() % (size - 1);
+        str[nIndex] = ch[num];
+    }
+    str[nLen] = '\0';
+    QString res(str);
+
+
+    QBENCHMARK
+    {
+        QTest::keyClicks(textBrowser, res);
+        QCOMPARE(textBrowser->toPlainText(), res);
+
+        QTest::mouseClick(button, Qt::LeftButton);
+        QCOMPARE(textBrowser->toPlainText(), "");
+    }
+}
+
+/** 用户输入消息后，然后改变字体的样式（加粗、斜体）
+ *  Пользователь вводит сообщение, а затем изменяет стиль шрифта (bold, italic)
+ * @brief PolyChatTester::lt_ChatBox_msg_change
+ */
+void PolyChatTester::lt_ChatBox_msg_change()
+{
+    ChatBoxWidget chatBox(nullptr, "3530409/90102", 2333);
+    QTextEdit* textBrowser = chatBox.findChild<QTextEdit*>("msgTextEdit");
+    QToolButton* btnBold = chatBox.findChild<QToolButton*>("btnBold");
+    QToolButton* btnItalic = chatBox.findChild<QToolButton*>("btnItalic");
+    QToolButton* btnUnderLine = chatBox.findChild<QToolButton*>("btnUnderLine");
+
+    QBENCHMARK
+    {
+        QTest::mouseClick(btnBold, Qt::LeftButton);
+        QTest::mouseClick(btnItalic, Qt::LeftButton);
+        QTest::mouseClick(btnUnderLine, Qt::LeftButton);
+
+        QTest::keyClicks(textBrowser, "adfhrthdfhdfhddgfsdhdsfsadaert");
+    }
+}
+
+/** 用户调用 10 个 TcpServer 文件发送窗口（发送 10 个文件）
+ *  Пользователь вызывает 10 окон отправки файлов TcpServer (отправляет 10 файлов)
+ * @brief PolyChatTester::lt_TcpServer_x10
+ */
+void PolyChatTester::lt_TcpServer_x10()
+{
+    QVector<TcpServer*> vWidget;
+    QBENCHMARK
+    {
+        for (int i = 0; i < 10; i++)
+        {
+            vWidget.push_back(new TcpServer(nullptr, "fox.exe", DAL::getLocalIpAddress(), PORT_TCP_FILE));
+            vWidget[i]->show();
+        }
+        for (int i = 0; i < 10; i++)
+        {
+            delete vWidget[i];
+        }
+    }
+}
+
+/** 用户调用 10 个 TcpClient 文件发送窗口（接收 10 个文件）
+ *  Пользователь вызывает 10 окон отправки файлов TcpClient (получает 10 файлов)
+ * @brief PolyChatTester::lt_TcpCerver_x10
+ */
+void PolyChatTester::lt_TcpCerver_x10()
+{
+
+    QVector<TcpClient*> vWidget;
+    QBENCHMARK
+    {
+        for (int i = 0; i < 10; i++)
+        {
+            vWidget.push_back(new TcpClient(nullptr, "fox.exe", 1551155, DAL::getLocalIpAddress(), PORT_TCP_FILE));
+            vWidget[i]->show();
+        }
+        for (int i = 0; i < 10; i++)
+        {
+            delete vWidget[i];
+        }
+    }
+}
+
+/** 模拟用户通过键盘在 msgTextEdit 输入英文、中文、俄文。且 ui 显示正常，不乱码
+ *  Имитирует ввод пользователем английского, китайского и русского языков в msgTextEdit с клавиатуры. При этом ui отображается корректно, без ошибок в коде.
+ * @brief PolyChatTester::ct_ChatBox_code_normal
+ */
+void PolyChatTester::ct_ChatBox_code_normal()
+{
+    ChatBoxWidget chatBox(nullptr, "3530409/90102", 2333);
+    QTextEdit* textBrowser = chatBox.findChild<QTextEdit*>("msgTextEdit");
+
+    QTest::keyClicks(textBrowser, "Test!");
+    QCOMPARE(textBrowser->toPlainText(), "Test!");
+    textBrowser->clear();
+
+    textBrowser->insertPlainText("Тестирование!");
+    QCOMPARE(textBrowser->toPlainText(), "Тестирование!");
+    textBrowser->clear();
+
+    textBrowser->insertPlainText("测试！");
+    QCOMPARE(textBrowser->toPlainText(), "测试！");
+    textBrowser->clear();
+}
 
 
 //QTEST_APPLESS_MAIN(PolyChatTester)
