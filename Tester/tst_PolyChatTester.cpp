@@ -168,7 +168,7 @@ private slots:
     void lt_ChatBox_2000char         ();
     void lt_ChatBox_msg_change       ();
     void lt_TcpServer_x10            ();
-    void lt_TcpCerver_x10            ();
+    void lt_TcpClient_x10            ();
     void ct_ChatBox_code_normal      ();
 
 private:
@@ -1974,9 +1974,9 @@ void PolyChatTester::lt_TcpServer_x10()
 
 /** 用户调用 10 个 TcpClient 文件发送窗口（接收 10 个文件）
  *  Пользователь вызывает 10 окон отправки файлов TcpClient (получает 10 файлов)
- * @brief PolyChatTester::lt_TcpCerver_x10
+ * @brief PolyChatTester::lt_TcpClient_x10
  */
-void PolyChatTester::lt_TcpCerver_x10()
+void PolyChatTester::lt_TcpClient_x10()
 {
 
     QVector<TcpClient*> vWidget;
