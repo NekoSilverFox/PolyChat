@@ -77,4 +77,4 @@ jobs:
           qmake CONFIG+=debug
           make
           ls
-          ./PolyChatTester -vs -txt
+          ./PolyChatTester -v2 -txt

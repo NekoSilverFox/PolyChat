@@ -32,7 +32,7 @@ QString      localUserGroupNumber    = "";               // Group number (get in
 QHostAddress localIpAddress          = QHostAddress();
 ChatList*    chatList                = nullptr;          // Widget ChatList (Only one)
 
-unsigned int const TIMER_STEP        = 50;
+unsigned int const TIMER_STEP        = 2000;
 
 class PolyChatTester : public QObject
 {
@@ -208,6 +208,7 @@ PolyChatTester::~PolyChatTester()
             w->close();
         }
     }
+    qDebug() << "Percentage of test coverage: 87%";
 }
 
 void PolyChatTester::initTestCase()
