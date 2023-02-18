@@ -65,7 +65,6 @@ private slots:
     void ut_chatlist_btnNewChat          ();
     void ut_chatlist_btnNewChat_emit     ();
     void ut_chatlist_leSearch            ();
-    void mt_chatlist_leSearch_change_emit();
     void ut_chatlist_lbName              ();
     void ut_chatlist_lbGroupNumber       ();
     void ut_chatlist_lbIP                ();
@@ -135,6 +134,7 @@ private slots:
     void mt_login_leUserGroupNumber      ();
 
     void mt_addchat_leNameNewChat        ();
+    void mt_chatlist_leSearch_change_emit();
     void mt_chatlist_getNewBtn           ();
     bool mt_chatlist_getRandomPort       ();
     void mt_chatlist_setChatState        ();
@@ -220,12 +220,20 @@ void PolyChatTester::cleanupTestCase()
     qDebug() << "End of all test runs";
 }
 
+/** 登录失败（用户名不能为空）
+ *  Сбой входа в систему (имя пользователя не может быть пустым).
+ *  @brief PolyChatTester::ut_login_login_empty
+ */
 void PolyChatTester::ut_login_login_empty()
 {
     bool isSuccInitLocalUser = DAL::initLocalUser("", "3530904/90102");
     QCOMPARE(isSuccInitLocalUser, false);
 }
 
+/** 登录失败（班级号不能为空）
+ *  Сбой входа в систему (номер группы не может быть пустым).
+ *  @brief PolyChatTester::ut_login_group_empty
+ */
 void PolyChatTester::ut_login_group_empty()
 {
     bool isSuccInitLocalUser = DAL::initLocalUser("Fox", "");
@@ -265,7 +273,7 @@ void PolyChatTester::ut_login_init_group()
 }
 
 /** 保证 btnlogin 是非可选按钮，且图标显示被禁用
- *  btnlogin является отмечаемой кнопкой (Checkable-QToolButton), а отображение icon отключено.
+ *  btnlogin не является отмечаемой кнопкой (Checkable-QToolButton), а отображение icon отключено.
  *  @brief PolyChatTester::ut_login_btnlogin
  */
 void PolyChatTester::ut_login_btnlogin()
@@ -297,22 +305,8 @@ void PolyChatTester::ut_login_btnlogin_emit()
     timer->stop();
 }
 
-
-/** 模拟用户点击并且通过键盘输入，确保输入内容在 leUserGroupNumber 输入框中正确显示
- *  Имитация щелчка пользователя и ввода с клавиатуры, чтобы убедиться, что вводимый контент правильно отображается в поле ввода leUserGroupNumber.
- *  @brief PolyChatTester::mt_login_leUserGroupNumber
- */
-void PolyChatTester::mt_login_leUserGroupNumber()
-{
-    LoginWidget loginWidget;
-
-    QLineEdit* leUserGroupNumber = loginWidget.findChild<QLineEdit*>("leUserName");
-    QTest::keyClicks(leUserGroupNumber, "3530904/90102");
-    QCOMPARE(leUserGroupNumber->text(), "3530904/90102");
-}
-
 /** 用户每次点击 btnInfo 时，保证（按钮点击）信号正确触发，且为一次
- *  btnlogin является отмечаемой кнопкой (Checkable-QToolButton), а отображение icon отключено.
+ *  Каждый раз, когда пользователь нажимает на btnInfo, сигнал (нажатие кнопки) гарантированно срабатывает правильно и единожды.
  *  @brief PolyChatTester::ut_login_btnInfo_emit
  */
 void PolyChatTester::ut_login_btnInfo_emit()
@@ -327,8 +321,8 @@ void PolyChatTester::ut_login_btnInfo_emit()
 }
 
 /** Login 窗口的大小被禁止缩放，并且为 400x250
- *  Размер Login отключен и составляет 400x250
- *  @brief PolyChatTester::mt_addchat_leNameNewChat
+ *  Размер Login отключен и составляет 400x250.
+ *  @brief PolyChatTester::ut_login_window
  */
 void PolyChatTester::ut_login_window()
 {
@@ -337,21 +331,9 @@ void PolyChatTester::ut_login_window()
     QCOMPARE(widget.minimumSize(), widget.maximumSize());
 }
 
-/** 模拟用户点击并且通过键盘输入，确保输入内容在 leNameNewChat 输入框中正确显示
- *  Имитация щелчка пользователя и ввода с клавиатуры, чтобы убедиться, что вводимое содержимое правильно отображается в поле ввода leNameNewChat.
- *  @brief PolyChatTester::mt_addchat_leNameNewChat
- */
-void PolyChatTester::mt_addchat_leNameNewChat()
-{
-    AddChat widget;
-    QLineEdit* lineEdit = widget.findChild<QLineEdit*>("leNameNewChat");
-    QTest::keyClicks(lineEdit, "3530904/90102");
-    QCOMPARE(lineEdit->text(), "3530904/90102");
-}
-
 /** 用户每次点击取消按钮时，保证（按钮点击）信号正确触发，且为一次
  *  Каждый раз, когда пользователь нажимает кнопку отмены, сигнал (нажатие кнопки) срабатывает правильно и единожды.
- *  @brief PolyChatTester::
+ *  @brief PolyChatTester::ut_addchat_btnCancelAddChat
  */
 void PolyChatTester::ut_addchat_btnCancelAddChat()
 {
@@ -383,7 +365,7 @@ void PolyChatTester::ut_addchat_btnAddChat()
 }
 
 /** 正确初始化（使用构造函数）一个 Chat 对象
- *  Правильно инициализируется (используя конструктор) объект чата.
+ *  Правильно инициализируется (используя конструктор) объект Chat.
  *  @brief PolyChatTester::ut_chat_init
  */
 void PolyChatTester::ut_chat_init()
@@ -395,7 +377,7 @@ void PolyChatTester::ut_chat_init()
 }
 
 /** 正确初始化（使用构造函数）一个 Chat 对象
- *  Правильно инициализируется (используя конструктор) объект чата.
+ *  Правильно инициализируется (используя конструктор) объект ChatList.
  *  @brief PolyChatTester::ut_chatlist_init
  */
 void PolyChatTester::ut_chatlist_init()
@@ -408,9 +390,8 @@ void PolyChatTester::ut_chatlist_init()
     QCOMPARE(DAL::getLocalIpAddress(), localIpAddress);
 }
 
-
 /** 保证 btnNewChat 是可选按钮（Checkable-QToolButton），且文字显示被禁用
- *  btnNewChat является отмечаемой кнопкой (Checkable-QToolButton), а отображение текста отключено
+ *  btnNewChat не является отмечаемой кнопкой (Checkable-QToolButton), а отображение текста отключено.
  *  @brief PolyChatTester::ut_chatlist_btnNewChat
  */
 void PolyChatTester::ut_chatlist_btnNewChat()
@@ -442,7 +423,7 @@ void PolyChatTester::ut_chatlist_btnNewChat_emit()
 }
 
 /** 模拟用户点击并且通过键盘输入，确保输入内容在 leSearch 搜索框中正确显示
- *  Смоделируйте, как пользователь нажимает и печатает на клавиатуре, чтобы убедиться, что вводимое содержимое правильно отображается в поле поиска
+ *  Моделируется то, как пользователь нажимает и печатает на клавиатуре, чтобы убедиться, что вводимое содержимое правильно отображается в поле поиска leSearch.
  *  @brief PolyChatTester::ut_chatlist_leSearch
  */
 void PolyChatTester::ut_chatlist_leSearch()
@@ -455,23 +436,8 @@ void PolyChatTester::ut_chatlist_leSearch()
     QCOMPARE(lineEdit->text(), "3530904/90102");
 }
 
-/** 当用户改变搜索框中的内容时，触发信号
- *  Инициировать сигнал, когда пользователь меняет содержимое в поле поиска.
- *  @brief PolyChatTester::
- */
-void PolyChatTester::mt_chatlist_leSearch_change_emit()
-{
-    DAL::initLocalUser("Fox", "3530904/90102");
-    ChatList widget(nullptr, DAL::getLocalUserName(), DAL::getLocalUserGroupNumber(), DAL::getLocalIpAddress());
-    QLineEdit* lineEdit = widget.findChild<QLineEdit*>("leSearch");
-
-    QSignalSpy spy(lineEdit, &QLineEdit::textEdited);
-    QTest::keyClicks(lineEdit, "90111");
-    QCOMPARE(spy.count(), 5);
-}
-
 /** lbName 中正确显示本用户的用户名
- *  Имя пользователя этого пользователя правильно отображается в lbName.
+ *  Имя пользователя текущего пользователя правильно отображается в lbName.
  *  @brief PolyChatTester::ut_chatlist_lbName
  */
 void PolyChatTester::ut_chatlist_lbName()
@@ -484,7 +450,7 @@ void PolyChatTester::ut_chatlist_lbName()
 }
 
 /** lbGroupNumber 中正确显示本用户的班级号
- *  Номер группы этого пользователя правильно отображается в lbGroupNumber.
+ *  Номер группы текущего пользователя правильно отображается в lbGroupNumber.
  *  @brief PolyChatTester::ut_chatlist_lbGroupNumber
  */
 void PolyChatTester::ut_chatlist_lbGroupNumber()
@@ -497,7 +463,7 @@ void PolyChatTester::ut_chatlist_lbGroupNumber()
 }
 
 /** lbIP 中正确显示本用户的 ip 地址
- *  IP-адрес этого пользователя корректно отображается в lbIP.
+ *  IP-адрес текущего пользователя корректно отображается в lbIP.
  *  @brief PolyChatTester::ut_chatlist_lbIP
  */
 void PolyChatTester::ut_chatlist_lbIP()
@@ -510,7 +476,7 @@ void PolyChatTester::ut_chatlist_lbIP()
 }
 
 /** 返回 false（如果某个名称的群聊没有被打开）
- *  Возвращает false (если групповой чат с таким названием не открыт).
+ *  Возвращает false (групповой чат с таким названием не открыт).
  *  @brief PolyChatTester::ut_chatlist_chat_not_open
  */
 void PolyChatTester::ut_chatlist_chat_not_open()
@@ -524,7 +490,7 @@ void PolyChatTester::ut_chatlist_chat_not_open()
 }
 
 /** 返回 true（如果某个名称的群聊被打开了）
- *  Возвращает true (если открыт групповой чат с таким названием).
+ *  Возвращает true (групповой чат с таким названием уже открыт).
  *  @brief PolyChatTester::ut_chatlist_chat_open
  */
 void PolyChatTester::ut_chatlist_chat_open()
@@ -593,9 +559,8 @@ void PolyChatTester::ut_addchat_chat_not_exist()
     QCOMPARE(widget.isChatExist("111111/88888"), false);
 }
 
-
 /** lbClientIP 内容正确解析且显示
- *  Содержимое lbClientIP анализируется правильно и отображается
+ *  Содержимое lbClientIP правильно анализируется и отображается.
  *  @brief PolyChatTester::ut_tcpclient_lbClientIP
  */
 void PolyChatTester::ut_tcpclient_lbClientIP()
@@ -672,7 +637,7 @@ void PolyChatTester::ut_tcpclient_progressBar()
 }
 
 /** 保证 btnCancel 是非可选按钮
- *  btnCancel является отмечаемой кнопкой (Checkable-QToolButton) и выделено жирным шрифтом
+ *  btnCancel не является отмечаемой кнопкой (Checkable-QToolButton).
  *  @brief PolyChatTester::ut_tcpclient_btnCancel
  */
 void PolyChatTester::ut_tcpclient_btnCancel()
@@ -681,7 +646,6 @@ void PolyChatTester::ut_tcpclient_btnCancel()
     QPushButton* button = widget.findChild<QPushButton*>("btnCancel");
     QCOMPARE(button->isCheckable(), false);
 }
-
 
 /** 用户每次点击取消按钮时，保证（按钮点击）信号正确触发，且为一次
  *  Каждый раз, когда пользователь нажимает кнопку отмены, сигнал (нажатие кнопки) срабатывает правильно и единожды.
@@ -702,7 +666,7 @@ void PolyChatTester::ut_tcpclient_btnCancel_emit()
 }
 
 /** 保证 btnSave 是非可选按钮
- *  btnSave является отмечаемой кнопкой (Checkable-QToolButton) и выделено жирным шрифтом
+ *  btnSave не является отмечаемой кнопкой (Checkable-QToolButton).
  *  @brief PolyChatTester::ut_tcpclient_btnSave
  */
 void PolyChatTester::ut_tcpclient_btnSave()
@@ -747,7 +711,7 @@ void PolyChatTester::ut_tcpclient_closeEvent_emit()
 }
 
 /** textBrowser 为只读状态，禁止写入
- *  textBrowser доступен только для чтения, запись запрещена
+ *  textBrowser доступен только для чтения, запись запрещена.
  *  @brief PolyChatTester::ut_tcpclient_textBrowser
  */
 void PolyChatTester::ut_tcpclient_textBrowser()
@@ -824,7 +788,7 @@ void PolyChatTester::ut_tcpserver_lbFileSize()
 }
 
 /** 保证 btnCancel 是非可选按钮
- *  btnCancel является отмечаемой кнопкой (Checkable-QToolButton) и выделено жирным шрифтом
+ *  btnCancel не является отмечаемой кнопкой (Checkable-QToolButton).
  *  @brief PolyChatTester::ut_tcpserver_btnCancel
  */
 void PolyChatTester::ut_tcpserver_btnCancel()
@@ -854,7 +818,7 @@ void PolyChatTester::ut_tcpserver_btnCancel_emit()
 
 /** progressBar 初始化时为 0
  *  progressBar инициализирован 0.
- *  @brief PolyChatTester::
+ *  @brief PolyChatTester::ut_tcpserver_progressBar
  */
 void PolyChatTester::ut_tcpserver_progressBar()
 {
@@ -882,7 +846,7 @@ void PolyChatTester::ut_tcpserver_closeEvent_emit()
 }
 
 /** textBrowser 为只读状态，禁止写入
- *  textBrowser доступен только для чтения, запись запрещена
+ *  textBrowser доступен только для чтения, запись запрещена.
  *  @brief PolyChatTester::ut_tcpserver_textBrowser
  */
 void PolyChatTester::ut_tcpserver_textBrowser()
@@ -994,7 +958,7 @@ void PolyChatTester::ut_chatbox_btnClean()
 }
 
 /** 保证 btnExit 不是可选按钮（Checkable）
- *  Кнопка btnExit не является проверяемой.
+ *  btnExit не является отмечаемой кнопкой (Checkable-QToolButton).
  *  @brief PolyChatTester::ut_chatbox_btnExit
  */
 void PolyChatTester::ut_chatbox_btnExit()
@@ -1006,7 +970,7 @@ void PolyChatTester::ut_chatbox_btnExit()
 }
 
 /** 保证 btnSend 不是可选按钮（Checkable）
- *  Кнопка btnSend не является проверяемой.
+ *  btnSend не является отмечаемой кнопкой (Checkable-QToolButton).
  *  @brief PolyChatTester::ut_chatbox_btnSend
  */
 void PolyChatTester::ut_chatbox_btnSend()
@@ -1242,9 +1206,8 @@ void PolyChatTester::ut_chatbox_closeEvent_emit()
     timer->stop();
 }
 
-
 /** 用户列表的宽度为 150-350
- *  Ширина списка пользователей составляет 150 - 350
+ *  Ширина списка пользователей составляет 150-350.
  *  @brief PolyChatTester::ut_chatbox_tbUser
  */
 void PolyChatTester::ut_chatbox_tbUser()
@@ -1256,7 +1219,7 @@ void PolyChatTester::ut_chatbox_tbUser()
 }
 
 /** 在线人数的 UI 初始化为正确格式
- *  UI инициализация онлайн-расчета численности в правильный формат
+ *  UI инициализация онлайн-расчета численности в правильном формате.
  *  @brief PolyChatTester::ut_chatbox_lbNumberOnlineUse
  */
 void PolyChatTester::ut_chatbox_lbNumberOnlineUse()
@@ -1266,8 +1229,9 @@ void PolyChatTester::ut_chatbox_lbNumberOnlineUse()
     QCOMPARE(label->text(), QString("Number of online user: %1").arg(0));
 }
 
+
 /** 登陆成功，本地用户信息被正确初始化
- *  Вход выполнен успешно, и информация о локальном пользователе правильно инициализирована.
+ *  Имитация использования пользователем клавиатуры для ввода текста в поле ввода, а затем нажатие кнопки входа в систему (вход выполнен успешно, и информация о локальном пользователе правильно инициализирована).
  *  @brief PolyChatTester::mt_login_init_success
  */
 void PolyChatTester::mt_login_init_success()
@@ -1285,6 +1249,59 @@ void PolyChatTester::mt_login_init_success()
     QCOMPARE(DAL::getLocalUserGroupNumber(), "3530409/90102");
 }
 
+/** 模拟用户点击并且通过键盘输入，确保输入内容在 leUserName 输入框中正确显示
+ *  Имитация щелчка пользователя и ввода с клавиатуры, чтобы убедиться, что вводимый контент правильно отображается в поле ввода leUserName.
+ *  @brief PolyChatTester::mt_login_leUserName
+ */
+void PolyChatTester::mt_login_leUserName()
+{
+    LoginWidget loginWidget;
+
+    QLineEdit* leUserName = loginWidget.findChild<QLineEdit*>("leUserName");
+    QTest::keyClicks(leUserName, "Fox");
+    QCOMPARE(leUserName->text(), "Fox");
+}
+
+/** 模拟用户点击并且通过键盘输入，确保输入内容在 leUserGroupNumber 输入框中正确显示
+ *  Имитация щелчка пользователя и ввода с клавиатуры, чтобы убедиться, что вводимый контент правильно отображается в поле ввода leUserGroupNumber.
+ *  @brief PolyChatTester::mt_login_leUserGroupNumber
+ */
+void PolyChatTester::mt_login_leUserGroupNumber()
+{
+    LoginWidget loginWidget;
+
+    QLineEdit* leUserGroupNumber = loginWidget.findChild<QLineEdit*>("leUserName");
+    QTest::keyClicks(leUserGroupNumber, "3530904/90102");
+    QCOMPARE(leUserGroupNumber->text(), "3530904/90102");
+}
+
+/** 模拟用户点击并且通过键盘输入，确保输入内容在 leNameNewChat 输入框中正确显示
+ *  Имитация щелчка пользователя и ввода с клавиатуры, чтобы убедиться, что вводимое содержимое правильно отображается в поле ввода leNameNewChat.
+ *  @brief PolyChatTester::mt_addchat_leNameNewChat
+ */
+void PolyChatTester::mt_addchat_leNameNewChat()
+{
+    AddChat widget;
+    QLineEdit* lineEdit = widget.findChild<QLineEdit*>("leNameNewChat");
+    QTest::keyClicks(lineEdit, "3530904/90102");
+    QCOMPARE(lineEdit->text(), "3530904/90102");
+}
+
+/** 当用户改变搜索框中的内容时，触发信号
+ *  Сигнал инициируется нужное количество раз, когда пользователь меняет содержимое в поле поиска.
+ *  @brief PolyChatTester::mt_chatlist_leSearch_change_emit
+ */
+void PolyChatTester::mt_chatlist_leSearch_change_emit()
+{
+    DAL::initLocalUser("Fox", "3530904/90102");
+    ChatList widget(nullptr, DAL::getLocalUserName(), DAL::getLocalUserGroupNumber(), DAL::getLocalIpAddress());
+    QLineEdit* lineEdit = widget.findChild<QLineEdit*>("leSearch");
+
+    QSignalSpy spy(lineEdit, &QLineEdit::textEdited);
+    QTest::keyClicks(lineEdit, "90111");
+    QCOMPARE(spy.count(), 5);
+}
+
 /** 根据传入的参数，所创建的新按钮对象中拥有正确的信息
  *  В соответствии с переданными параметрами создается новый объект кнопки с правильной информацией.
  *  @brief PolyChatTester::mt_chatlist_getNewBtn
@@ -1300,20 +1317,6 @@ void PolyChatTester::mt_chatlist_getNewBtn()
 
     widget.updateBtnInvPair("3530904/90102", btn);
     QCOMPARE(widget.isChatOpen("3530904/90102"), false);
-}
-
-
-/** 模拟用户点击并且通过键盘输入，确保输入内容在 leUserName 输入框中正确显示
- *  Имитация щелчка пользователя и ввода с клавиатуры, чтобы убедиться, что вводимый контент правильно отображается в поле ввода leUserName.
- *  @brief PolyChatTester::mt_login_leUserName
- */
-void PolyChatTester::mt_login_leUserName()
-{
-    LoginWidget loginWidget;
-
-    QLineEdit* leUserName = loginWidget.findChild<QLineEdit*>("leUserName");
-    QTest::keyClicks(leUserName, "Fox");
-    QCOMPARE(leUserName->text(), "Fox");
 }
 
 /** 生成的随机端口介于 PORT_MIN 与 PORT_MAX
@@ -1350,8 +1353,8 @@ void PolyChatTester::mt_chatlist_setChatState()
 }
 
 /** 当增加新的聊天群组时，ui 界面正确刷新
- *  ui интерфейс обновляется корректно при добавлении новой группы чата
- * @brief mt_chatlist_btnchat_exist
+ *  ui интерфейс обновляется корректно при добавлении нового группового чата.
+ *  @brief PolyChatTester::mt_chatlist_btnchat_exist
  */
 void PolyChatTester::mt_chatlist_btnchat_exist()
 {
@@ -1369,7 +1372,7 @@ void PolyChatTester::mt_chatlist_btnchat_exist()
 }
 
 /** 用户加入（用户列表正确刷新）
- *  Присоединение пользователя (список пользователей обновляется корректно)
+ *  Пользователь присоединился (список пользователей обновляется корректно).
  *  @brief PolyChatTester::mt_chatbox_userjoin_list
  */
 void PolyChatTester::mt_chatbox_userjoin_list()
@@ -1396,7 +1399,7 @@ void PolyChatTester::mt_chatbox_userjoin_list()
 }
 
 /** 用户加入（计数器正确增加，并且ui的显示格式及内容正确）
- *  Присоединение пользователя (счетчик правильно увеличивается и ui отображается в правильном формате и с правильным содержанием)
+ *  Пользователь присоединился (счетчик правильно увеличивается и ui отображается в правильном формате и с правильным содержанием).
  *  @brief PolyChatTester::mt_chatbox_userjoin_counter
  */
 void PolyChatTester::mt_chatbox_userjoin_counter()
@@ -1422,7 +1425,7 @@ void PolyChatTester::mt_chatbox_userjoin_counter()
 }
 
 /** 用户加入（msgTextBrowser 被刷新）
- *  Пользователь присоединился (msgTextBrowser обновляется)
+ *  Пользователь присоединился (msgTextBrowser обновляется).
  *  @brief PolyChatTester::mt_chatbox_userjoin_msgTextBrowser
  */
 void PolyChatTester::mt_chatbox_userjoin_msgTextBrowser()
@@ -1438,7 +1441,7 @@ void PolyChatTester::mt_chatbox_userjoin_msgTextBrowser()
 }
 
 /** 用户离开（用户列表正确刷新）
- *  Вылет пользователя (список пользователей обновляется корректно)
+ *  Пользователь вышел (список пользователей обновляется корректно).
  *  @brief PolyChatTester::mt_chatbox_userleft_list
  */
 void PolyChatTester::mt_chatbox_userleft_list()
@@ -1480,7 +1483,7 @@ void PolyChatTester::mt_chatbox_userleft_list()
 }
 
 /** 用户离开（计数器正确增加，并且ui的显示格式及内容正确）
- *  Пользователь уходит (счетчик правильно увеличивается и ui отображается в правильном формате и с правильным содержанием)
+ *  Пользователь вышел (счетчик правильно увеличивается и ui отображается в правильном формате и с правильным содержанием).
  *  @brief PolyChatTester::mt_chatbox_userleft_counter
  */
 void PolyChatTester::mt_chatbox_userleft_counter()
@@ -1520,7 +1523,7 @@ void PolyChatTester::mt_chatbox_userleft_counter()
 }
 
 /** 用户离开（msgTextBrowser 被刷新）
- *  Пользователь уходит (msgTextBrowser обновляется)
+ *  Пользователь вышел (msgTextBrowser обновляется).
  *  @brief PolyChatTester::mt_chatbox_userleft_msgTextBrowser
  */
 void PolyChatTester::mt_chatbox_userleft_msgTextBrowser()
@@ -1538,12 +1541,11 @@ void PolyChatTester::mt_chatbox_userleft_msgTextBrowser()
     curString = msgTextBrowser->toPlainText();
     chatBox.userLeft("Fox", time);
     QVERIFY(curString != msgTextBrowser->toPlainText());
-
 }
 
 /** 当清空聊天框的时候提示警告信息
- *  Предупреждающее сообщение при очистке окна чата
- *
+ *  Предупреждающее сообщение при очистке окна чата.
+ *  @brief PolyChatTester::mt_chatbox_clean
  */
 void PolyChatTester::mt_chatbox_clean()
 {
@@ -1556,8 +1558,8 @@ void PolyChatTester::mt_chatbox_clean()
 }
 
 /** 当清空聊天框中无内容时，模拟模拟用户点击“保存聊天记录”按钮（提示警告信息）
- *  Имитация нажатия симулированным пользователем кнопки "Save", когда в пустом поле чата нет содержимого (с предупреждающим сообщением)
- *
+ *  Имитация нажатия симулированным пользователем кнопки "Save", когда в пустом поле чата нет содержимого (с предупреждающим сообщением).
+ *  @brief PolyChatTester::mt_chatbox_save_empty
  */
 void PolyChatTester::mt_chatbox_save_empty()
 {
@@ -1574,8 +1576,8 @@ void PolyChatTester::mt_chatbox_save_empty()
 }
 
 /** 模拟用户在使用键盘在聊天框中输入内容，然后点击发送按钮。输入的信息正确显示在消息框汇总（消息成功发送）
- *  Имитирует ввод пользователем текста в поле чата с помощью клавиатуры и последующее нажатие кнопки отправки. Введенная информация правильно отображается в сводке окна сообщения (сообщение успешно отправлено)
- *
+ *  Имитация ввода пользователем текста в поле чата с помощью клавиатуры и последующее нажатие кнопки отправки. Введенная информация правильно отображается в сводке окна сообщения (сообщение успешно отправлено).
+ *  @brief PolyChatTester::mt_chatbox_send_success
  */
 void PolyChatTester::mt_chatbox_send_success()
 {
@@ -1597,8 +1599,8 @@ void PolyChatTester::mt_chatbox_send_success()
 }
 
 /** ui 界面的所有控件经过接口初始化为正确内容
- *  Все элементы управления интерфейса ui инициализируются правильным содержимым через интерфейс
- * @brief PolyChatTester::mt_tcpclient
+ *  Все элементы управления интерфейса ui инициализируются правильным содержимым через интерфейс.
+ *  @brief PolyChatTester::mt_tcpclient
  */
 void PolyChatTester::mt_tcpclient()
 {
@@ -1627,12 +1629,11 @@ void PolyChatTester::mt_tcpclient()
 
     QPushButton* btnCancel = widget.findChild<QPushButton*>("btnCancel");
     QCOMPARE(btnCancel->isCheckable(), false);
-
 }
 
 /** ui 界面的所有控件经过接口初始化为正确内容
- *  Все элементы управления интерфейса ui инициализируются правильным содержимым через интерфейс
- * @brief PolyChatTester::mt_tcpclient
+ *  Все элементы управления интерфейса ui инициализируются правильным содержимым через интерфейс.
+ *  @brief PolyChatTester::mt_tcpserver
  */
 void PolyChatTester::mt_tcpserver()
 {
@@ -1664,13 +1665,12 @@ void PolyChatTester::mt_tcpserver()
 
     QTextBrowser* textBrowser = widget.findChild<QTextBrowser*>("textBrowser");
     QCOMPARE(textBrowser->isReadOnly(), true);
-
 }
 
 
 /** 窗口加载/调用的性能
- *  Производительность загрузки/вызова окон
- * @brief PolyChatTester::pt_Login_load
+ *  Производительность загрузки/вызова окон.
+ *  @brief PolyChatTester::pt_Login_load
  */
 void PolyChatTester::pt_Login_load()
 {
@@ -1683,8 +1683,8 @@ void PolyChatTester::pt_Login_load()
 }
 
 /** 窗口加载/调用的性能
- *  Производительность загрузки/вызова окон
- * @brief PolyChatTester::pt_AddChat_load
+ *  Производительность загрузки/вызова окон.
+ *  @brief PolyChatTester::pt_AddChat_load
  */
 void PolyChatTester::pt_AddChat_load()
 {
@@ -1697,8 +1697,8 @@ void PolyChatTester::pt_AddChat_load()
 }
 
 /** 窗口加载/调用的性能
- *  Производительность загрузки/вызова окон
- * @brief PolyChatTester::pt_ChatList_load
+ *  Производительность загрузки/вызова окон.
+ *  @brief PolyChatTester::pt_ChatList_load
  */
 void PolyChatTester::pt_ChatList_load()
 {
@@ -1712,8 +1712,8 @@ void PolyChatTester::pt_ChatList_load()
 }
 
 /** 窗口加载/调用的性能
- *  Производительность загрузки/вызова окон
- * @brief PolyChatTester::pt_TcpClient_load
+ *  Производительность загрузки/вызова окон.
+ *  @brief PolyChatTester::pt_TcpClient_load
  */
 void PolyChatTester::pt_TcpClient_load()
 {
@@ -1726,8 +1726,8 @@ void PolyChatTester::pt_TcpClient_load()
 }
 
 /** 窗口加载/调用的性能
- *  Производительность загрузки/вызова окон
- * @brief PolyChatTester::pt_TcpServer_load
+ *  Производительность загрузки/вызова окон.
+ *  @brief PolyChatTester::pt_TcpServer_load
  */
 void PolyChatTester::pt_TcpServer_load()
 {
@@ -1740,8 +1740,8 @@ void PolyChatTester::pt_TcpServer_load()
 }
 
 /** 窗口加载/调用的性能
- *  Производительность загрузки/вызова окон
- * @brief PolyChatTester::pt_ChatBox_load
+ *  Производительность загрузки/вызова окон.
+ *  @brief PolyChatTester::pt_ChatBox_load
  */
 void PolyChatTester::pt_ChatBox_load()
 {
@@ -1754,8 +1754,8 @@ void PolyChatTester::pt_ChatBox_load()
 }
 
 /** 用户进入群聊
- *  Доступ пользователей в групповой чат
- * @brief PolyChatTester::pt_ChatBox_userjoin
+ *  Пользователи входят в групповой чат.
+ *  @brief PolyChatTester::pt_ChatBox_userjoin
  */
 void PolyChatTester::pt_ChatBox_userjoin()
 {
@@ -1769,8 +1769,8 @@ void PolyChatTester::pt_ChatBox_userjoin()
 }
 
 /** 用户进入群聊并伴随其他用户离开
- *  Пользователи входят в групповой чат и выходят из него вместе с другими пользователями
- * @brief PolyChatTester::pt_ChatBox_userjoin_left
+ *  Пользователи входят в групповой чат и выходят из него вместе с другими пользователями.
+ *  @brief PolyChatTester::pt_ChatBox_userjoin_left
  */
 void PolyChatTester::pt_ChatBox_userjoin_left()
 {
@@ -1784,13 +1784,11 @@ void PolyChatTester::pt_ChatBox_userjoin_left()
         chatBox.userLeft("Fox1", time);
         chatBox.userJoin("Fox1", "3530904/90102", DAL::getLocalIpAddress());
     }
-
-
 }
 
 /** 模拟用户键盘在 msgTextEdit 中输入100 个字符，然后点击发送按钮
- *  Имитирует ввод пользователем с клавиатуры 100 символов в msgTextEdit и последующее нажатие кнопки отправить
- * @brief PolyChatTester::pt_ChatBox_msgTextEdit_input
+ *  Имитация ввода пользователем с клавиатуры 100 символов в msgTextEdit и последующее нажатие кнопки отправить.
+ *  @brief PolyChatTester::pt_ChatBox_msgTextEdit_input
  */
 void PolyChatTester::pt_ChatBox_msgTextEdit_input()
 {
@@ -1821,8 +1819,8 @@ void PolyChatTester::pt_ChatBox_msgTextEdit_input()
 }
 
 /** 用户通过键盘输入姓名和班级编号，然后点击登录按钮进入系统（ChatList）
- *  Пользователи вводят свое имя и номер класса с клавиатуры, а затем нажимают кнопку входа для доступа к системе (ChatList).
- * @brief PolyChatTester::pt_Login_to_system
+ *  Пользователи вводят свое имя и номер группы с клавиатуры, а затем нажимают кнопку входа для доступа к системе (ChatList).
+ *  @brief PolyChatTester::pt_Login_to_system
  */
 void PolyChatTester::pt_Login_to_system()
 {
@@ -1840,8 +1838,8 @@ void PolyChatTester::pt_Login_to_system()
 }
 
 /** 通过 Add Chat 模拟用户输入，然后点击确认按钮来增加新的群聊（测试创建新的群聊窗口性能）
- *  Добавление нового группового чата путем имитации ввода пользователем команды `Add Chat` и последующего нажатия кнопки Подтвердить (Тестирование производительности при создании нового окна группового чата)
- * @brief PolyChatTester::pt_AddChat_ui
+ *  Добавление нового группового чата путем имитации ввода пользователем команды Add Chat и последующего нажатия кнопки Подтвердить (Тестирование производительности при создании нового окна группового чата).
+ *  @brief PolyChatTester::pt_AddChat_ui
  */
 void PolyChatTester::pt_AddChat_ui()
 {
@@ -1857,8 +1855,8 @@ void PolyChatTester::pt_AddChat_ui()
 }
 
 /** 用户**进入** 100 个群聊
- *  Пользователь **Доступ** 100 групповых чатов
- * @brief PolyChatTester::lt_ChatBox_x100
+ *  Пользователь вступает в 100 групповых чатов.
+ *  @brief PolyChatTester::lt_ChatBox_x100
  */
 void PolyChatTester::lt_ChatBox_x100()
 {
@@ -1877,8 +1875,8 @@ void PolyChatTester::lt_ChatBox_x100()
 }
 
 /** 保证每个聊天中可以存在 200 位用户
- *  Гарантированные 200 пользователей на один чат
- * @brief PolyChatTester::lt_ChatBox_200user
+ *  Гарантированная возможность подключения 200 пользователей в один чат.
+ *  @brief PolyChatTester::lt_ChatBox_200user
  */
 void PolyChatTester::lt_ChatBox_200user()
 {
@@ -1895,8 +1893,8 @@ void PolyChatTester::lt_ChatBox_200user()
 }
 
 /** 用户发送 2000 个字符
- *  Пользователь отправляет 2000 символов
- * @brief PolyChatTester::lt_ChatBox_2000char
+ *  Пользователь отправляет 2000 символов.
+ *  @brief PolyChatTester::lt_ChatBox_2000char
  */
 void PolyChatTester::lt_ChatBox_2000char()
 {
@@ -1930,8 +1928,8 @@ void PolyChatTester::lt_ChatBox_2000char()
 }
 
 /** 用户输入消息后，然后改变字体的样式（加粗、斜体）
- *  Пользователь вводит сообщение, а затем изменяет стиль шрифта (bold, italic)
- * @brief PolyChatTester::lt_ChatBox_msg_change
+ *  Пользователь вводит сообщение, а затем изменяет стиль шрифта (bold, italic).
+ *  @brief PolyChatTester::lt_ChatBox_msg_change
  */
 void PolyChatTester::lt_ChatBox_msg_change()
 {
@@ -1952,8 +1950,8 @@ void PolyChatTester::lt_ChatBox_msg_change()
 }
 
 /** 用户调用 10 个 TcpServer 文件发送窗口（发送 10 个文件）
- *  Пользователь вызывает 10 окон отправки файлов TcpServer (отправляет 10 файлов)
- * @brief PolyChatTester::lt_TcpServer_x10
+ *  Пользователь вызывает 10 окон отправки файлов TcpServer (отправляет 10 файлов).
+ *  @brief PolyChatTester::lt_TcpServer_x10
  */
 void PolyChatTester::lt_TcpServer_x10()
 {
@@ -1973,12 +1971,11 @@ void PolyChatTester::lt_TcpServer_x10()
 }
 
 /** 用户调用 10 个 TcpClient 文件发送窗口（接收 10 个文件）
- *  Пользователь вызывает 10 окон отправки файлов TcpClient (получает 10 файлов)
- * @brief PolyChatTester::lt_TcpClient_x10
+ *  Пользователь вызывает 10 окон отправки файлов TcpClient (получает 10 файлов).
+ *  @brief PolyChatTester::lt_TcpClient_x10
  */
 void PolyChatTester::lt_TcpClient_x10()
 {
-
     QVector<TcpClient*> vWidget;
     QBENCHMARK
     {
@@ -1995,8 +1992,8 @@ void PolyChatTester::lt_TcpClient_x10()
 }
 
 /** 模拟用户通过键盘在 msgTextEdit 输入英文、中文、俄文。且 ui 显示正常，不乱码
- *  Имитирует ввод пользователем английского, китайского и русского языков в msgTextEdit с клавиатуры. При этом ui отображается корректно, без ошибок в коде.
- * @brief PolyChatTester::ct_ChatBox_code_normal
+ *  Имитация ввода пользователем английского, китайского и русского языков в msgTextEdit с клавиатуры. При этом ui отображается корректно, без искажений.
+ *  @brief PolyChatTester::ct_ChatBox_code_normal
  */
 void PolyChatTester::ct_ChatBox_code_normal()
 {
