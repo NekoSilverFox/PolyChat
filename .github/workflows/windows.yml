@@ -60,7 +60,7 @@ jobs:
           echo vcToolsInstallDir=%VCToolsInstallDir% >> %GITHUB_ENV%
           echo vcToolsRedistDir=%VCToolsRedistDir% >> %GITHUB_ENV%
   test:
-    # needs: build
+    needs: build
     name: Test
     # 运行平台， windows-latest目前是windows server 2019 
     # 参考文档 https://github.com/actions/virtual-environments/blob/main/images/win/Windows2019-Readme.md
@@ -80,13 +80,9 @@ jobs:
     steps:
       # 安装Qt
       - name: Install Qt
-        # 使用外部action。这个action专门用来安装Qt
         uses: jurplel/install-qt-action@v3
         with:
-          # Version of Qt to install
           version: ${{ matrix.qt_ver }}
-          # Target platform for build
-          # target: ${{ matrix.qt_target }}
           arch: ${{ matrix.qt_arch }}
           cached: 'false'
           aqtversion: '==2.0.5'          
