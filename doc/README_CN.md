@@ -418,6 +418,111 @@ K、易扩展：用户自定义类型可以容易地加入到测试数据和测�
 
 ## 集成（接口）测试
 
+对以下模块进行了集成测试：Login、Add Chat、ChatList、ChatBox、TcpClient、TcpServer。并在 Qt 中通过使用初始化（调用）单个窗口来隔离外部环境和排除其他窗口可能造成的影响。并且在其中的一些测试中，为了反应用户真实的使用场景，采取了模拟用户使用键盘输入的方式。
+
+**几个测试设计技术被应用:**
+
+- 等价类
+
+    ```c++
+    void PolyChatTester::mt_chatlist_leSearch_change_emit()
+    {
+        DAL::initLocalUser("Fox", "3530904/90102");
+        ChatList widget(nullptr, DAL::getLocalUserName(), DAL::getLocalUserGroupNumber(), DAL::getLocalIpAddress());
+        QLineEdit* lineEdit = widget.findChild<QLineEdit*>("leSearch");
+    
+        QSignalSpy spy(lineEdit, &QLineEdit::textEdited);
+        QTest::keyClicks(lineEdit, "90111");
+        QCOMPARE(spy.count(), 5);
+    }
+    ```
+
+    
+
+- 边界条件
+
+    ```c++
+    bool PolyChatTester::mt_chatlist_getRandomPort()
+    {
+        ChatList widget(nullptr, DAL::getLocalUserName(), DAL::getLocalUserGroupNumber(), DAL::getLocalIpAddress());
+        for (int i = 0; i < PORT_MAX - PORT_MIN; i++)
+        {
+            qint16 port = widget.getRandomPort();
+            if (port > PORT_MAX || port < PORT_MIN) return false;
+        }
+        return true;
+    }
+    ```
+
+    
+
+- 成对测试
+
+    ```c++
+    void PolyChatTester::mt_chatbox_save_empty()
+    {
+        QTimer* timer = new QTimer(this);
+        connect(timer, &QTimer::timeout, this, [=](){
+            QWidgetList topWidgets = QApplication::topLevelWidgets();
+            foreach (QWidget *w, topWidgets) {
+                if (QMessageBox *mb = qobject_cast<QMessageBox *>(w)) {
+                    QTest::keyClick(mb, Qt::Key_Enter);
+                } else if (QFileDialog* dialog = qobject_cast<QFileDialog *>(w)) {
+                    QTest::keyClick(dialog, Qt::Key_Cancel);
+                } else if (QColorDialog* dialog = qobject_cast<QColorDialog *>(w)) {
+                    QTest::keyClick(dialog, Qt::Key_Enter);
+                } else {
+                    w->close();
+                }
+            }
+        });
+      
+        timer->start(50);
+        ChatBoxWidget chatBox(nullptr, "3530409/90102", 2333);
+    
+        QTextBrowser* msgTextBrowser = chatBox.findChild<QTextBrowser*>("msgTextBrowser");
+        QCOMPARE(msgTextBrowser->toPlainText(), "");
+    
+    
+        QToolButton* button = chatBox.findChild<QToolButton*>("btnSave");
+        QTest::mouseClick(button, Qt::LeftButton);
+        timer->stop();
+    }
+    ```
+
+
+
+
+**持续集成：**
+
+使用了 GitHub 的持续集成服务器，当代码发生变化时触发触发器，并开始执行自动编译和自动测试。以下是触发器的代码：
+
+```yaml
+name: macOS Build and Test
+on: 
+  push:
+    paths:
+      - 'App/**'
+      - 'Tester/**'
+      - '.github/workflows/macos.yml'
+  pull_request:
+    paths:
+      - 'App/**'
+      - 'Tester/**'
+      - '.github/workflows/macos.yml' 
+```
+
+CI 的编译和测试环境：
+
+- Windows: Qt6.2.2, win64_msvc2019_64, msvc2019_64
+- macOS: Qt6.2.2, macos-10.15, clang_64
+
+![image-20230218155228161](./pic/image-20230218155228161.png)
+
+![image-20230218155712711](./pic/image-20230218155712711.png)
+
+**测试：**
+
 |      | 测试名                             | 所属模块  | 说明（预期结果）                                             |
 | ---- | ---------------------------------- | --------- | ------------------------------------------------------------ |
 | 76   | mt_login_init_succ                 | Login     | 模拟用户在使用键盘在输入框中输入内容，然后点击登录按钮（登陆成功，本地用户信息被正确初始化） |
@@ -441,33 +546,53 @@ K、易扩展：用户自定义类型可以容易地加入到测试数据和测�
 | 94   | mt_tcpclient                       | TcpClient | ui 界面的所有控件经过接口初始化为正确内容                    |
 | 95   | mt_tcpserver                       | TcpServer | ui 界面的所有控件经过接口初始化为正确内容                    |
 
+**集成测试结果:**
 
+![image-20230218154016123](./pic/image-20230218154016123.png)
 
-## 系统/端到端测试
+## 系统/端到端和其他测试
 
 |      | 测试名 | 类型     | 所属模块  | 说明（预期结果）    |
 | :--- | ------ | :------- | :-------- | :------------------ |
-| 96  | pt_Login_load                | 性能测试 | Login            | 窗口加载/调用的性能 |
-| 97  | pt_AddChat_load              | 性能测试 | Add Chat         | 窗口加载/调用的性能 |
-| 98  | pt_ChatList_load             | 性能测试 | ChatList         | 窗口加载/调用的性能 |
-| 99  | pt_TcpClient_load            | 性能测试 | TcpClient        | 窗口加载/调用的性能 |
-| 100 | pt_TcpServer_load            | 性能测试 | ChatBox          | 窗口加载/调用的性能 |
-| 101 | pt_ChatBox_load              | 性能测试 | ChatBox          | 窗口加载/调用的性能 |
-| 102 | pt_ChatBox_userjoin          | 性能测试 | ChatBox          | 用户进入群聊 |
-| 103 | pt_ChatBox_userjoin_left     | 性能测试 | ChatBox          | 用户进入群聊并伴随其他用户离开 |
-| 104 | pt_ChatBox_msgTextEdit_input | 性能测试 | ChatBox          | 模拟用户键盘在 msgTextEdit 中输入100 个字符，然后点击发送按钮 |
-| 105 | pt_Login_to_system           | 性能测试 | Login/ChatList   | 用户通过键盘输入姓名和班级编号，然后点击登录按钮进入系统（ChatList） |
-| 106 | pt_AddChat_ui                | 性能测试 | Add Chat/ChatBox | 通过 Add Chat 模拟用户输入，然后点击确认按钮来增加新的群聊（测试创建新的群聊窗口性能） |
-| 107 | lt_ChatBox_x100              | 负载测试 | ChatBox          | 用户**进入** 100 个群聊 |
-| 108 | lt_ChatBox_200user           | 负载测试 | ChatBox          | 保证每个聊天中可以存在 200 位用户 |
-| 109 | lt_ChatBox_2000char          | 负载测试 | ChatBox          | 用户发送 2000 个字符 |
-| 110 | lt_ChatBox_msg_change        | 负载测试 | ChatBox          | 用户输入消息后，然后改变字体的样式（加粗、斜体） |
-| 111 | lt_TcpServer_x10             | 负载测试 | TcpServer        | 用户调用 10 个 TcpServer 文件发送窗口（发送 10 个文件） |
-| 112 | lt_TcpCerver_x10             | 负载测试 | TcpClient        | 用户调用 10 个 TcpClient 文件发送窗口（接收 10 个文件） |
-| 113 | ct_ChatBox_code_normal       | 兼容性测试 | ChatBox        | 模拟用户通过键盘在 msgTextEdit 输入英文、中文、俄文。且 ui 显示正常，不乱码 |
-| 114 | GitHub CI | 跨平台测试（自动测试） | ALL | 保证在 macOS 和 Windows 上可以编译和运行 |
-| 115 | GitHub CI | 自动化测试 | ALL | 在 macOS 和 Windows 上进行自动编译和测试 |
-| 116 | GitHub CI | 兼容性测试 | ALL | 在 Qt6.2.2 环境下编译，并保证 macOS 最小的版本为 10.12；Windows 最小版本为 2019 |
+| 96  | e2e_Login_normal | E2E | Login | 1. 模拟用户打开程序<br />2. 鼠标点击用户名输入框，并用键盘输入内容<br />3. 鼠标点击班级号输入框，并用键盘输入内容<br />4. 鼠标点击登录按钮 |
+| 97  | e2e_Login_empty_all | E2E | Login | 1. 模拟用户打开程序<br />2. 鼠标点击登录按钮 |
+| 98  | e2e_Login_empty_name | E2E | Login | 1. 模拟用户打开程序<br />2. 鼠标点击用户名输入框，并用键盘输入内容<br />3. 鼠标点击登录按钮 |
+| 99  | e2e_Login_empty_group | E2E | Login | 1. 模拟用户打开程序<br />2. 鼠标点击班级号输入框，并用键盘输入内容<br />3. 鼠标点击登录按钮 |
+| 100 | e2e_ChatList_AddChat | E2E | ChatList/Add Chat | 1. 用户进入主窗口（ChatList）<br />2. 鼠标点击“增加新群聊”按钮<br />3. 在弹出的“Add Chat”对话框中使用键盘输入内容<br />4. 点击确认按钮增加新群聊 |
+| 101 | e2e_ChatList_search | E2E | ChatList | 1. 用户进入主窗口（ChatList）<br />2. 鼠标点击搜索框<br />3. 使用键盘输入要搜索的群聊名称<br />4. 使用键盘删除若干字符 |
+| 102 | e2e_ChatBox_normal_send | E2E | ChatBox | 1. 用户进入一个群聊<br />2. 鼠标点击文本输入框<br />3. 输入一段文字<br />4. 点击发送<br />5. 用户点击退出群聊按钮 |
+| 103 | e2e_ChatBox_btnBold | E2E | ChatBox | 1. 用户进入一个群聊<br />2. 鼠标点击文本输入框<br />3. 输入一段文字<br />4. 点击文本加粗按钮<br />5. 输入一段文字<br />6. 点击发送<br />5. 用户点击退出群聊按钮 |
+| 104 | e2e_ChatBox_btnItalic | E2E | ChatBox | 1. 用户进入一个群聊<br />2. 鼠标点击文本输入框<br />3. 输入一段文字<br />4. 点击文本倾斜按钮<br />5. 输入一段文字<br />6. 点击发送<br />5. 用户点击退出群聊按钮 |
+| 105 | e2e_ChatBox_btnUnderLine | E2E | ChatBox | 1. 用户进入一个群聊<br />2. 鼠标点击文本输入框<br />3. 输入一段文字<br />4. 点击文本下划线按钮<br />5. 输入一段文字<br />6. 点击发送<br />5. 用户点击退出群聊按钮 |
+| 106 | e2e_ChatBox_other_user_left | E2E | ChatBox | 1. 用户进入一个群聊<br />2. 其他用户进入群聊<br />3. 鼠标点击文本输入框<br />4. 输入一段文字<br />5. 点击发送<br />6. 其他用户离开<br />7. 用户点击退出群聊按钮 |
+| 107 | e2e_ChatBox_join_left | E2E | ChatBox | 1. 用户创建并加入群聊<br />2. 用户 2 加入群聊<br />3. 用户 3 加入群聊<br />4. 用户 2 离开群聊<br />5. 用户点击退出群聊按钮 |
+| 108 | e2e_TcpClient | E2E | TcpClient | 1. 用户通过调用 TcpClient 窗口（指定端口、文件大小、文件路径）<br />2. 等待一段时间（模式文件传输所需的时间）<br />3. 退出TCP传输程序 |
+| 109 | e2e_TcpServer | E2E | TcpServer | 1. 用户通过调用 TcpServer 窗口（指定端口、文件大小、文件路径）<br />2. 等待一段时间（模式文件传输所需的时间）<br />3. 退出TCP接收程序 |
+| 110  | pt_Login_load                | 性能测试 | Login            | 窗口加载/调用的性能 |
+| 111  | pt_AddChat_load              | 性能测试 | Add Chat         | 窗口加载/调用的性能 |
+| 112  | pt_ChatList_load             | 性能测试 | ChatList         | 窗口加载/调用的性能 |
+| 113  | pt_TcpClient_load            | 性能测试 | TcpClient        | 窗口加载/调用的性能 |
+| 114  | pt_TcpServer_load            | 性能测试 | ChatBox          | 窗口加载/调用的性能 |
+| 115  | pt_ChatBox_load              | 性能测试 | ChatBox          | 窗口加载/调用的性能 |
+| 116  | pt_ChatBox_userjoin          | 性能测试 | ChatBox          | 用户进入群聊 |
+| 117 | pt_ChatBox_userjoin_left     | 性能测试 | ChatBox          | 用户进入群聊并伴随其他用户离开 |
+| 118 | pt_ChatBox_msgTextEdit_input | 性能测试 | ChatBox          | 模拟用户键盘在 msgTextEdit 中输入100 个字符，然后点击发送按钮 |
+| 119 | pt_Login_to_system           | 性能测试 | Login/ChatList   | 用户通过键盘输入姓名和班级编号，然后点击登录按钮进入系统（ChatList） |
+| 120 | pt_AddChat_ui                | 性能测试 | Add Chat/ChatBox | 通过 Add Chat 模拟用户输入，然后点击确认按钮来增加新的群聊（测试创建新的群聊窗口性能） |
+| 121 | lt_ChatBox_x100              | 负载测试 | ChatBox          | 用户**进入** 100 个群聊 |
+| 122 | lt_ChatBox_200user           | 负载测试 | ChatBox          | 保证每个聊天中可以存在 200 位用户 |
+| 123 | lt_ChatBox_2000char          | 负载测试 | ChatBox          | 用户发送 2000 个字符 |
+| 124 | lt_ChatBox_msg_change        | 负载测试 | ChatBox          | 用户输入消息后，然后改变字体的样式（加粗、斜体） |
+| 125 | lt_TcpServer_x10             | 负载测试 | TcpServer        | 用户调用 10 个 TcpServer 文件发送窗口（发送 10 个文件） |
+| 126 | lt_TcpCerver_x10             | 负载测试 | TcpClient        | 用户调用 10 个 TcpClient 文件发送窗口（接收 10 个文件） |
+| 127 | ct_ChatBox_code_normal       | 兼容性测试 | ChatBox        | 模拟用户通过键盘在 msgTextEdit 输入英文、中文、俄文。且 ui 显示正常，不乱码 |
+| 128 | GitHub CI | 跨平台测试（自动测试） | ALL | 保证在 macOS 和 Windows 上可以编译和运行 |
+| 129 | GitHub CI | 自动化测试 | ALL | 在 macOS 和 Windows 上进行自动编译和测试 |
+| 130 | GitHub CI | 兼容性测试 | ALL | 在 Qt6.2.2 环境下编译，并保证 macOS 最小的版本为 10.12；Windows 最小版本为 2019 |
+
+**GitHub 结果：**
+
+![image-20230219131232852](./pic/image-20230219131232852.png)
 
 
 
@@ -477,7 +602,9 @@ K、易扩展：用户自定义类型可以容易地加入到测试数据和测�
 | -------------------- | ---- |
 | 单元测试             | 75   |
 | 接口测试             | 20   |
-| 系统/End-to-End 测试 | 21   |
+| 系统/End-to-End 测试 | 14   |
+| 其他测试             | 21   |
+| 总共                 | 130  |
 
 
 
