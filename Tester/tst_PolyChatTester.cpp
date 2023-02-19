@@ -32,7 +32,7 @@ QString      localUserGroupNumber    = "";               // Group number (get in
 QHostAddress localIpAddress          = QHostAddress();
 ChatList*    chatList                = nullptr;          // Widget ChatList (Only one)
 
-unsigned int const TIMER_STEP        = 2000;
+unsigned int const TIMER_STEP        = 50;
 
 class PolyChatTester : public QObject
 {
@@ -170,6 +170,21 @@ private slots:
     void lt_TcpServer_x10            ();
     void lt_TcpClient_x10            ();
     void ct_ChatBox_code_normal      ();
+
+    void e2e_Login_normal           ();
+    void e2e_Login_empty_all        ();
+    void e2e_Login_empty_name       ();
+    void e2e_Login_empty_group      ();
+    void e2e_ChatList_AddChat       ();
+    void e2e_ChatList_search        ();
+    void e2e_ChatBox_normal_send    ();
+    void e2e_ChatBox_btnBold        ();
+    void e2e_ChatBox_btnItalic      ();
+    void e2e_ChatBox_btnUnderLine   ();
+    void e2e_ChatBox_other_user_left();
+    void e2e_ChatBox_join_left      ();
+    void e2e_TcpClient              ();
+    void e2e_TcpServer              ();
 
 private:
     QTimer* timer;
@@ -2014,6 +2029,296 @@ void PolyChatTester::ct_ChatBox_code_normal()
     textBrowser->clear();
 }
 
+void PolyChatTester::e2e_Login_normal()
+{
+    LoginWidget widget;
+    QLineEdit* name  = widget.findChild<QLineEdit*>("leUserName");
+    QLineEdit* group = widget.findChild<QLineEdit*>("leUserGroupNumber");
+    QPushButton* button = widget.findChild<QPushButton*>("btnLogin");
+
+    QTest::mouseClick(name, Qt::LeftButton);
+    QTest::keyClicks(name, "Fox");
+
+    QTest::mouseClick(group, Qt::LeftButton);
+    QTest::keyClicks(group, "3530409/90102");
+
+
+    QTest::mouseClick(button, Qt::LeftButton);
+    QCOMPARE(DAL::getLocalUserName(), "Fox");
+    QCOMPARE(DAL::getLocalUserGroupNumber(), "3530409/90102");
+}
+
+void PolyChatTester::e2e_Login_empty_all()
+{
+    timer->start(TIMER_STEP);
+    LoginWidget widget;
+    QPushButton* button = widget.findChild<QPushButton*>("btnLogin");
+
+
+    QTest::mouseClick(button, Qt::LeftButton);
+    timer->stop();
+}
+
+void PolyChatTester::e2e_Login_empty_name()
+{
+    timer->start(TIMER_STEP);
+    LoginWidget widget;
+    QLineEdit* name  = widget.findChild<QLineEdit*>("leUserName");
+    QLineEdit* group = widget.findChild<QLineEdit*>("leUserGroupNumber");
+    QPushButton* button = widget.findChild<QPushButton*>("btnLogin");
+
+    QTest::mouseClick(group, Qt::LeftButton);
+    QTest::keyClicks(group, "3530409/90102");
+
+
+    QTest::mouseClick(button, Qt::LeftButton);
+    QCOMPARE(DAL::getLocalUserGroupNumber(), "3530409/90102");
+    timer->stop();
+}
+
+void PolyChatTester::e2e_Login_empty_group()
+{
+    timer->start(TIMER_STEP);
+    LoginWidget widget;
+    QLineEdit* name  = widget.findChild<QLineEdit*>("leUserName");
+    QLineEdit* group = widget.findChild<QLineEdit*>("leUserGroupNumber");
+    QPushButton* button = widget.findChild<QPushButton*>("btnLogin");
+
+    QTest::mouseClick(name, Qt::LeftButton);
+    QTest::keyClicks(name, "Fox");
+
+    QTest::mouseClick(button, Qt::LeftButton);
+    QCOMPARE(DAL::getLocalUserName(), "Fox");
+    timer->stop();
+}
+
+void PolyChatTester::e2e_ChatList_AddChat()
+{
+    timer->start(TIMER_STEP);
+    DAL::initLocalUser("Fox", "3530904/90102");
+    ChatList widget(nullptr, DAL::getLocalUserName(), DAL::getLocalUserGroupNumber(), DAL::getLocalIpAddress());
+    QToolButton* btnNewChat = widget.findChild<QToolButton*>("btnNewChat");
+    QTest::mouseClick(btnNewChat, Qt::LeftButton);
+
+    AddChat addChat;
+    QLineEdit* leNameNewChat = addChat.findChild<QLineEdit*>("leNameNewChat");
+    QTest::mouseClick(leNameNewChat, Qt::LeftButton);
+    QTest::keyClicks(leNameNewChat, "3530904/90107");
+
+    QPushButton* btnAddChat = addChat.findChild<QPushButton*>("btnAddChat");
+    QTest::mouseClick(btnAddChat, Qt::LeftButton);
+    timer->stop();
+}
+
+void PolyChatTester::e2e_ChatList_search()
+{
+    DAL::initLocalUser("Fox", "3530904/90102");
+    ChatList widget(nullptr, DAL::getLocalUserName(), DAL::getLocalUserGroupNumber(), DAL::getLocalIpAddress());
+    QLineEdit* lineEdit = widget.findChild<QLineEdit*>("leSearch");
+
+    QSignalSpy spy(lineEdit, &QLineEdit::textEdited);
+    QTest::keyClicks(lineEdit, "90111");
+    QCOMPARE(spy.count(), 5);
+
+    QTest::keyRelease(lineEdit, Qt::Key_Delete);
+    QCOMPARE(spy.count(), 5);
+}
+
+void PolyChatTester::e2e_ChatBox_normal_send()
+{
+    ChatBoxWidget chatBox(nullptr, "3530409/90102", 2333);
+    QTextEdit* msgTextEdit = chatBox.findChild<QTextEdit*>("msgTextEdit");
+    QPushButton* btnSend = chatBox.findChild<QPushButton*>("btnSend");
+
+    QTest::mouseClick(msgTextEdit, Qt::LeftButton);
+    QTest::keyClicks(msgTextEdit, "Hello world!");
+    QCOMPARE(msgTextEdit->toPlainText(), "Hello world!");
+
+    QTest::mouseClick(btnSend, Qt::LeftButton);
+    QCOMPARE(msgTextEdit->toPlainText(), "");
+
+    QPushButton* btnExit = chatBox.findChild<QPushButton*>("btnExit");
+    QTest::mouseClick(btnExit, Qt::LeftButton);
+}
+
+void PolyChatTester::e2e_ChatBox_btnBold()
+{
+    ChatBoxWidget chatBox(nullptr, "3530409/90102", 2333);
+    QTextEdit* msgTextEdit = chatBox.findChild<QTextEdit*>("msgTextEdit");
+    QPushButton* btnSend = chatBox.findChild<QPushButton*>("btnSend");
+
+
+    QTest::mouseClick(msgTextEdit, Qt::LeftButton);
+    QTest::keyClicks(msgTextEdit, "Hello");
+    QCOMPARE(msgTextEdit->toPlainText(), "Hello");
+
+    QToolButton* toolButton = chatBox.findChild<QToolButton*>("btnBold");
+    QTest::mouseClick(toolButton, Qt::LeftButton);
+    QTest::keyClicks(msgTextEdit, " world!");
+    QCOMPARE(msgTextEdit->toPlainText(), "Hello world!");
+
+    QTest::mouseClick(btnSend, Qt::LeftButton);
+    QCOMPARE(msgTextEdit->toPlainText(), "");
+
+    QPushButton* btnExit = chatBox.findChild<QPushButton*>("btnExit");
+    QTest::mouseClick(btnExit, Qt::LeftButton);
+}
+
+void PolyChatTester::e2e_ChatBox_btnItalic()
+{
+    ChatBoxWidget chatBox(nullptr, "3530409/90102", 2333);
+    QTextEdit* msgTextEdit = chatBox.findChild<QTextEdit*>("msgTextEdit");
+    QPushButton* btnSend = chatBox.findChild<QPushButton*>("btnSend");
+
+
+    QTest::mouseClick(msgTextEdit, Qt::LeftButton);
+    QTest::keyClicks(msgTextEdit, "Hello");
+    QCOMPARE(msgTextEdit->toPlainText(), "Hello");
+
+    QToolButton* toolButton = chatBox.findChild<QToolButton*>("btnItalic");
+    QTest::mouseClick(toolButton, Qt::LeftButton);
+    QTest::keyClicks(msgTextEdit, " world!");
+    QCOMPARE(msgTextEdit->toPlainText(), "Hello world!");
+
+    QTest::mouseClick(btnSend, Qt::LeftButton);
+    QCOMPARE(msgTextEdit->toPlainText(), "");
+
+    QPushButton* btnExit = chatBox.findChild<QPushButton*>("btnExit");
+    QTest::mouseClick(btnExit, Qt::LeftButton);
+}
+
+void PolyChatTester::e2e_ChatBox_btnUnderLine()
+{
+    ChatBoxWidget chatBox(nullptr, "3530409/90102", 2333);
+    QTextEdit* msgTextEdit = chatBox.findChild<QTextEdit*>("msgTextEdit");
+    QPushButton* btnSend = chatBox.findChild<QPushButton*>("btnSend");
+
+
+    QTest::mouseClick(msgTextEdit, Qt::LeftButton);
+    QTest::keyClicks(msgTextEdit, "Hello");
+    QCOMPARE(msgTextEdit->toPlainText(), "Hello");
+
+    QToolButton* toolButton = chatBox.findChild<QToolButton*>("btnUnderLine");
+    QTest::mouseClick(toolButton, Qt::LeftButton);
+    QTest::keyClicks(msgTextEdit, " world!");
+    QCOMPARE(msgTextEdit->toPlainText(), "Hello world!");
+
+    QTest::mouseClick(btnSend, Qt::LeftButton);
+    QCOMPARE(msgTextEdit->toPlainText(), "");
+
+    QPushButton* btnExit = chatBox.findChild<QPushButton*>("btnExit");
+    QTest::mouseClick(btnExit, Qt::LeftButton);
+}
+
+void PolyChatTester::e2e_ChatBox_other_user_left()
+{
+    ChatBoxWidget chatBox(nullptr, "3530409/90102", 2333);
+    QString time = QDateTime::currentDateTime().toString("dd-MM-yyyy hh:mm:ss");
+    chatBox.userJoin("Fox", "3530904/90102", DAL::getLocalIpAddress());
+    chatBox.userJoin("Fox2", "3530904/90102", DAL::getLocalIpAddress());
+
+    QTextEdit* msgTextEdit = chatBox.findChild<QTextEdit*>("msgTextEdit");
+    QTest::mouseClick(msgTextEdit, Qt::LeftButton);
+    QTest::keyClicks(msgTextEdit, "Hello");
+    QCOMPARE(msgTextEdit->toPlainText(), "Hello");
+
+    QPushButton* btnSend = chatBox.findChild<QPushButton*>("btnSend");
+    QTest::mouseClick(btnSend, Qt::LeftButton);
+    QCOMPARE(msgTextEdit->toPlainText(), "");
+
+    chatBox.userLeft("Fox", time);
+    chatBox.userLeft("Fox2", time);
+}
+
+void PolyChatTester::e2e_ChatBox_join_left()
+{
+    ChatBoxWidget chatBox(nullptr, "3530409/90102", 2333);
+    QString time = QDateTime::currentDateTime().toString("dd-MM-yyyy hh:mm:ss");
+    chatBox.userJoin("Fox", "3530904/90102", DAL::getLocalIpAddress());
+
+    chatBox.userJoin("Fox2", "3530904/90102", DAL::getLocalIpAddress());
+    chatBox.userJoin("Fox3", "3530904/90102", DAL::getLocalIpAddress());
+
+    QTextEdit* msgTextEdit = chatBox.findChild<QTextEdit*>("msgTextEdit");
+    QTest::mouseClick(msgTextEdit, Qt::LeftButton);
+    QCOMPARE(msgTextEdit->toPlainText(), "");
+
+    chatBox.userLeft("Fox2", time);
+
+    QPushButton* btnExit = chatBox.findChild<QPushButton*>("btnExit");
+    QTest::mouseClick(btnExit, Qt::LeftButton);
+}
+
+void PolyChatTester::e2e_TcpClient()
+{
+    TcpClient widget(nullptr, "fox.exe", 1551155, DAL::getLocalIpAddress(), PORT_TCP_FILE);
+    widget.show();
+
+    QLabel* lbClientIP = widget.findChild<QLabel*>("lbClientIP");
+    QCOMPARE(lbClientIP->text(), localIpAddress.toString());
+
+    QLabel* lbClientPort = widget.findChild<QLabel*>("lbClientPort");
+    QCOMPARE(lbClientPort->text(), QString::number(PORT_TCP_FILE));
+
+    QLabel* lbServerIP = widget.findChild<QLabel*>("lbServerIP");
+    QCOMPARE(lbServerIP->text(), localIpAddress.toString());
+
+    QLabel* lbServerPort = widget.findChild<QLabel*>("lbServerPort");
+    QCOMPARE(lbServerPort->text(), QString::number(PORT_TCP_FILE));
+
+    QLabel* lbFileName = widget.findChild<QLabel*>("lbFileName");
+    QCOMPARE(lbFileName->text(), "fox.exe");
+
+    QLabel* lbFileSize = widget.findChild<QLabel*>("lbFileSize");
+    QCOMPARE(lbFileSize->text(),QString("%1Kb").arg(QString::number(1551155 / 1024)));
+
+    QProgressBar* progressBar = widget.findChild<QProgressBar*>("progressBar");
+    QCOMPARE(progressBar->value(), 0);
+
+    QPushButton* btnCancel = widget.findChild<QPushButton*>("btnCancel");
+    QCOMPARE(btnCancel->isCheckable(), false);
+
+    QTest::qSleep(100);
+
+    widget.destroyed();
+}
+
+void PolyChatTester::e2e_TcpServer()
+{
+    TcpServer widget(nullptr, "fox.exe", DAL::getLocalIpAddress(), PORT_TCP_FILE);
+    widget.show();
+
+    QLabel* lbClientIP = widget.findChild<QLabel*>("lbClientIP");
+    QCOMPARE(lbClientIP->text(), "");
+
+    QLabel* lbClientPort = widget.findChild<QLabel*>("lbClientPort");
+    QCOMPARE(lbClientPort->text(), "");
+
+    QLabel* lbServerIP = widget.findChild<QLabel*>("lbServerIP");
+    QCOMPARE(lbServerIP->text(), localIpAddress.toString());
+
+    QLabel* lbServerPort = widget.findChild<QLabel*>("lbServerPort");
+    QCOMPARE(lbServerPort->text(), QString::number(PORT_TCP_FILE));
+
+    QLabel* lbFilePath = widget.findChild<QLabel*>("lbFilePath");
+    QCOMPARE(lbFilePath->text(), "fox.exe");
+
+    QLabel* lbFileSize = widget.findChild<QLabel*>("lbFileSize");
+    QCOMPARE(lbFileSize->text(), "0Kb");
+
+    QPushButton* btnCancel = widget.findChild<QPushButton*>("btnCancel");
+    QCOMPARE(btnCancel->isCheckable(), false);
+
+    QProgressBar* progressBar = widget.findChild<QProgressBar*>("progressBar");
+    QCOMPARE(progressBar->value(), 0);
+
+    QTextBrowser* textBrowser = widget.findChild<QTextBrowser*>("textBrowser");
+    QCOMPARE(textBrowser->isReadOnly(), true);
+
+    QTest::qSleep(100);
+
+    widget.destroyed();
+}
 
 //QTEST_APPLESS_MAIN(PolyChatTester)
 QTEST_MAIN(PolyChatTester)  // 自动为我们创建用于测试的 main 函数（带 GUI）
