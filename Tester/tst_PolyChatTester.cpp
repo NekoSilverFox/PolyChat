@@ -2052,8 +2052,15 @@ void PolyChatTester::e2e_Login_empty_all()
 {
     timer->start(TIMER_STEP);
     LoginWidget widget;
+    QLineEdit* name  = widget.findChild<QLineEdit*>("leUserName");
+    QLineEdit* group = widget.findChild<QLineEdit*>("leUserGroupNumber");
     QPushButton* button = widget.findChild<QPushButton*>("btnLogin");
 
+    QTest::mouseClick(name, Qt::LeftButton);
+    QTest::keyClicks(name, "");
+
+    QTest::mouseClick(group, Qt::LeftButton);
+    QTest::keyClicks(group, "");
 
     QTest::mouseClick(button, Qt::LeftButton);
     timer->stop();
