@@ -365,56 +365,58 @@ K、易扩展：用户自定义类型可以容易地加入到测试数据和测�
 | 23   | ut_addchat_chat_not_exist        | ChatList    | 返回 false（不存在同名的群聊）                               |
 | 24   | ut_chatlist_chat_not_open        | ChatList    | 返回 true（如果某个名称的群聊没有被打开）                    |
 | 25   | ut_chatlist_chat_open            | ChatList    | 返回 false（如果某个名称的群聊被打开了）                     |
-| 26   | ut_tcpclient_lbClientIP          | TcpClient   | lbClientIP 内容正确解析且显示                                |
-| 27   | ut_tcpclient_lbClientPort        | TcpClient   | lbClientPort 内容正确解析且显示                              |
-| 28   | ut_tcpclient_lbServerIP          | TcpClient   | lbServerIP 内容正确解析且显示                                |
-| 29   | ut_tcpclient_lbServerPort        | TcpClient   | lbServerPort 内容正确解析且显示                              |
-| 30   | ut_tcpclient_lbFileName          | TcpClient   | lbFileName 内容正确解析且显示                                |
-| 31   | ut_tcpclient_lbFileSize          | TcpClient   | lbFileSize 内容正确解析且显示                                |
-| 32   | ut_tcpclient_progressBar         | TcpClient   | progressBar 初始化时为 0                                     |
-| 33   | ut_tcpclient_btnCancel           | TcpClient   | 保证 btnCancel 是非可选按钮                                  |
-| 34   | ut_tcpclient_btnCancel_emit      | TcpClient   | 用户每次点击取消按钮时，保证（按钮点击）信号正确触发，且为一次 |
-| 35   | ut_tcpclient_btnSave             | TcpClient   | 保证 btnSave 是非可选按钮                                    |
-| 36   | ut_tcpclient_btnSave_emit        | TcpClient   | 用户每次点击保存按钮时，保证（按钮点击）信号正确触发，且为一次 |
-| 37   | ut_tcpclient_closeEvent_emit     | TcpClient   | 用户关闭窗口时触发关闭事件                                   |
-| 38   | ut_tcpclient_textBrowser         | TcpClient   | textBrowser 为只读状态，禁止写入                             |
-| 39   | ut_tcpserver_lbClientIP          | TcpServer   | lbClientIP 内容正确解析且显示                                |
-| 40   | ut_tcpserver_lbClientPort        | TcpServer   | lbClientPort 内容正确解析且显示                              |
-| 41   | ut_tcpserver_lbServerIP          | TcpServer   | lbServerIP 内容正确解析且显示                                |
-| 42   | ut_tcpserver_lbServerPort        | TcpServer   | lbServerPort 内容正确解析且显示                              |
-| 43   | ut_tcpserver_lbFilePath          | TcpServer   | lbFilePath 内容正确解析且显示                                |
-| 44   | ut_tcpserver_lbFileSize          | TcpServer   | lbFileSize 内容正确解析且显示                                |
-| 45   | ut_tcpserver_btnCancel           | TcpServer   | 保证 btnCancel 是非可选按钮                                  |
-| 46   | ut_tcpserver_btnCancel_emit      | TcpServer   | 用户每次点击取消按钮时，保证（按钮点击）信号正确触发，且为一次 |
-| 47   | ut_tcpserver_progressBar         | TcpServer   | progressBar 初始化时为 0                                     |
-| 48   | ut_tcpserver_closeEvent_emit     | TcpServer   | 用户关闭窗口时触发关闭事件                                   |
-| 49   | ut_tcpserver_textBrowser         | TcpServer   | textBrowser 为只读状态，禁止写入                             |
-| 50   | ut_chatbox_title                 | ChatBox     | ChatBox 窗口的标题正确初始化（符合格式）                     |
-| 51   | ut_chatbox_btnBold               | ChatBox     | 保证 btnBold 是可选按钮（Checkable-QToolButton），且文字显示被禁用 |
-| 52   | ut_chatbox_btnItalic             | ChatBox     | 保证 btnItalic 是可选按钮（Checkable-QToolButton），且文字显示被禁用 |
-| 53   | ut_chatbox_btnUnderLine          | ChatBox     | 保证 btnUnderLine 是可选按钮（Checkable-QToolButton），且文字显示被禁用 |
-| 54   | ut_chatbox_btnColor              | ChatBox     | 保证 btnColor 不是可选按钮（Checkable-QToolButton），且文字显示被禁用 |
-| 55   | ut_chatbox_btnFileSend           | ChatBox     | 保证 btnFileSend 不是可选按钮（Checkable-QToolButton），且文字显示被禁用 |
-| 56   | ut_chatbox_btnSave               | ChatBox     | 保证 btnSave 不是可选按钮（Checkable-QToolButton），且文字显示被禁用 |
-| 57   | ut_chatbox_btnClean              | ChatBox     | 保证 btnClean 不是可选按钮（Checkable-QToolButton），且文字显示被禁用 |
-| 58   | ut_chatbox_btnExit               | ChatBox     | 保证 btnExit 不是可选按钮（Checkable）                       |
-| 59   | ut_chatbox_btnSend               | ChatBox     | 保证 btnSend 不是可选按钮（Checkable）                       |
-| 60   | ut_chatbox_btnBold_emit          | ChatBox     | 点击 btnBold 触发（按钮点击）信号，且状态改变为 enable；再次点击恢复为初始状态 |
-| 61   | ut_chatbox_btnItalic_emit        | ChatBox     | 点击 btnItalic 触发（按钮点击）信号，且状态改变为 enable；再次点击恢复为初始状态 |
-| 62   | ut_chatbox_btnUnderLine_emit     | ChatBox     | 点击 btnUnderLine 触发（按钮点击）信号，且状态改变为 enable；再次点击恢复为初始状态 |
-| 63   | ut_chatbox_btnColor_emit         | ChatBox     | 点击 btnColor 触发（按钮点击）信号                           |
-| 64   | ut_chatbox_btnFileSend_emit      | ChatBox     | 点击 btnFileSend 触发（按钮点击）信号                        |
-| 65   | ut_chatbox_btnSave_emit          | ChatBox     | 点击 btnSave 触发（按钮点击）信号                            |
-| 66   | ut_chatbox_btnClean_emit         | ChatBox     | 点击 btnClean 触发（按钮点击）信号                           |
-| 67   | ut_chatbox_btnExit_emit          | ChatBox     | 点击 btnExit 触发（按钮点击）信号                            |
-| 68   | ut_chatbox_btnSend_emit          | ChatBox     | 点击 btnSend 触发（按钮点击）信号                            |
-| 69   | ut_chatbox_msgTextBrowser        | ChatBox     | msgTextBrowser 为只读状态                                    |
-| 70   | ut_chatbox_msgTextEdit           | ChatBox     | msgTextEdit 允许写入                                         |
-| 71   | ut_chatbox_init_cbxFontSize      | ChatBox     | 初始字体为 12                                                |
-| 72   | ut_chatbox_cbxFontSize_min_max   | ChatBox     | 最小字体为 10，最大为 28                                     |
-| 73   | ut_chatbox_closeEvent_emit       | ChatBox     | 用户关闭窗口（退出）时触发关闭事件                           |
-| 74   | ut_chatbox_tbUser                | ChatBox     | 用户列表的宽度为 150-350                                     |
-| 75   | ut_chatbox_lbNumberOnlineUse     | ChatBox     | 在线人数的 UI 初始化为正确格式                               |
+| 26   | mt_chatlist_getRandomPort | ChatList | 生成的随机端口介于 PORT_MIN 与 PORT_MAX |
+| 27   | mt_chatlist_setChatState | ChatList | 正常设置聊天窗口为打开或者关闭 |
+| 28   | ut_tcpclient_lbClientIP          | TcpClient   | lbClientIP 内容正确解析且显示                                |
+| 29   | ut_tcpclient_lbClientPort        | TcpClient   | lbClientPort 内容正确解析且显示                              |
+| 30   | ut_tcpclient_lbServerIP          | TcpClient   | lbServerIP 内容正确解析且显示                                |
+| 31   | ut_tcpclient_lbServerPort        | TcpClient   | lbServerPort 内容正确解析且显示                              |
+| 32   | ut_tcpclient_lbFileName          | TcpClient   | lbFileName 内容正确解析且显示                                |
+| 33   | ut_tcpclient_lbFileSize          | TcpClient   | lbFileSize 内容正确解析且显示                                |
+| 34   | ut_tcpclient_progressBar         | TcpClient   | progressBar 初始化时为 0                                     |
+| 35   | ut_tcpclient_btnCancel           | TcpClient   | 保证 btnCancel 是非可选按钮                                  |
+| 36   | ut_tcpclient_btnCancel_emit      | TcpClient   | 用户每次点击取消按钮时，保证（按钮点击）信号正确触发，且为一次 |
+| 37   | ut_tcpclient_btnSave             | TcpClient   | 保证 btnSave 是非可选按钮                                    |
+| 38   | ut_tcpclient_btnSave_emit        | TcpClient   | 用户每次点击保存按钮时，保证（按钮点击）信号正确触发，且为一次 |
+| 39   | ut_tcpclient_closeEvent_emit     | TcpClient   | 用户关闭窗口时触发关闭事件                                   |
+| 40   | ut_tcpclient_textBrowser         | TcpClient   | textBrowser 为只读状态，禁止写入                             |
+| 41   | ut_tcpserver_lbClientIP          | TcpServer   | lbClientIP 内容正确解析且显示                                |
+| 42   | ut_tcpserver_lbClientPort        | TcpServer   | lbClientPort 内容正确解析且显示                              |
+| 43   | ut_tcpserver_lbServerIP          | TcpServer   | lbServerIP 内容正确解析且显示                                |
+| 44   | ut_tcpserver_lbServerPort        | TcpServer   | lbServerPort 内容正确解析且显示                              |
+| 45   | ut_tcpserver_lbFilePath          | TcpServer   | lbFilePath 内容正确解析且显示                                |
+| 46   | ut_tcpserver_lbFileSize          | TcpServer   | lbFileSize 内容正确解析且显示                                |
+| 47   | ut_tcpserver_btnCancel           | TcpServer   | 保证 btnCancel 是非可选按钮                                  |
+| 48   | ut_tcpserver_btnCancel_emit      | TcpServer   | 用户每次点击取消按钮时，保证（按钮点击）信号正确触发，且为一次 |
+| 49   | ut_tcpserver_progressBar         | TcpServer   | progressBar 初始化时为 0                                     |
+| 50   | ut_tcpserver_closeEvent_emit     | TcpServer   | 用户关闭窗口时触发关闭事件                                   |
+| 51   | ut_tcpserver_textBrowser         | TcpServer   | textBrowser 为只读状态，禁止写入                             |
+| 52   | ut_chatbox_title                 | ChatBox     | ChatBox 窗口的标题正确初始化（符合格式）                     |
+| 53   | ut_chatbox_btnBold               | ChatBox     | 保证 btnBold 是可选按钮（Checkable-QToolButton），且文字显示被禁用 |
+| 54   | ut_chatbox_btnItalic             | ChatBox     | 保证 btnItalic 是可选按钮（Checkable-QToolButton），且文字显示被禁用 |
+| 55   | ut_chatbox_btnUnderLine          | ChatBox     | 保证 btnUnderLine 是可选按钮（Checkable-QToolButton），且文字显示被禁用 |
+| 56   | ut_chatbox_btnColor              | ChatBox     | 保证 btnColor 不是可选按钮（Checkable-QToolButton），且文字显示被禁用 |
+| 57   | ut_chatbox_btnFileSend           | ChatBox     | 保证 btnFileSend 不是可选按钮（Checkable-QToolButton），且文字显示被禁用 |
+| 58   | ut_chatbox_btnSave               | ChatBox     | 保证 btnSave 不是可选按钮（Checkable-QToolButton），且文字显示被禁用 |
+| 59   | ut_chatbox_btnClean              | ChatBox     | 保证 btnClean 不是可选按钮（Checkable-QToolButton），且文字显示被禁用 |
+| 60   | ut_chatbox_btnExit               | ChatBox     | 保证 btnExit 不是可选按钮（Checkable）                       |
+| 61   | ut_chatbox_btnSend               | ChatBox     | 保证 btnSend 不是可选按钮（Checkable）                       |
+| 62   | ut_chatbox_btnBold_emit          | ChatBox     | 点击 btnBold 触发（按钮点击）信号，且状态改变为 enable；再次点击恢复为初始状态 |
+| 63   | ut_chatbox_btnItalic_emit        | ChatBox     | 点击 btnItalic 触发（按钮点击）信号，且状态改变为 enable；再次点击恢复为初始状态 |
+| 64   | ut_chatbox_btnUnderLine_emit     | ChatBox     | 点击 btnUnderLine 触发（按钮点击）信号，且状态改变为 enable；再次点击恢复为初始状态 |
+| 65   | ut_chatbox_btnColor_emit         | ChatBox     | 点击 btnColor 触发（按钮点击）信号                           |
+| 66   | ut_chatbox_btnFileSend_emit      | ChatBox     | 点击 btnFileSend 触发（按钮点击）信号                        |
+| 67   | ut_chatbox_btnSave_emit          | ChatBox     | 点击 btnSave 触发（按钮点击）信号                            |
+| 68   | ut_chatbox_btnClean_emit         | ChatBox     | 点击 btnClean 触发（按钮点击）信号                           |
+| 69   | ut_chatbox_btnExit_emit          | ChatBox     | 点击 btnExit 触发（按钮点击）信号                            |
+| 70   | ut_chatbox_btnSend_emit          | ChatBox     | 点击 btnSend 触发（按钮点击）信号                            |
+| 71   | ut_chatbox_msgTextBrowser        | ChatBox     | msgTextBrowser 为只读状态                                    |
+| 72   | ut_chatbox_msgTextEdit           | ChatBox     | msgTextEdit 允许写入                                         |
+| 73   | ut_chatbox_init_cbxFontSize      | ChatBox     | 初始字体为 12                                                |
+| 74   | ut_chatbox_cbxFontSize_min_max   | ChatBox     | 最小字体为 10，最大为 28                                     |
+| 75   | ut_chatbox_closeEvent_emit       | ChatBox     | 用户关闭窗口（退出）时触发关闭事件                           |
+| 76   | ut_chatbox_tbUser                | ChatBox     | 用户列表的宽度为 150-350                                     |
+| 77   | ut_chatbox_lbNumberOnlineUse     | ChatBox     | 在线人数的 UI 初始化为正确格式                               |
 
 ## 集成（接口）测试
 
@@ -525,26 +527,26 @@ CI 的编译和测试环境：
 
 |      | 测试名                             | 所属模块  | 说明（预期结果）                                             |
 | ---- | ---------------------------------- | --------- | ------------------------------------------------------------ |
-| 76   | mt_login_init_succ                 | Login     | 模拟用户在使用键盘在输入框中输入内容，然后点击登录按钮（登陆成功，本地用户信息被正确初始化） |
-| 77   | mt_login_leUserName                | Login     | 模拟用户点击并且通过键盘输入，确保输入内容在 leUserName 输入框中正确显示 |
-| 78   | mt_login_leUserGroupNumber         | Login     | 模拟用户点击并且通过键盘输入，确保输入内容在 leUserGroupNumber 输入框中正确显示 |
-| 79   | mt_addchat_leNameNewChat           | Add Chat  | 模拟用户点击并且通过键盘输入，确保输入内容在 leNameNewChat 输入框中正确显示 |
-| 80   | mt_chatlist_leSearch_change_emit   | ChatList  | 当用户改变搜索框中的内容时，触发正确次数的信号               |
-| 81   | mt_chatlist_getNewBtn              | ChatList  | 根据传入的参数，所创建的新按钮对象中拥有正确的信息           |
-| 82   | mt_chatlist_getRandomPort          | ChatList  | 生成的随机端口介于 PORT_MIN 与 PORT_MAX                      |
-| 83   | mt_chatlist_setChatState           | ChatList  | 正常设置聊天窗口为打开或者关闭                               |
-| 84   | mt_chatlist_btnchat_exist          | ChatList  | 当增加新的聊天群组时，ui 界面正确刷新                        |
-| 85   | mt_chatbox_userjoin_list           | ChatBox   | 用户加入（用户列表正确刷新）                                 |
-| 86   | mt_chatbox_userjoin_conter         | ChatBox   | 用户加入（计数器正确增加，并且ui的显示格式及内容正确）       |
-| 87   | mt_chatbox_userjoin_msgTextBrowser | ChatBox   | 用户加入（msgTextBrowser 被刷新）                            |
-| 88   | mt_chatbox_userleft_list           | ChatBox   | 用户离开（用户列表正确刷新）                                 |
-| 89   | mt_chatbox_userleft_conter         | ChatBox   | 用户离开（计数器正确增加，并且ui的显示格式及内容正确）       |
-| 90   | mt_chatbox_userleft_msgTextBrowser | ChatBox   | 用户离开（msgTextBrowser 被刷新）                            |
-| 91   | mt_chatbox_clean                   | ChatBox   | 当清空聊天框的时候提示警告信息                               |
-| 92   | mt_chatbox_save_empty              | ChatBox   | 当清空聊天框中无内容时，模拟模拟用户点击“保存聊天记录”按钮（提示警告信息） |
-| 93   | mt_chatbox_send_success            | ChatBox   | 模拟用户在使用键盘在聊天框中输入内容，然后点击发送按钮。输入的信息正确显示在消息框汇总（消息成功发送） |
-| 94   | mt_tcpclient                       | TcpClient | ui 界面的所有控件经过接口初始化为正确内容                    |
-| 95   | mt_tcpserver                       | TcpServer | ui 界面的所有控件经过接口初始化为正确内容                    |
+| 78   | mt_login_init_succ                 | Login     | 模拟用户在使用键盘在输入框中输入内容，然后点击登录按钮（登陆成功，本地用户信息被正确初始化） |
+| 79   | mt_login_leUserName                | Login     | 模拟用户点击并且通过键盘输入，确保输入内容在 leUserName 输入框中正确显示 |
+| 80   | mt_login_leUserGroupNumber         | Login     | 模拟用户点击并且通过键盘输入，确保输入内容在 leUserGroupNumber 输入框中正确显示 |
+| 81   | mt_addchat_leNameNewChat           | Add Chat  | 模拟用户点击并且通过键盘输入，确保输入内容在 leNameNewChat 输入框中正确显示 |
+| 82   | mt_chatlist_leSearch_change_emit   | ChatList  | 当用户改变搜索框中的内容时，触发正确次数的信号               |
+| 83   | mt_chatlist_getNewBtn              | ChatList  | 根据传入的参数，所创建的新按钮对象中拥有正确的信息           |
+| 84   |                                    |           |                                                              |
+| 85   |                                    |           |                                                              |
+| 86   | mt_chatlist_btnchat_exist          | ChatList  | 当增加新的聊天群组时，ui 界面正确刷新                        |
+| 87   | mt_chatbox_userjoin_list           | ChatBox   | 用户加入（用户列表正确刷新）                                 |
+| 88   | mt_chatbox_userjoin_conter         | ChatBox   | 用户加入（计数器正确增加，并且ui的显示格式及内容正确）       |
+| 89   | mt_chatbox_userjoin_msgTextBrowser | ChatBox   | 用户加入（msgTextBrowser 被刷新）                            |
+| 90   | mt_chatbox_userleft_list           | ChatBox   | 用户离开（用户列表正确刷新）                                 |
+| 91   | mt_chatbox_userleft_conter         | ChatBox   | 用户离开（计数器正确增加，并且ui的显示格式及内容正确）       |
+| 92   | mt_chatbox_userleft_msgTextBrowser | ChatBox   | 用户离开（msgTextBrowser 被刷新）                            |
+| 93   | mt_chatbox_clean                   | ChatBox   | 当清空聊天框的时候提示警告信息                               |
+| 94   | mt_chatbox_save_empty              | ChatBox   | 当清空聊天框中无内容时，模拟模拟用户点击“保存聊天记录”按钮（提示警告信息） |
+| 95   | mt_chatbox_send_success            | ChatBox   | 模拟用户在使用键盘在聊天框中输入内容，然后点击发送按钮。输入的信息正确显示在消息框汇总（消息成功发送） |
+| 96   | mt_tcpclient                       | TcpClient | ui 界面的所有控件经过接口初始化为正确内容                    |
+| 97   | mt_tcpserver                       | TcpServer | ui 界面的所有控件经过接口初始化为正确内容                    |
 
 **集成测试结果:**
 
@@ -554,41 +556,41 @@ CI 的编译和测试环境：
 
 |      | 测试名 | 类型     | 所属模块  | 说明（预期结果）    |
 | :--- | ------ | :------- | :-------- | :------------------ |
-| 96  | e2e_Login_normal | E2E | Login | 1. 模拟用户打开程序<br />2. 鼠标点击用户名输入框，并用键盘输入内容<br />3. 鼠标点击班级号输入框，并用键盘输入内容<br />4. 鼠标点击登录按钮 |
-| 97  | e2e_Login_empty_all | E2E | Login | 1. 模拟用户打开程序<br />2. 鼠标点击登录按钮 |
-| 98  | e2e_Login_empty_name | E2E | Login | 1. 模拟用户打开程序<br />2. 鼠标点击用户名输入框，并用键盘输入内容<br />3. 鼠标点击登录按钮 |
-| 99  | e2e_Login_empty_group | E2E | Login | 1. 模拟用户打开程序<br />2. 鼠标点击班级号输入框，并用键盘输入内容<br />3. 鼠标点击登录按钮 |
-| 100 | e2e_ChatList_AddChat | E2E | ChatList/Add Chat | 1. 用户进入主窗口（ChatList）<br />2. 鼠标点击“增加新群聊”按钮<br />3. 在弹出的“Add Chat”对话框中使用键盘输入内容<br />4. 点击确认按钮增加新群聊 |
-| 101 | e2e_ChatList_search | E2E | ChatList | 1. 用户进入主窗口（ChatList）<br />2. 鼠标点击搜索框<br />3. 使用键盘输入要搜索的群聊名称<br />4. 使用键盘删除若干字符 |
-| 102 | e2e_ChatBox_normal_send | E2E | ChatBox | 1. 用户进入一个群聊<br />2. 鼠标点击文本输入框<br />3. 输入一段文字<br />4. 点击发送<br />5. 用户点击退出群聊按钮 |
-| 103 | e2e_ChatBox_btnBold | E2E | ChatBox | 1. 用户进入一个群聊<br />2. 鼠标点击文本输入框<br />3. 输入一段文字<br />4. 点击文本加粗按钮<br />5. 输入一段文字<br />6. 点击发送<br />5. 用户点击退出群聊按钮 |
-| 104 | e2e_ChatBox_btnItalic | E2E | ChatBox | 1. 用户进入一个群聊<br />2. 鼠标点击文本输入框<br />3. 输入一段文字<br />4. 点击文本倾斜按钮<br />5. 输入一段文字<br />6. 点击发送<br />5. 用户点击退出群聊按钮 |
-| 105 | e2e_ChatBox_btnUnderLine | E2E | ChatBox | 1. 用户进入一个群聊<br />2. 鼠标点击文本输入框<br />3. 输入一段文字<br />4. 点击文本下划线按钮<br />5. 输入一段文字<br />6. 点击发送<br />5. 用户点击退出群聊按钮 |
-| 106 | e2e_ChatBox_other_user_left | E2E | ChatBox | 1. 用户进入一个群聊<br />2. 其他用户进入群聊<br />3. 鼠标点击文本输入框<br />4. 输入一段文字<br />5. 点击发送<br />6. 其他用户离开<br />7. 用户点击退出群聊按钮 |
-| 107 | e2e_ChatBox_join_left | E2E | ChatBox | 1. 用户创建并加入群聊<br />2. 用户 2 加入群聊<br />3. 用户 3 加入群聊<br />4. 用户 2 离开群聊<br />5. 用户点击退出群聊按钮 |
-| 108 | e2e_TcpClient | E2E | TcpClient | 1. 用户通过调用 TcpClient 窗口（指定端口、文件大小、文件路径）<br />2. 等待一段时间（模式文件传输所需的时间）<br />3. 退出TCP传输程序 |
-| 109 | e2e_TcpServer | E2E | TcpServer | 1. 用户通过调用 TcpServer 窗口（指定端口、文件大小、文件路径）<br />2. 等待一段时间（模式文件传输所需的时间）<br />3. 退出TCP接收程序 |
-| 110  | pt_Login_load                | 性能测试 | Login            | 窗口加载/调用的性能 |
-| 111  | pt_AddChat_load              | 性能测试 | Add Chat         | 窗口加载/调用的性能 |
-| 112  | pt_ChatList_load             | 性能测试 | ChatList         | 窗口加载/调用的性能 |
-| 113  | pt_TcpClient_load            | 性能测试 | TcpClient        | 窗口加载/调用的性能 |
-| 114  | pt_TcpServer_load            | 性能测试 | ChatBox          | 窗口加载/调用的性能 |
-| 115  | pt_ChatBox_load              | 性能测试 | ChatBox          | 窗口加载/调用的性能 |
-| 116  | pt_ChatBox_userjoin          | 性能测试 | ChatBox          | 用户进入群聊 |
-| 117 | pt_ChatBox_userjoin_left     | 性能测试 | ChatBox          | 用户进入群聊并伴随其他用户离开 |
-| 118 | pt_ChatBox_msgTextEdit_input | 性能测试 | ChatBox          | 模拟用户键盘在 msgTextEdit 中输入100 个字符，然后点击发送按钮 |
-| 119 | pt_Login_to_system           | 性能测试 | Login/ChatList   | 用户通过键盘输入姓名和班级编号，然后点击登录按钮进入系统（ChatList） |
-| 120 | pt_AddChat_ui                | 性能测试 | Add Chat/ChatBox | 通过 Add Chat 模拟用户输入，然后点击确认按钮来增加新的群聊（测试创建新的群聊窗口性能） |
-| 121 | lt_ChatBox_x100              | 负载测试 | ChatBox          | 用户**进入** 100 个群聊 |
-| 122 | lt_ChatBox_200user           | 负载测试 | ChatBox          | 保证每个聊天中可以存在 200 位用户 |
-| 123 | lt_ChatBox_2000char          | 负载测试 | ChatBox          | 用户发送 2000 个字符 |
-| 124 | lt_ChatBox_msg_change        | 负载测试 | ChatBox          | 用户输入消息后，然后改变字体的样式（加粗、斜体） |
-| 125 | lt_TcpServer_x10             | 负载测试 | TcpServer        | 用户调用 10 个 TcpServer 文件发送窗口（发送 10 个文件） |
-| 126 | lt_TcpCerver_x10             | 负载测试 | TcpClient        | 用户调用 10 个 TcpClient 文件发送窗口（接收 10 个文件） |
-| 127 | ct_ChatBox_code_normal       | 兼容性测试 | ChatBox        | 模拟用户通过键盘在 msgTextEdit 输入英文、中文、俄文。且 ui 显示正常，不乱码 |
-| 128 | GitHub CI | 跨平台测试（自动测试） | ALL | 保证在 macOS 和 Windows 上可以编译和运行 |
-| 129 | GitHub CI | 自动化测试 | ALL | 在 macOS 和 Windows 上进行自动编译和测试 |
-| 130 | GitHub CI | 兼容性测试 | ALL | 在 Qt6.2.2 环境下编译，并保证 macOS 最小的版本为 10.12；Windows 最小版本为 2019 |
+| 98   | e2e_Login_normal | E2E | Login | 1. 模拟用户打开程序<br />2. 鼠标点击用户名输入框，并用键盘输入内容<br />3. 鼠标点击班级号输入框，并用键盘输入内容<br />4. 鼠标点击登录按钮 |
+| 99   | e2e_Login_empty_all | E2E | Login | 1. 模拟用户打开程序<br />2. 鼠标点击登录按钮 |
+| 100  | e2e_Login_empty_name | E2E | Login | 1. 模拟用户打开程序<br />2. 鼠标点击用户名输入框，并用键盘输入内容<br />3. 鼠标点击登录按钮 |
+| 101  | e2e_Login_empty_group | E2E | Login | 1. 模拟用户打开程序<br />2. 鼠标点击班级号输入框，并用键盘输入内容<br />3. 鼠标点击登录按钮 |
+| 102  | e2e_ChatList_AddChat | E2E | ChatList/Add Chat | 1. 用户进入主窗口（ChatList）<br />2. 鼠标点击“增加新群聊”按钮<br />3. 在弹出的“Add Chat”对话框中使用键盘输入内容<br />4. 点击确认按钮增加新群聊 |
+| 103  | e2e_ChatList_search | E2E | ChatList | 1. 用户进入主窗口（ChatList）<br />2. 鼠标点击搜索框<br />3. 使用键盘输入要搜索的群聊名称<br />4. 使用键盘删除若干字符 |
+| 104  | e2e_ChatBox_normal_send | E2E | ChatBox | 1. 用户进入一个群聊<br />2. 鼠标点击文本输入框<br />3. 输入一段文字<br />4. 点击发送<br />5. 用户点击退出群聊按钮 |
+| 105  | e2e_ChatBox_btnBold | E2E | ChatBox | 1. 用户进入一个群聊<br />2. 鼠标点击文本输入框<br />3. 输入一段文字<br />4. 点击文本加粗按钮<br />5. 输入一段文字<br />6. 点击发送<br />5. 用户点击退出群聊按钮 |
+| 106  | e2e_ChatBox_btnItalic | E2E | ChatBox | 1. 用户进入一个群聊<br />2. 鼠标点击文本输入框<br />3. 输入一段文字<br />4. 点击文本倾斜按钮<br />5. 输入一段文字<br />6. 点击发送<br />5. 用户点击退出群聊按钮 |
+| 107  | e2e_ChatBox_btnUnderLine | E2E | ChatBox | 1. 用户进入一个群聊<br />2. 鼠标点击文本输入框<br />3. 输入一段文字<br />4. 点击文本下划线按钮<br />5. 输入一段文字<br />6. 点击发送<br />5. 用户点击退出群聊按钮 |
+| 108  | e2e_ChatBox_other_user_left | E2E | ChatBox | 1. 用户进入一个群聊<br />2. 其他用户进入群聊<br />3. 鼠标点击文本输入框<br />4. 输入一段文字<br />5. 点击发送<br />6. 其他用户离开<br />7. 用户点击退出群聊按钮 |
+| 109  | e2e_ChatBox_join_left | E2E | ChatBox | 1. 用户创建并加入群聊<br />2. 用户 2 加入群聊<br />3. 用户 3 加入群聊<br />4. 用户 2 离开群聊<br />5. 用户点击退出群聊按钮 |
+| 110  | e2e_TcpClient | E2E | TcpClient | 1. 用户通过调用 TcpClient 窗口（指定端口、文件大小、文件路径）<br />2. 等待一段时间（模式文件传输所需的时间）<br />3. 退出TCP传输程序 |
+| 111  | e2e_TcpServer | E2E | TcpServer | 1. 用户通过调用 TcpServer 窗口（指定端口、文件大小、文件路径）<br />2. 等待一段时间（模式文件传输所需的时间）<br />3. 退出TCP接收程序 |
+| 112  | pt_Login_load                | 性能测试 | Login            | 窗口加载/调用的性能 |
+| 113  | pt_AddChat_load              | 性能测试 | Add Chat         | 窗口加载/调用的性能 |
+| 114  | pt_ChatList_load             | 性能测试 | ChatList         | 窗口加载/调用的性能 |
+| 115  | pt_TcpClient_load            | 性能测试 | TcpClient        | 窗口加载/调用的性能 |
+| 116  | pt_TcpServer_load            | 性能测试 | ChatBox          | 窗口加载/调用的性能 |
+| 117  | pt_ChatBox_load              | 性能测试 | ChatBox          | 窗口加载/调用的性能 |
+| 118  | pt_ChatBox_userjoin          | 性能测试 | ChatBox          | 用户进入群聊 |
+| 119  | pt_ChatBox_userjoin_left     | 性能测试 | ChatBox          | 用户进入群聊并伴随其他用户离开 |
+| 120  | pt_ChatBox_msgTextEdit_input | 性能测试 | ChatBox          | 模拟用户键盘在 msgTextEdit 中输入100 个字符，然后点击发送按钮 |
+| 121  | pt_Login_to_system           | 性能测试 | Login/ChatList   | 用户通过键盘输入姓名和班级编号，然后点击登录按钮进入系统（ChatList） |
+| 122  | pt_AddChat_ui                | 性能测试 | Add Chat/ChatBox | 通过 Add Chat 模拟用户输入，然后点击确认按钮来增加新的群聊（测试创建新的群聊窗口性能） |
+| 123  | lt_ChatBox_x100              | 负载测试 | ChatBox          | 用户**进入** 100 个群聊 |
+| 124  | lt_ChatBox_200user           | 负载测试 | ChatBox          | 保证每个聊天中可以存在 200 位用户 |
+| 125  | lt_ChatBox_2000char          | 负载测试 | ChatBox          | 用户发送 2000 个字符 |
+| 126  | lt_ChatBox_msg_change        | 负载测试 | ChatBox          | 用户输入消息后，然后改变字体的样式（加粗、斜体） |
+| 127  | lt_TcpServer_x10             | 负载测试 | TcpServer        | 用户调用 10 个 TcpServer 文件发送窗口（发送 10 个文件） |
+| 128  | lt_TcpCerver_x10             | 负载测试 | TcpClient        | 用户调用 10 个 TcpClient 文件发送窗口（接收 10 个文件） |
+| 129  | ct_ChatBox_code_normal       | 兼容性测试 | ChatBox        | 模拟用户通过键盘在 msgTextEdit 输入英文、中文、俄文。且 ui 显示正常，不乱码 |
+| 130  | GitHub CI | 跨平台测试（自动测试） | ALL | 保证在 macOS 和 Windows 上可以编译和运行 |
+| 131  | GitHub CI | 自动化测试 | ALL | 在 macOS 和 Windows 上进行自动编译和测试 |
+| 132  | GitHub CI | 兼容性测试 | ALL | 在 Qt6.2.2 环境下编译，并保证 macOS 最小的版本为 10.12；Windows 最小版本为 2019 |
 
 **GitHub 结果：**
 
@@ -600,8 +602,8 @@ CI 的编译和测试环境：
 
 | 测试类型             | 数量 |
 | -------------------- | ---- |
-| 单元测试             | 75   |
-| 接口测试             | 20   |
+| 单元测试             | 77   |
+| 接口测试             | 18   |
 | 系统/End-to-End 测试 | 14   |
 | 其他测试             | 21   |
 | 总共                 | 130  |
