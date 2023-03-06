@@ -70,6 +70,8 @@ private slots:
     void ut_chatlist_lbIP                ();
     void ut_chatlist_chat_not_open       ();
     void ut_chatlist_chat_open           ();
+    bool ut_chatlist_getRandomPort       ();
+    void ut_chatlist_setChatState        ();
 
     void ut_addchat_port_exist           ();
     void ut_addchat_port_not_exist       ();
@@ -136,8 +138,6 @@ private slots:
     void mt_addchat_leNameNewChat        ();
     void mt_chatlist_leSearch_change_emit();
     void mt_chatlist_getNewBtn           ();
-    bool mt_chatlist_getRandomPort       ();
-    void mt_chatlist_setChatState        ();
     void mt_chatlist_btnchat_exist       ();
 
     void mt_chatbox_userjoin_list           ();
@@ -517,6 +517,39 @@ void PolyChatTester::ut_chatlist_chat_open()
     widget.vPair_OChat_BtnChat.push_front(pair);
 
     QCOMPARE(widget.isChatOpen("3530904/90102"), true);
+}
+
+/** 生成的随机端口介于 PORT_MIN 与 PORT_MAX
+ *  Генерирует случайные порты между PORT_MIN и PORT_MAX.
+ *  @brief PolyChatTester::ut_chatlist_getRandomPort
+ */
+bool PolyChatTester::ut_chatlist_getRandomPort()
+{
+    ChatList widget(nullptr, DAL::getLocalUserName(), DAL::getLocalUserGroupNumber(), DAL::getLocalIpAddress());
+    for (int i = 0; i < PORT_MAX - PORT_MIN; i++)
+    {
+        qint16 port = widget.getRandomPort();
+        if (port > PORT_MAX || port < PORT_MIN) return false;
+    }
+    return true;
+}
+
+/** 正常设置聊天窗口为打开或者关闭
+ *  Окно чата открыто или закрыто.
+ *  @brief PolyChatTester::ut_chatlist_setChatState
+ */
+void PolyChatTester::ut_chatlist_setChatState()
+{
+    DAL::initLocalUser("Fox", "3530904/90102");
+    ChatList widget(nullptr, DAL::getLocalUserName(), DAL::getLocalUserGroupNumber(), DAL::getLocalIpAddress());
+    QPair<Chat*, QToolButton*> pair1(new Chat("3530904/90102", 6666, true), widget.getNewBtn("3530904/90102", 6666, false));
+    widget.vPair_OChat_BtnChat.push_front(pair1);
+    QCOMPARE(widget.isChatOpen("3530904/90102"), true);
+
+    QPair<Chat*, QToolButton*> pair2(new Chat("3530904/90103", 7777, false), widget.getNewBtn("3530904/90103", 7777, false));
+    widget.vPair_OChat_BtnChat.push_front(pair2);
+
+    QCOMPARE(widget.isChatOpen("3530904/90103"), false);
 }
 
 /** 返回 true（当前端口上已存在群聊）
@@ -1333,39 +1366,6 @@ void PolyChatTester::mt_chatlist_getNewBtn()
 
     widget.updateBtnInvPair("3530904/90102", btn);
     QCOMPARE(widget.isChatOpen("3530904/90102"), false);
-}
-
-/** 生成的随机端口介于 PORT_MIN 与 PORT_MAX
- *  Генерирует случайные порты между PORT_MIN и PORT_MAX.
- *  @brief PolyChatTester::mt_chatlist_getRandomPort
- */
-bool PolyChatTester::mt_chatlist_getRandomPort()
-{
-    ChatList widget(nullptr, DAL::getLocalUserName(), DAL::getLocalUserGroupNumber(), DAL::getLocalIpAddress());
-    for (int i = 0; i < PORT_MAX - PORT_MIN; i++)
-    {
-        qint16 port = widget.getRandomPort();
-        if (port > PORT_MAX || port < PORT_MIN) return false;
-    }
-    return true;
-}
-
-/** 正常设置聊天窗口为打开或者关闭
- *  Окно чата открыто или закрыто.
- *  @brief PolyChatTester::mt_chatlist_setChatState
- */
-void PolyChatTester::mt_chatlist_setChatState()
-{
-    DAL::initLocalUser("Fox", "3530904/90102");
-    ChatList widget(nullptr, DAL::getLocalUserName(), DAL::getLocalUserGroupNumber(), DAL::getLocalIpAddress());
-    QPair<Chat*, QToolButton*> pair1(new Chat("3530904/90102", 6666, true), widget.getNewBtn("3530904/90102", 6666, false));
-    widget.vPair_OChat_BtnChat.push_front(pair1);
-    QCOMPARE(widget.isChatOpen("3530904/90102"), true);
-
-    QPair<Chat*, QToolButton*> pair2(new Chat("3530904/90103", 7777, false), widget.getNewBtn("3530904/90103", 7777, false));
-    widget.vPair_OChat_BtnChat.push_front(pair2);
-
-    QCOMPARE(widget.isChatOpen("3530904/90103"), false);
 }
 
 /** 当增加新的聊天群组时，ui 界面正确刷新
