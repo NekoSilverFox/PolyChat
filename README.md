@@ -1,26 +1,17 @@
-<style> 
-.centered
-{
-    text-align:center;
-}
-.titled
-{
-    font-size: xx-large;
-}
-</style>
-
 <!-- SPbSTU  -->
-<div class="centered">
-    <img width="250px" src="https://github.com/NekoSilverFox/NekoSilverfox/blob/master/icons/logo_building_spbstu.png?raw=true" alt="ogo_building_spbstu"><br><br>
-    <b>Санкт-Петербургский государственный политехнический университет</b><br>
-    <b>Институт компьютерных наук и технологий</b><br><br>
-    <b class="titled">PolyChat</b><br><br>
-    <b>Учебный чат</b><br><br>
-    <a href="/doc/README_CN.md">简体中文</a>
-</div>
+
+<p align="center">
+    <img width="250px" src="https://github.com/NekoSilverFox/NekoSilverfox/blob/master/icons/logo_building_spbstu.png?raw=true" align="center" alt="ogo_building_spbstu" />
+    <br><br>
+    <b><font size=4>Санкт-Петербургский государственный политехнический университет</font></b><br>
+    <b>Институт компьютерных наук и технологий</b>
+</p>
+<p align="center"><b><font size=6>PolyChat</font></b></p>
+<p align="center"><b>Учебный чат</b></p>
+<p align="center"><a href="/doc/README_CN.md">简体中文</a></p>
 <!-- SPbSTU 最后一行 -->
 
-<div class="centered">
+<div align=center>
 
 [![License](https://img.shields.io/badge/license-Apache%202.0-brightgreen)](LICENSE)
 
