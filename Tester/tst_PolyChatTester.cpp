@@ -171,6 +171,17 @@ private slots:
     void lt_TcpClient_x10            ();
     void ct_ChatBox_code_normal      ();
 
+    void e2e_add_new_chat            ();
+    void e2e_join_chat               ();
+    void e2e_search_chat             ();
+    void e2e_send_message            ();
+    void e2e_send_special_message    ();
+    void e2e_send_file               ();
+    void e2e_receive_file            ();
+    void e2e_clean_chat              ();
+    void e2e_save_chat               ();
+    void e2e_leave_chat              ();
+
     void e2e_Login_normal           ();
     void e2e_Login_empty_all        ();
     void e2e_Login_empty_name       ();
@@ -2028,6 +2039,62 @@ void PolyChatTester::ct_ChatBox_code_normal()
     QCOMPARE(textBrowser->toPlainText(), "测试！");
     textBrowser->clear();
 }
+
+void PolyChatTester::e2e_add_new_chat()
+{
+
+}
+
+void PolyChatTester::e2e_join_chat()
+{
+
+}
+
+void PolyChatTester::e2e_search_chat()
+{
+
+}
+
+void PolyChatTester::e2e_send_message()
+{
+
+}
+
+void PolyChatTester::e2e_send_special_message()
+{
+
+}
+
+void PolyChatTester::e2e_send_file()
+{
+
+}
+
+void PolyChatTester::e2e_receive_file()
+{
+
+}
+
+void PolyChatTester::e2e_clean_chat()
+{
+
+}
+
+void PolyChatTester::e2e_save_chat()
+{
+
+}
+
+void PolyChatTester::e2e_leave_chat()
+{
+
+}
+
+
+
+
+
+
 
 void PolyChatTester::e2e_Login_normal()
 {
