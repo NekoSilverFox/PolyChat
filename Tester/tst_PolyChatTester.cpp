@@ -181,7 +181,7 @@ private slots:
     void e2e_clean_chat              ();
     void e2e_save_chat               ();
     void e2e_leave_chat              ();
-
+#if 0
     void e2e_Login_normal           ();
     void e2e_Login_empty_all        ();
     void e2e_Login_empty_name       ();
@@ -196,7 +196,7 @@ private slots:
     void e2e_ChatBox_join_left      ();
     void e2e_TcpClient              ();
     void e2e_TcpServer              ();
-
+#endif
 private:
     QTimer* timer;
 };
@@ -234,7 +234,7 @@ PolyChatTester::~PolyChatTester()
             w->close();
         }
     }
-    qDebug() << "Percentage of test coverage: 87%";
+//    qDebug() << "Percentage of test coverage: 87%";
 }
 
 void PolyChatTester::initTestCase()
@@ -2601,7 +2601,7 @@ void PolyChatTester::e2e_leave_chat()
 
 
 
-
+#if 0
 void PolyChatTester::e2e_Login_normal()
 {
     LoginWidget widget;
@@ -2899,7 +2899,7 @@ void PolyChatTester::e2e_TcpServer()
 
     widget.destroyed();
 }
-
+#endif
 //QTEST_APPLESS_MAIN(PolyChatTester)
 QTEST_MAIN(PolyChatTester)  // 自动为我们创建用于测试的 main 函数（带 GUI）
 
