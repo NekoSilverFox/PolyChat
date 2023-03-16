@@ -45,7 +45,7 @@ public:
 private slots:
     void initTestCase();
     void cleanupTestCase();
-#if 0
+
     void ut_login_login_empty            ();
     void ut_login_group_empty            ();
     void ut_login_login_group_empty      ();
@@ -170,7 +170,7 @@ private slots:
     void lt_TcpServer_x10            ();
     void lt_TcpClient_x10            ();
     void ct_ChatBox_code_normal      ();
-#endif
+
     void e2e_add_new_chat            ();
     void e2e_join_chat               ();
     void e2e_search_chat             ();
@@ -246,7 +246,7 @@ void PolyChatTester::cleanupTestCase()
 {
     qDebug() << "End of all test runs";
 }
-#if 0
+
 /** 登录失败（用户名不能为空）
  *  Сбой входа в систему (имя пользователя не может быть пустым).
  *  @brief PolyChatTester::ut_login_login_empty
@@ -2039,7 +2039,7 @@ void PolyChatTester::ct_ChatBox_code_normal()
     QCOMPARE(textBrowser->toPlainText(), "测试！");
     textBrowser->clear();
 }
-#endif
+
 void PolyChatTester::e2e_add_new_chat()
 {
     LoginWidget loginWidget;
