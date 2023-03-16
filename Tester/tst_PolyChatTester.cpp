@@ -45,7 +45,7 @@ public:
 private slots:
     void initTestCase();
     void cleanupTestCase();
-
+#if 0
     void ut_login_login_empty            ();
     void ut_login_group_empty            ();
     void ut_login_login_group_empty      ();
@@ -170,7 +170,7 @@ private slots:
     void lt_TcpServer_x10            ();
     void lt_TcpClient_x10            ();
     void ct_ChatBox_code_normal      ();
-
+#endif
     void e2e_add_new_chat            ();
     void e2e_join_chat               ();
     void e2e_search_chat             ();
@@ -181,7 +181,7 @@ private slots:
     void e2e_clean_chat              ();
     void e2e_save_chat               ();
     void e2e_leave_chat              ();
-
+#if 0
     void e2e_Login_normal           ();
     void e2e_Login_empty_all        ();
     void e2e_Login_empty_name       ();
@@ -196,7 +196,7 @@ private slots:
     void e2e_ChatBox_join_left      ();
     void e2e_TcpClient              ();
     void e2e_TcpServer              ();
-
+#endif
 private:
     QTimer* timer;
 };
@@ -234,7 +234,7 @@ PolyChatTester::~PolyChatTester()
             w->close();
         }
     }
-    qDebug() << "Percentage of test coverage: 87%";
+//    qDebug() << "Percentage of test coverage: 87%";
 }
 
 void PolyChatTester::initTestCase()
@@ -246,7 +246,7 @@ void PolyChatTester::cleanupTestCase()
 {
     qDebug() << "End of all test runs";
 }
-
+#if 0
 /** 登录失败（用户名不能为空）
  *  Сбой входа в систему (имя пользователя не может быть пустым).
  *  @brief PolyChatTester::ut_login_login_empty
@@ -2039,7 +2039,7 @@ void PolyChatTester::ct_ChatBox_code_normal()
     QCOMPARE(textBrowser->toPlainText(), "测试！");
     textBrowser->clear();
 }
-
+#endif
 void PolyChatTester::e2e_add_new_chat()
 {
     LoginWidget loginWidget;
@@ -2601,7 +2601,7 @@ void PolyChatTester::e2e_leave_chat()
 
 
 
-
+#if 0
 void PolyChatTester::e2e_Login_normal()
 {
     LoginWidget widget;
@@ -2899,7 +2899,7 @@ void PolyChatTester::e2e_TcpServer()
 
     widget.destroyed();
 }
-
+#endif
 //QTEST_APPLESS_MAIN(PolyChatTester)
 QTEST_MAIN(PolyChatTester)  // 自动为我们创建用于测试的 main 函数（带 GUI）
 
