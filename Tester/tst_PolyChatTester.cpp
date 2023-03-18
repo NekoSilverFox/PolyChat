@@ -1715,6 +1715,8 @@ void PolyChatTester::pt_Login_load()
  */
 void PolyChatTester::pt_AddChat_load()
 {
+//    QBENCHMARK_ONCE
+
     QBENCHMARK
     {
         AddChat widget;
@@ -2047,6 +2049,7 @@ void PolyChatTester::e2e_add_new_chat()
     QLineEdit* group = loginWidget.findChild<QLineEdit*>("leUserGroupNumber");
     QPushButton* btnLogin = loginWidget.findChild<QPushButton*>("btnLogin");
 
+
     QTest::mouseClick(name, Qt::LeftButton);
     QTest::keyClicks(name, "Fox");
 
@@ -2061,17 +2064,22 @@ void PolyChatTester::e2e_add_new_chat()
     timer->start(TIMER_STEP);
     DAL::initLocalUser("Fox", "3530904/90102");
     ChatList chatList(nullptr, DAL::getLocalUserName(), DAL::getLocalUserGroupNumber(), DAL::getLocalIpAddress());
+    QToolButton* btn = chatList.getNewBtn("3530904/90102", 6666, false);
+    QPair<Chat*, QToolButton*> pair(new Chat("3530904/90102", 6666, false), btn);
     QToolButton* btnNewChat = chatList.findChild<QToolButton*>("btnNewChat");
     QTest::mouseClick(btnNewChat, Qt::LeftButton);
+    chatList.vPair_OChat_BtnChat.push_front(pair);
 
     AddChat addChat;
     QLineEdit* leNameNewChat = addChat.findChild<QLineEdit*>("leNameNewChat");
     QTest::mouseClick(leNameNewChat, Qt::LeftButton);
-    QTest::keyClicks(leNameNewChat, "3530904/90107");
+    QTest::keyClicks(leNameNewChat, "3530904/90102");
 
     QPushButton* btnAddChat = addChat.findChild<QPushButton*>("btnAddChat");
     QTest::mouseClick(btnAddChat, Qt::LeftButton);
     timer->stop();
+
+    QCOMPARE(chatList.vPair_OChat_BtnChat.count(), 1);
 }
 
 void PolyChatTester::e2e_join_chat()
@@ -2458,7 +2466,8 @@ void PolyChatTester::e2e_clean_chat()
 
     timer->start(TIMER_STEP);
     QToolButton* btnClean = chatBox.findChild<QToolButton*>("btnClean");
-    QTest::mouseClick(btnClean, Qt::LeftButton);
+    QSignalSpy spy(btnClean, &QToolButton::clicked);
+    QCOMPARE(spy.count(), 0);
     timer->stop();
 }
 
