@@ -537,7 +537,7 @@ CI 的编译和测试环境：
 | 85   |                                    |           |                                                              |
 | 86   | mt_chatlist_btnchat_exist          | ChatList  | 当增加新的聊天群组时，ui 界面正确刷新                        |
 | 87   | mt_chatbox_userjoin_list           | ChatBox   | 用户加入（用户列表正确刷新）                                 |
-| 88   | mt_chatbox_userjoin_conter         | ChatBox   | 用户加入（计数器正确增加，并且ui的显示格式及内容正确）       |
+| 88   | mt_chatbox_userjoin_counter        | ChatBox   | 用户加入（计数器正确增加，并且ui的显示格式及内容正确）       |
 | 89   | mt_chatbox_userjoin_msgTextBrowser | ChatBox   | 用户加入（msgTextBrowser 被刷新）                            |
 | 90   | mt_chatbox_userleft_list           | ChatBox   | 用户离开（用户列表正确刷新）                                 |
 | 91   | mt_chatbox_userleft_conter         | ChatBox   | 用户离开（计数器正确增加，并且ui的显示格式及内容正确）       |
@@ -554,47 +554,50 @@ CI 的编译和测试环境：
 
 ## 系统/端到端和其他测试
 
-|      | 测试名 | 类型     | 所属模块  | 说明（预期结果）    |
-| :--- | ------ | :------- | :-------- | :------------------ |
-| 98   | e2e_Login_normal | E2E | Login | 1. 模拟用户打开程序<br />2. 鼠标点击用户名输入框，并用键盘输入内容<br />3. 鼠标点击班级号输入框，并用键盘输入内容<br />4. 鼠标点击登录按钮 |
-| 99   | e2e_Login_empty_all | E2E | Login | 1. 模拟用户打开程序<br />2. 鼠标点击登录按钮 |
-| 100  | e2e_Login_empty_name | E2E | Login | 1. 模拟用户打开程序<br />2. 鼠标点击用户名输入框，并用键盘输入内容<br />3. 鼠标点击登录按钮 |
-| 101  | e2e_Login_empty_group | E2E | Login | 1. 模拟用户打开程序<br />2. 鼠标点击班级号输入框，并用键盘输入内容<br />3. 鼠标点击登录按钮 |
-| 102  | e2e_ChatList_AddChat | E2E | ChatList/Add Chat | 1. 用户进入主窗口（ChatList）<br />2. 鼠标点击“增加新群聊”按钮<br />3. 在弹出的“Add Chat”对话框中使用键盘输入内容<br />4. 点击确认按钮增加新群聊 |
-| 103  | e2e_ChatList_search | E2E | ChatList | 1. 用户进入主窗口（ChatList）<br />2. 鼠标点击搜索框<br />3. 使用键盘输入要搜索的群聊名称<br />4. 使用键盘删除若干字符 |
-| 104  | e2e_ChatBox_normal_send | E2E | ChatBox | 1. 用户进入一个群聊<br />2. 鼠标点击文本输入框<br />3. 输入一段文字<br />4. 点击发送<br />5. 用户点击退出群聊按钮 |
-| 105  | e2e_ChatBox_btnBold | E2E | ChatBox | 1. 用户进入一个群聊<br />2. 鼠标点击文本输入框<br />3. 输入一段文字<br />4. 点击文本加粗按钮<br />5. 输入一段文字<br />6. 点击发送<br />5. 用户点击退出群聊按钮 |
-| 106  | e2e_ChatBox_btnItalic | E2E | ChatBox | 1. 用户进入一个群聊<br />2. 鼠标点击文本输入框<br />3. 输入一段文字<br />4. 点击文本倾斜按钮<br />5. 输入一段文字<br />6. 点击发送<br />5. 用户点击退出群聊按钮 |
-| 107  | e2e_ChatBox_btnUnderLine | E2E | ChatBox | 1. 用户进入一个群聊<br />2. 鼠标点击文本输入框<br />3. 输入一段文字<br />4. 点击文本下划线按钮<br />5. 输入一段文字<br />6. 点击发送<br />5. 用户点击退出群聊按钮 |
-| 108  | e2e_ChatBox_other_user_left | E2E | ChatBox | 1. 用户进入一个群聊<br />2. 其他用户进入群聊<br />3. 鼠标点击文本输入框<br />4. 输入一段文字<br />5. 点击发送<br />6. 其他用户离开<br />7. 用户点击退出群聊按钮 |
-| 109  | e2e_ChatBox_join_left | E2E | ChatBox | 1. 用户创建并加入群聊<br />2. 用户 2 加入群聊<br />3. 用户 3 加入群聊<br />4. 用户 2 离开群聊<br />5. 用户点击退出群聊按钮 |
-| 110  | e2e_TcpClient | E2E | TcpClient | 1. 用户通过调用 TcpClient 窗口（指定端口、文件大小、文件路径）<br />2. 等待一段时间（模式文件传输所需的时间）<br />3. 退出TCP传输程序 |
-| 111  | e2e_TcpServer | E2E | TcpServer | 1. 用户通过调用 TcpServer 窗口（指定端口、文件大小、文件路径）<br />2. 等待一段时间（模式文件传输所需的时间）<br />3. 退出TCP接收程序 |
-| 112  | pt_Login_load                | 性能测试 | Login            | 窗口加载/调用的性能 |
-| 113  | pt_AddChat_load              | 性能测试 | Add Chat         | 窗口加载/调用的性能 |
-| 114  | pt_ChatList_load             | 性能测试 | ChatList         | 窗口加载/调用的性能 |
-| 115  | pt_TcpClient_load            | 性能测试 | TcpClient        | 窗口加载/调用的性能 |
-| 116  | pt_TcpServer_load            | 性能测试 | ChatBox          | 窗口加载/调用的性能 |
-| 117  | pt_ChatBox_load              | 性能测试 | ChatBox          | 窗口加载/调用的性能 |
-| 118  | pt_ChatBox_userjoin          | 性能测试 | ChatBox          | 用户进入群聊 |
-| 119  | pt_ChatBox_userjoin_left     | 性能测试 | ChatBox          | 用户进入群聊并伴随其他用户离开 |
-| 120  | pt_ChatBox_msgTextEdit_input | 性能测试 | ChatBox          | 模拟用户键盘在 msgTextEdit 中输入100 个字符，然后点击发送按钮 |
-| 121  | pt_Login_to_system           | 性能测试 | Login/ChatList   | 用户通过键盘输入姓名和班级编号，然后点击登录按钮进入系统（ChatList） |
-| 122  | pt_AddChat_ui                | 性能测试 | Add Chat/ChatBox | 通过 Add Chat 模拟用户输入，然后点击确认按钮来增加新的群聊（测试创建新的群聊窗口性能） |
-| 123  | lt_ChatBox_x100              | 负载测试 | ChatBox          | 用户**进入** 100 个群聊 |
-| 124  | lt_ChatBox_200user           | 负载测试 | ChatBox          | 保证每个聊天中可以存在 200 位用户 |
-| 125  | lt_ChatBox_2000char          | 负载测试 | ChatBox          | 用户发送 2000 个字符 |
-| 126  | lt_ChatBox_msg_change        | 负载测试 | ChatBox          | 用户输入消息后，然后改变字体的样式（加粗、斜体） |
-| 127  | lt_TcpServer_x10             | 负载测试 | TcpServer        | 用户调用 10 个 TcpServer 文件发送窗口（发送 10 个文件） |
-| 128  | lt_TcpCerver_x10             | 负载测试 | TcpClient        | 用户调用 10 个 TcpClient 文件发送窗口（接收 10 个文件） |
-| 129  | ct_ChatBox_code_normal       | 兼容性测试 | ChatBox        | 模拟用户通过键盘在 msgTextEdit 输入英文、中文、俄文。且 ui 显示正常，不乱码 |
-| 130  | GitHub CI | 跨平台测试（自动测试） | ALL | 保证在 macOS 和 Windows 上可以编译和运行 |
-| 131  | GitHub CI | 自动化测试 | ALL | 在 macOS 和 Windows 上进行自动编译和测试 |
-| 132  | GitHub CI | 兼容性测试 | ALL | 在 Qt6.2.2 环境下编译，并保证 macOS 最小的版本为 10.12；Windows 最小版本为 2019 |
+*关于持续集成和在GitHub中设置触发器的更多信息，请参见前面的集成测试部分。*
+
+| 编号 | 测试名                   | 说明（预期结果）                                             |
+| ---- | ------------------------ | ------------------------------------------------------------ |
+| 96   | e2e_add_new_chat         | 1. 由用户打开程序<br/>2. 用户点击用户名输入栏，用键盘输入内容<br/>3. 用户点击组号输入栏，用键盘输入内容<br/>4. 用户在登录按钮上点击鼠标<br/>5. 用户点击 "添加新的群组聊天 "按钮<br/>6. 用户在出现的 "添加聊天 "对话框中输入文字<br/>7. 用户点击 "确认 "按钮，添加新的群聊 |
+| 97   | e2e_join_chat            | 1-4. 用户已登录<br/>5. 用户点击聊天列表中的聊天按钮          |
+| 98   | e2e_search_chat          | 1-4. 用户已登录<br/>5. 用户点击聊天搜索栏，用键盘输入一个名字<br/>6. 用户点击找到的聊天列表中的聊天按钮 |
+| 99   | e2e_send_message         | 1-4. 用户已登录<br/>5. 用户点击聊天列表中的聊天按钮<br/>6. 用户点击聊天区域，用键盘输入内容<br/>7. 用户点击 "发送 "按钮 |
+| 100  | e2e_send_special_message | 1-4. 用户已登录<br/>5. 用户点击聊天列表中的聊天按钮<br/>6. 用户点击聊天区域，用键盘输入内容<br/>7. 用户点击文字更改样式按钮（加粗、倾斜等）<br/>8. 用户点击发送按钮 |
+| 101  | e2e_send_file            | 1-4. 用户已登录<br/>5. 用户点击聊天列表中的聊天按钮<br/>6. 用户点击发送文件按钮<br/>7. 用户选择一个要发送的文件<br/>8. 用户按下发送按钮 |
+| 102  | e2e_receive_file         | 1-4. 用户已登录<br/>5. 用户点击聊天列表中的聊天按钮<br/>6. 当出现对话框询问他们是否要接受文件时，用户点击 "是 "按钮<br/>7. 用户选择保存所接收文件的目录和文件名<br/>8. 用户按下保存按钮 |
+| 103  | e2e_clean_chat           | 1-4. 用户已登录<br/>5. 用户点击聊天列表中的聊天按钮<br/>6. 用户点击 "清除聊天 "按钮 |
+| 104  | e2e_save_chat            | 1-4. 用户已登录<br/>5. 用户点击聊天列表中的聊天按钮<br/>6. 用户点击 "保存聊天 "按钮 |
+| 105  | e2e_leave_chat           | 1-4. 用户已登录<br/>5. 用户点击聊天列表中的聊天按钮<br/>6. 用户点击聊天区域，用键盘输入内容<br/>7. 用户点击发送按钮<br/>8. 其他用户加入群聊<br/>9. 其他用户离开群聊<br />10. 用户点击 "退出聊天 "按钮 |
 
 **GitHub 结果：**
 
 ![image-20230219131232852](./pic/image-20230219131232852.png)
+
+## 其他测试
+
+|      | 测试名 | 类型     | 所属模块  | 说明（预期结果）    |
+| :--- | ------ | :------- | :-------- | :------------------ |
+| 106  | pt_Login_load                | 性能测试 | Login            | 窗口加载/调用的性能 |
+| 107  | pt_AddChat_load              | 性能测试 | Add Chat         | 窗口加载/调用的性能 |
+| 108  | pt_ChatList_load             | 性能测试 | ChatList         | 窗口加载/调用的性能 |
+| 109  | pt_TcpClient_load            | 性能测试 | TcpClient        | 窗口加载/调用的性能 |
+| 110  | pt_TcpServer_load            | 性能测试 | ChatBox          | 窗口加载/调用的性能 |
+| 111  | pt_ChatBox_load              | 性能测试 | ChatBox          | 窗口加载/调用的性能 |
+| 112  | pt_ChatBox_userjoin          | 性能测试 | ChatBox          | 用户进入群聊 |
+| 113  | pt_ChatBox_userjoin_left     | 性能测试 | ChatBox          | 用户进入群聊并伴随其他用户离开 |
+| 114  | pt_ChatBox_msgTextEdit_input | 性能测试 | ChatBox          | 模拟用户键盘在 msgTextEdit 中输入100 个字符，然后点击发送按钮 |
+| 115  | pt_Login_to_system           | 性能测试 | Login/ChatList   | 用户通过键盘输入姓名和班级编号，然后点击登录按钮进入系统（ChatList） |
+| 116  | pt_AddChat_ui                | 性能测试 | Add Chat/ChatBox | 通过 Add Chat 模拟用户输入，然后点击确认按钮来增加新的群聊（测试创建新的群聊窗口性能） |
+| 117  | lt_ChatBox_x100              | 负载测试 | ChatBox          | 用户**进入** 100 个群聊 |
+| 118  | lt_ChatBox_200user           | 负载测试 | ChatBox          | 保证每个聊天中可以存在 200 位用户 |
+| 119  | lt_ChatBox_2000char          | 负载测试 | ChatBox          | 用户发送 2000 个字符 |
+| 120  | lt_ChatBox_msg_change        | 负载测试 | ChatBox          | 用户输入消息后，然后改变字体的样式（加粗、斜体） |
+| 121  | lt_TcpServer_x10             | 负载测试 | TcpServer        | 用户调用 10 个 TcpServer 文件发送窗口（发送 10 个文件） |
+| 122  | lt_TcpCerver_x10             | 负载测试 | TcpClient        | 用户调用 10 个 TcpClient 文件发送窗口（接收 10 个文件） |
+| 123  | ct_ChatBox_code_normal       | 兼容性测试 | ChatBox        | 模拟用户通过键盘在 msgTextEdit 输入英文、中文、俄文。且 ui 显示正常，不乱码 |
+| 124  | GitHub CI | 跨平台测试（自动测试） | ALL | 保证在 macOS 和 Windows 上可以编译和运行 |
+| 125  | GitHub CI | 自动化测试 | ALL | 在 macOS 和 Windows 上进行自动编译和测试 |
+| 126  | GitHub CI | 兼容性测试 | ALL | 在 Qt6.2.2 环境下编译，并保证 macOS 最小的版本为 10.12；Windows 最小版本为 2019 |
 
 
 
@@ -604,9 +607,9 @@ CI 的编译和测试环境：
 | -------------------- | ---- |
 | 单元测试             | 77   |
 | 接口测试             | 18   |
-| 系统/End-to-End 测试 | 14   |
+| 系统/End-to-End 测试 | 10   |
 | 其他测试             | 21   |
-| 总共                 | 130  |
+| 总共                 | 126  |
 
 
 

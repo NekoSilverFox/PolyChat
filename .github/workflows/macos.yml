@@ -78,3 +78,5 @@ jobs:
           make
           ls
           ./PolyChatTester -v2 -txt
+          echo '\n\n==============================./PolyChatTester  -txt==============================\n\n'
+          ./PolyChatTester -txt

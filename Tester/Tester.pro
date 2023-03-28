@@ -40,3 +40,5 @@ FORMS += \
     ../App/loginwidget.ui \
     ../App/tcpclient.ui \
     ../App/tcpserver.ui
+
+QMAKE_CXXFLAGS += -w
