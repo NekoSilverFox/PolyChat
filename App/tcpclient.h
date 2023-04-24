@@ -29,6 +29,7 @@ private:
 private:
     Ui::TcpClient *ui;
     QMovie* movie;  // 动图
+    QTimer* timer_progressBar; // 更新进度条用的定时器
 
     /* 参数传入 */
     QString fileName;

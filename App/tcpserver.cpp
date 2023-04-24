@@ -135,15 +135,21 @@ void TcpServer::sendData()
     qint64 lenPackage = 0;  // 记录[当前]数据包大小
     this->bytesAlreadySend = 0;
 
+    // 使用定时器更新进度条
+    QTimer* timer = new QTimer(this);
+    connect(timer, &QTimer::timeout, this,
+            [=](){
+        ui->progressBar->setValue(this->bytesAlreadySend / this->fileSize * 100);
+        ui->progressBar->update();
+    });
+
     do {
+        timer->start(10);
         char buf[4 * 1024] = {0};  // 【数据包】每次发送的数据 4Kb
         lenPackage = file.read(buf, sizeof(buf));
         lenPackage = tcpSocket->write(buf, lenPackage);  // 发送数据，读多少，发多少
 
         this->bytesAlreadySend += lenPackage;  // 发送的数据需要累积
-
-        /* 更新 ui 界面及 */
-        ui->progressBar->setValue(this->bytesAlreadySend / this->fileSize * 100);
 
 #if !QT_NO_DEBUG
         appendTextBrowser(Qt::darkCyan, QString("[DEBUG] TCP-Server this->bytesAlreadySend:%1").arg(this->bytesAlreadySend));
@@ -153,6 +159,10 @@ void TcpServer::sendData()
 
     if (this->bytesAlreadySend == this->fileSize)
     {
+        timer->stop();
+        ui->progressBar->setValue(this->bytesAlreadySend / this->fileSize * 100);
+        ui->progressBar->update();
+
         appendTextBrowser(Qt::green, "[INFO] Success to send file\n#############################\n\n");
         this->file.close();
         this->tcpSocket->disconnectFromHost();
