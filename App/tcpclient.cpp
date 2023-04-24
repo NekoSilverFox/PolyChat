@@ -67,6 +67,15 @@ TcpClient::TcpClient(QWidget *parent, QString fileName, qint64 fileSizeBytes, QH
 
     appendTextBrowser(Qt::blue, "[INFO] Initializing the TCP client done");
     appendTextBrowser(Qt::red, "[INFO] Click `Save` to receive the file");
+
+
+    /* 使用定时器更新进度条 */
+    timer_progressBar = new QTimer(this);
+    connect(timer_progressBar, &QTimer::timeout, this,
+            [=](){
+        ui->progressBar->setValue(bytesReceived / fileSizeBytes * 100);  // 更新进度条
+        ui->progressBar->update();
+    });
 }
 
 /** 点击 Save 文件按钮，初始化数据，并且保存文件
@@ -124,6 +133,7 @@ void TcpClient::receiveTcpDataAndSave()
         appendTextBrowser(Qt::blue, "[INFO] Start parsing the data header");
         this->isHeaderReceived = true;
         this->bytesReceived = 0;
+        timer_progressBar->start(10);
         ui->progressBar->setValue(0);
 
         /** 解析 header
@@ -146,13 +156,17 @@ void TcpClient::receiveTcpDataAndSave()
         {
             this->bytesReceived += lenWrite;
         }
-        ui->progressBar->setValue(bytesReceived / fileSizeBytes * 100);  // 更新进度条
+
 
 #if !QT_NO_DEBUG
         appendTextBrowser(Qt::darkCyan, QString("[DEBUG] TCP-Client bytesReceived:%1").arg(bytesReceived));
 #endif
         if (fileSizeBytes == bytesReceived)
         {
+            timer_progressBar->stop();
+            ui->progressBar->setValue(bytesReceived / fileSizeBytes * 100);  // 更新进度条
+            ui->progressBar->update();
+
             ui->textBrowser->setTextColor(Qt::green);
             ui->textBrowser->append(QString("[INFO] File %1 received successfully, already saved to the path: %2").arg(fileName).arg(file.fileName()));
 
