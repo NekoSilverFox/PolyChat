@@ -291,6 +291,9 @@ Receipter</string>
         <property name="text">
          <string>Cancel</string>
         </property>
+        <property name="shortcut">
+         <string>Esc</string>
+        </property>
        </widget>
       </item>
       <item>
@@ -302,6 +305,9 @@ Receipter</string>
         </property>
         <property name="text">
          <string>Save</string>
+        </property>
+        <property name="shortcut">
+         <string>Return</string>
         </property>
        </widget>
       </item>
