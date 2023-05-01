@@ -259,7 +259,7 @@
                </size>
               </property>
               <property name="shortcut">
-               <string>Ctrl+B</string>
+               <string>Ctrl+F</string>
               </property>
               <property name="checkable">
                <bool>false</bool>
@@ -502,6 +502,22 @@
    </item>
   </layout>
  </widget>
+ <tabstops>
+  <tabstop>btnBold</tabstop>
+  <tabstop>btnItalic</tabstop>
+  <tabstop>btnUnderLine</tabstop>
+  <tabstop>btnColor</tabstop>
+  <tabstop>btnFileSend</tabstop>
+  <tabstop>btnSave</tabstop>
+  <tabstop>btnClean</tabstop>
+  <tabstop>cbxFontSize</tabstop>
+  <tabstop>cbxFontType</tabstop>
+  <tabstop>msgTextEdit</tabstop>
+  <tabstop>btnSend</tabstop>
+  <tabstop>btnExit</tabstop>
+  <tabstop>msgTextBrowser</tabstop>
+  <tabstop>tbUser</tabstop>
+ </tabstops>
  <resources>
   <include location="resource.qrc"/>
  </resources>

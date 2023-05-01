@@ -94,6 +94,9 @@
         <property name="text">
          <string>OK</string>
         </property>
+        <property name="shortcut">
+         <string>Return</string>
+        </property>
        </widget>
       </item>
      </layout>
@@ -101,6 +104,11 @@
    </item>
   </layout>
  </widget>
+ <tabstops>
+  <tabstop>leNameNewChat</tabstop>
+  <tabstop>btnAddChat</tabstop>
+  <tabstop>btnCancelAddChat</tabstop>
+ </tabstops>
  <resources/>
  <connections/>
 </ui>
