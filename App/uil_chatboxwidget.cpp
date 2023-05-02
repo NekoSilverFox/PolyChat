@@ -12,6 +12,7 @@
 #include <QColorDialog>
 #include <QFileDialog>
 #include <QDesktopServices>
+#include <QNetworkAddressEntry>
 
 ChatBoxWidget::ChatBoxWidget(QWidget* parent, QString name, qint16 port)
     : QWidget(parent)
@@ -207,6 +208,7 @@ void ChatBoxWidget::sendUDPSignal(const SignalType type)
     dataStream << localIpAddress_6;         // 第6段：当前（本地）用户ip localIpAddress
 
     /* 添加消息块 7 的内容 */
+    qint64 isSucc;
     switch (type) {
 
     case SignalType::ChatExist:
@@ -227,9 +229,14 @@ void ChatBoxWidget::sendUDPSignal(const SignalType type)
         if (ui->msgTextEdit->toPlainText().isEmpty()) return;
 
         dataStream << getAndCleanMsg();
-        udpSocketOnPortChatBox->writeDatagram(resByteArray,
-                                              QHostAddress(QHostAddress::Broadcast),
-                                              port);
+        isSucc = udpSocketOnPortChatBox->writeDatagram(resByteArray,
+                                                       QHostAddress(QHostAddress::Broadcast),
+                                                       port);
+        if (-1 == isSucc)
+        {
+            ui->msgTextBrowser->append("[ERROR] Message delivery failure\n");
+        }
+
         break;  // END SignalType::Msg
 
     case SignalType::File:
