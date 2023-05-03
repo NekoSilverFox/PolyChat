@@ -503,6 +503,8 @@
   </layout>
  </widget>
  <tabstops>
+  <tabstop>msgTextEdit</tabstop>
+  <tabstop>btnSend</tabstop>
   <tabstop>btnBold</tabstop>
   <tabstop>btnItalic</tabstop>
   <tabstop>btnUnderLine</tabstop>
@@ -512,11 +514,9 @@
   <tabstop>btnClean</tabstop>
   <tabstop>cbxFontSize</tabstop>
   <tabstop>cbxFontType</tabstop>
-  <tabstop>msgTextEdit</tabstop>
-  <tabstop>btnSend</tabstop>
-  <tabstop>btnExit</tabstop>
   <tabstop>msgTextBrowser</tabstop>
   <tabstop>tbUser</tabstop>
+  <tabstop>btnExit</tabstop>
  </tabstops>
  <resources>
   <include location="resource.qrc"/>
