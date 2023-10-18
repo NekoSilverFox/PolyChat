@@ -263,6 +263,8 @@ TCP 采用了定制的通讯协议，其中存在 4 个部分：
 
 # 测试
 
+> 由于 GitHub 不再支持 MacOS 10.15, clang_64 所以已经将持续集成 CI 中的 MacOS 版本更新为 MacOS 11.0
+
 ## 说明
 
 将使用 QTest 对 PolyChat 进行测试。
