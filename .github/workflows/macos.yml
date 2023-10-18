@@ -58,7 +58,7 @@ jobs:
     steps:
       - name: Test on macOS 
         run: |
-          cd ./Tester
+          cd ../Tester
           ls
           qmake CONFIG+=debug
           make
