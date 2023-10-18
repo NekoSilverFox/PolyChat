@@ -33,13 +33,13 @@ TcpClient::TcpClient(QWidget *parent, QString fileName, qint64 fileSizeBytes, QH
 
     this->tcpSocket = new QTcpSocket(this);
     /* 如果与主机建立连接 */
-    connect(this->tcpSocket, &QTcpSocket::connected, [=](){
+    connect(this->tcpSocket, &QTcpSocket::connected, this, [=](){
         ui->btnSave->setEnabled(false);
         appendTextBrowser(Qt::green, "[INFO] Successfully establish a link with the host");
     });
 
     /* 如果与主机断开连接 */
-    connect(this->tcpSocket, &QTcpSocket::disconnected, [=](){
+    connect(this->tcpSocket, &QTcpSocket::disconnected, this, [=](){
         ui->btnSave->setEnabled(true);
         appendTextBrowser(Qt::darkYellow, "[WARNING] Disconnected with the host");
     });
@@ -63,7 +63,7 @@ TcpClient::TcpClient(QWidget *parent, QString fileName, qint64 fileSizeBytes, QH
     connect(ui->btnSave, &QPushButton::clicked, this, &TcpClient::connectTcpServerAndOpenFile);
 
     /* 点击 Cancel 按钮 */
-    connect(ui->btnCancel, &QPushButton::clicked, [=](){ this->close(); });
+    connect(ui->btnCancel, &QPushButton::clicked, this, [=](){ this->close(); });
 
     appendTextBrowser(Qt::blue, "[INFO] Initializing the TCP client done");
     appendTextBrowser(Qt::red, "[INFO] Click `Save` to receive the file");
