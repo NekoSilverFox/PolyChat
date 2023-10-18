@@ -32,7 +32,7 @@ QString      localUserGroupNumber    = "";               // Group number (get in
 QHostAddress localIpAddress          = QHostAddress();
 ChatList*    chatList                = nullptr;          // Widget ChatList (Only one)
 
-unsigned int const TIMER_STEP        = 50;
+unsigned int const TIMER_STEP        = 1000;             // 对话框弹出市场，缩短此项只会影响展示效果。不会影响测试的最终结果
 
 class PolyChatTester : public QObject
 {
