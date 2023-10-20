@@ -20,7 +20,9 @@ jobs:
         qt_ver: [6.2.2]
         qt_arch: [clang_64]
     env:
-      targetName: PolyChatApp
+      targetName: PolyChat
+      # 在 Qt pro 文件中的
+      QtApplicationName: App
     steps:
       # macos 11.0 默认环境变了,要指定
       - name: prepare env
@@ -37,14 +39,11 @@ jobs:
       - uses: actions/checkout@v2
         with:
           fetch-depth: 1
-      - name: Build on macOS 
-        run: |
-          cd ./App
-          qmake
-          make
       - name: Test on macOS 
         run: |
-          cd ../Tester
+          echo '-------------------'
+          cd ./Tester
+          echo '-------------------'
           ls
           qmake CONFIG+=debug
           make
@@ -52,3 +51,33 @@ jobs:
           ./PolyChatTester -v2 -txt
           echo '\n\n==============================./PolyChatTester  -txt==============================\n\n'
           ./PolyChatTester -txt
+      - name: Build on macOS 
+        run: |
+          ls
+          cd ./${QtApplicationName}
+          qmake
+          make
+      # 打包
+      - name: Package
+        run: |
+          ls
+          cd ./${QtApplicationName}
+          echo '------------------'
+          ls
+          # 拷贝依赖 pro文件里的名称：
+          macdeployqt ${QtApplicationName}.app -qmldir=. -verbose=1 -dmg
+      # 上传artifacts          
+      - uses: actions/upload-artifact@v2
+        with:
+          name: ${{ env.targetName }}_${{ matrix.os }}_${{matrix.qt_ver}}.zip
+          path: ${QtApplicationName}.app
+      # tag 上传Release
+      - name: uploadRelease
+        if: startsWith(github.event.ref, 'refs/tags/')
+        uses: svenstaro/upload-release-action@v2
+        with:
+          repo_token: ${{ secrets.GITHUB_TOKEN }}
+          file: ${QtApplicationName}.dmg
+          asset_name: ${{ env.targetName }}_${{ matrix.os }}_${{ matrix.qt_ver }}.dmg
+          tag: ${{ github.ref }}
+          overwrite: true
