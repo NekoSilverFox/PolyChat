@@ -102,7 +102,7 @@ TcpServer::TcpServer(QWidget *parent, QString filePath, QHostAddress ip, qint16 
         if (len > 0)
         {
             appendTextBrowser(Qt::blue, "[INFO] The file header is sent successfully");
-            timer->start(TCP_DELAY_MS);
+            timer->start(TCP_DELAY_MS);  // TCP 文件发送间隔，防止黏包
             return;
         }
         else
@@ -198,7 +198,7 @@ void  TcpServer::closeEvent(QCloseEvent* event)
         event->ignore();
     }
 
-    /* 防止在未发送文件（tcpSocket 未初始化）的情况下关闭窗口出现的奔溃 */
+    /* 【注意】这里可以防止在未发送文件（tcpSocket 未初始化）的情况下关闭窗口出现的崩溃 */
     if (nullptr != this->tcpSocket)
     {
         tcpSocket->disconnectFromHost(); //断开连接
