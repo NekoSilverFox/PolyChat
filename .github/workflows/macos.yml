@@ -59,7 +59,6 @@ jobs:
       # 打包
       - name: Package
         run: |
-          ls
           cd ./${QtApplicationName}
           # mv ./${QtApplicationName}/${QtApplicationName}.app .
           echo '------------------'
