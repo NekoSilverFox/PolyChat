@@ -44,7 +44,6 @@ jobs:
           echo '-------------------'
           cd ./Tester
           echo '-------------------'
-          ls
           qmake CONFIG+=debug
           make
           ls
@@ -62,6 +61,7 @@ jobs:
         run: |
           ls
           cd ./${QtApplicationName}
+          # mv ./${QtApplicationName}/${QtApplicationName}.app .
           echo '------------------'
           ls
           # 拷贝依赖 pro文件里的名称：
@@ -70,14 +70,14 @@ jobs:
       - uses: actions/upload-artifact@v2
         with:
           name: ${{ env.targetName }}_${{ matrix.os }}_${{matrix.qt_ver}}.zip
-          path: ${QtApplicationName}.app
+          path: ${{ env.QtApplicationName }}/${{ env.QtApplicationName }}.app
       # tag 上传Release
       - name: uploadRelease
         if: startsWith(github.event.ref, 'refs/tags/')
         uses: svenstaro/upload-release-action@v2
         with:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
-          file: ${QtApplicationName}.dmg
+          file: ${{ env.QtApplicationName }}/${{ env.QtApplicationName }}.dmg
           asset_name: ${{ env.targetName }}_${{ matrix.os }}_${{ matrix.qt_ver }}.dmg
           tag: ${{ github.ref }}
           overwrite: true
