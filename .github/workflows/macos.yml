@@ -1,4 +1,4 @@
-name: macOS Build and Test
+name: macOS CI/CD
 on: 
   push:
     paths:
@@ -12,16 +12,16 @@ on:
       - '.github/workflows/macos.yml' 
 jobs:
   build:
-    name: Build
+    name: CICD
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
         os: [macos-11.0]
-        qt_ver: [6.2.2]
+        qt_ver: [6.2.2, 6.6.0]
         qt_arch: [clang_64]
     env:
       targetName: PolyChat
-      # 在 Qt pro 文件中的
+      # 在 Qt pro 文件中的 TARGET
       QtApplicationName: App
     steps:
       # macos 11.0 默认环境变了,要指定
@@ -30,15 +30,21 @@ jobs:
         run: |
           softwareupdate --all --install --force
           sudo xcode-select --print-path
-          sudo xcode-select --switch /Library/Developer/CommandLineTools       
+          sudo xcode-select --switch /Library/Developer/CommandLineTools
+      #参考：https://ddalcino.github.io/aqt-list-server/
       - name: Install Qt
         uses: jurplel/install-qt-action@v3
         with:
           version: ${{ matrix.qt_ver }}
           cached: 'false'
+          #下面这几行不用也可以，删除不必要的控件能减少包体积
+          aqtversion: '==3.1.*'
+          # modules: 'qtnetworkauth'
+          # tools: 'tools_qtcreator'
       - uses: actions/checkout@v2
         with:
           fetch-depth: 1
+      # MacOS 下测试（使用 QTest）
       - name: Test on macOS 
         run: |
           echo '-------------------'
@@ -50,6 +56,7 @@ jobs:
           ./PolyChatTester -v2 -txt
           echo '\n\n==============================./PolyChatTester  -txt==============================\n\n'
           ./PolyChatTester -txt
+      # 编译 Release 版本
       - name: Build on macOS 
         run: |
           ls
@@ -57,7 +64,7 @@ jobs:
           qmake
           make
       # 打包
-      - name: Package
+      - name: Package on MacOS
         run: |
           cd ./${QtApplicationName}
           # mv ./${QtApplicationName}/${QtApplicationName}.app .
@@ -71,7 +78,7 @@ jobs:
           name: ${{ env.targetName }}_${{ matrix.os }}_${{matrix.qt_ver}}.zip
           path: ${{ env.QtApplicationName }}/${{ env.QtApplicationName }}.app
       # tag 上传Release
-      - name: uploadRelease
+      - name: Upload Release
         if: startsWith(github.event.ref, 'refs/tags/')
         uses: svenstaro/upload-release-action@v2
         with:

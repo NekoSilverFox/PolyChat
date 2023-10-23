@@ -1,4 +1,4 @@
-name: Windows Build and Test
+name: Windows CD/CD
 on: 
   # push代码时触发workflow
   push:
@@ -28,6 +28,11 @@ jobs:
             qt_arch: win64_msvc2019_64
             msvc_arch: x64
             qt_arch_install: msvc2019_64
+
+          - qt_ver: 6.6.0
+            qt_arch: win64_msvc2019_64
+            msvc_arch: x64
+            qt_arch_install: msvc2019_64
     env:
       # 在 Qt pro 文件中的
       QtApplicationName: App.exe
@@ -44,12 +49,18 @@ jobs:
           # target: ${{ matrix.qt_target }}
           arch: ${{ matrix.qt_arch }}
           cached: 'false'
-          aqtversion: '==2.0.5'          
+          aqtversion: '==3.1.*'
+          #下面这几行不用也可以，删除不必要的控件能减少包体积
+          # host: 'windows'
+          # target: 'desktop'
+          # toolsOnly: 'true'
+          # modules: 'qtnetworkauth'
+          # tools: 'tools_qtcreator_gui'
       # 拉取代码
       - uses: actions/checkout@v2
         with:
           fetch-depth: 1
-      # msvc测试
+      # msvc测试（使用 QTest）
       - name: msvc-test
         id: test
         shell: cmd
