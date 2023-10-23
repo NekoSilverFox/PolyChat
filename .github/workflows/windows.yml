@@ -1,4 +1,4 @@
-name: Windows CD/CD
+name: Windows CI/CD
 on: 
   # push代码时触发workflow
   push:
@@ -34,6 +34,7 @@ jobs:
             msvc_arch: x64
             qt_arch_install: msvc2019_64
     env:
+      targetName: PolyChat
       # 在 Qt pro 文件中的
       QtApplicationName: App.exe
     # 步骤
@@ -50,8 +51,8 @@ jobs:
           arch: ${{ matrix.qt_arch }}
           cached: 'false'
           aqtversion: '==3.1.*'
+          host: 'windows'
           #下面这几行不用也可以，删除不必要的控件能减少包体积
-          # host: 'windows'
           # target: 'desktop'
           # toolsOnly: 'true'
           # modules: 'qtnetworkauth'
@@ -117,6 +118,6 @@ jobs:
         with:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
           file: ${{ steps.package.outputs.packageName }}.zip
-          asset_name: ${{ steps.package.outputs.packageName }}.zip
+          asset_name: ${{ env.targetName }}_${{ steps.package.outputs.packageName }}.zip
           tag: ${{ github.ref }}
           overwrite: true
