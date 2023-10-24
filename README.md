@@ -7,60 +7,23 @@
     <b>Институт компьютерных наук и технологий</b>
 </p>
 <p align="center"><b><font size=6>PolyChat</font></b></p>
-<p align="center"><b>Учебный чат</b></p>
-<p align="center"><a href="/doc/README_CN.md">简体中文</a></p>
+<p align="center"><b>Кроссплатформенный чат для локальной сети, основанный на разработке QT</b></p>
+<p align="center"><a href="/doc/README_CN.md">简体中文</a> <a href="/doc/README_EN.md">English</a></p>
+
 <!-- SPbSTU 最后一行 -->
 
 <div align=center>
 
 [![License](https://img.shields.io/badge/license-Apache%202.0-brightgreen)](LICENSE)
 
-[![Build for MacOS](https://github.com/NekoSilverFox/PolyChat/actions/workflows/macos.yml/badge.svg)](https://github.com/NekoSilverFox/PolyChat/actions/workflows/macos.yml)
-[![Build for Windows](https://github.com/NekoSilverFox/PolyChat/actions/workflows/windows.yml/badge.svg)](https://github.com/NekoSilverFox/PolyChat/actions/workflows/windows.yml)
+[![MacOS CI/CD](https://github.com/NekoSilverFox/PolyChat/actions/workflows/macos.yml/badge.svg)](https://github.com/NekoSilverFox/PolyChat/actions/workflows/macos.yml)
+[![Windows CI/CD](https://github.com/NekoSilverFox/PolyChat/actions/workflows/windows.yml/badge.svg)](https://github.com/NekoSilverFox/PolyChat/actions/workflows/windows.yml)
 
 </div>
 
-# Содержание
+ <p align="center"><b><font size=6>Содержание</font></b></p>
 
-+ [Участники проекта и планирование](#участники-проекта-и-планирование)
-+ [Требования](#требования)
-  - [Системные требования](#системные-требования)
-  - [Технические требования](#технические-требования)
-+ [Функциональная спецификация](#функциональная-спецификация)
-+ [HLD](#hld)
-  - [Дизайн GUI](#дизайн-gui)
-    * [Окно авторизации](#окно-авторизации)
-    * [Окно списка групповых чатов](#окно-списка-групповых-чатов)
-    * [Окно чата](#окно-чата)
-  - [Архитектура](#архитектура)
-  - [Диаграмма классов](#диаграмма-классов)
-  - [Раздел группового чата UDP и список групп](#раздел-группового-чата-udp-и-список-групп)
-    * [Собственный протокол взаимодействия UDP](#собственный-протокол-взаимодействия-udp)
-    * [Сервер](#сервер)
-    * [Клиент](#клиент)
-  - [Секция передачи файлов TCP](#секция-передачи-файлов-tcp)
-    * [Собственный протокол взаимодействия TCP](#собственный-протокол-взаимодействия-tcp)
-    * [Сторона отправителя](#сторона-отправителя)
-    * [Сторона получателя](#сторона-получателя)
-  - [Потоки данных](#потоки-данных)
-+ [Тестирование](#тестирование)
-  - [Описание](#описание)
-  - [Процедура расширения тестового набора](#процедура-расширения-тестового-набора)
-  - [Модульное тестирование](#модульное-тестирование)
-  - [Интеграционное тестирование](#интеграционное-тестирование)
-  - [Системное/End-to-End тестирование](#системноеend-to-end-тестирование)
-  - [Другое тестирование](#другое-тестирование)
-
-
-# Участники проекта и планирование
-
-| Участник        | Ответственность                                                                        |
-|-----------------|----------------------------------------------------------------------------------------|
-| Валерий Фофанов | Внедрить функциональные модули, написать документацию                                  |
-| Ли Ицзя         | Внедрить функциональные модули, поддерживать Канбан                                    |
-| Мэн Цзянин      | Дизайн формы, построение и организация каркаса кода, реализация функциональных модулей |
-
-
+[toc]
 
 # Требования
 
@@ -95,6 +58,8 @@ PolyChat - это кроссплатформенное программное о
 - Когда пользователь отправляет сообщение, оно транслируется на порт
 
 - Socket UDP привязывается за фиксированным портом, а сигнал и слот используются для прослушивания входящих данных
+
+- Автоматизация тестирования, сборки, упаковки и выпуска с помощью CI/CD для Action на платформе GitHub
 
 
 
@@ -508,36 +473,6 @@ K. Простота расширения: определяемые пользо�
     }
     ```
 
-
-
-**Непрерывная интеграция:**
-
-Использует сервер непрерывной интеграции GitHub для запуска триггеров при внесении изменений в код и запуска автоматической компиляции и автоматического тестирования. Ниже приведен код для триггера:
-
-```yaml
-name: macOS Build and Test
-on: 
-  push:
-    paths:
-      - 'App/**'
-      - 'Tester/**'
-      - '.github/workflows/macos.yml'
-  pull_request:
-    paths:
-      - 'App/**'
-      - 'Tester/**'
-      - '.github/workflows/macos.yml' 
-```
-
-Среда компиляции и тестирования CI:
-
-- Windows: Qt6.2.2, win64_msvc2019_64, msvc2019_64
-- macOS: Qt6.2.2, macos-10.15, clang_64
-
-![image-20230218155228161](doc/pic/image-20230218155228161.png)
-
-![image-20230218155712711](doc/pic/image-20230218155712711.png)
-
 **Тестирования:**
 
 |     | Название тестирования              | Связанные модули | Описание (ожидаемые результаты)                                                                                                                                                                                  |
@@ -569,7 +504,7 @@ on:
 
 ## Системное/End-to-End тестирование
 
-*Более подробную информацию о непрерывной интеграции и настройке триггеров в GitHub см. в предыдущем разделе "Интеграционное тестирование".*
+*Более подробную информацию о непрерывной интеграции и настройке триггеров в GitHub см. в разделе "Интеграционное тестирование".*
 
 |     | Название тестирования    | Сценарии пользователя и ожидаемые результаты                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               |
 |-----|--------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
@@ -631,3 +566,395 @@ on:
 ![image-20230316204255954](doc/pic/image-20230316204255954.png)
 
 ![image-20230316221004870](doc/pic/image-20230316221004870.png)
+
+## Результаты локального тестирования
+
+Тестирование проводилось на MacBook Pro (чип Apple M1 Pro) с установленной операционной системой MacOS 14.
+
+![image-20231024155247741](doc/pic/image-20231024155247741.png)
+
+# CI/CD
+
+CI/CD строится через Github Action. Данный процесс CI/CD можно разделить на две части: Continuous Integration (CI) и Continuous Deployment (CD).
+
+**CI (непрерывная интеграция)** - первая часть процесса. Она отвечает за автоматическую сборку и тестирование вашего кода при каждом коммите или запросе на объединение (pull request). Это помогает выявить и устранить проблемы в коде на ранних этапах разработки, обеспечивая стабильность и качество вашего приложения.
+
+**CD (непрерывная доставка/развертывание)** - вторая часть процесса. Когда CI успешно завершается, CD берет на себя автоматическое развертывание вашего приложения на целевых серверах или платформах. Это обеспечивает быструю и надежную поставку новых версий вашего приложения конечным пользователям.
+
+
+
+## CI (Непрерывная интеграция)
+
+1. **События, на которые реагирует CI:**
+
+    Использует сервер непрерывной интеграции GitHub для запуска триггеров при внесении изменений в код и запуска автоматической компиляции и автоматического тестирования.
+
+    - **MacOS**
+
+        1. Пуш изменений в репозиторий в следующих директориях: 'App/', 'Tester/', '.github/workflows/macos.yml'
+        2. Открытие pull и pull_request с изменениями в тех же директориях.
+
+        ```yaml
+        name: macOS Build and Test
+        on: 
+          push:
+            paths:
+              - 'App/**'
+              - 'Tester/**'
+              - '.github/workflows/macos.yml'
+          pull_request:
+            paths:
+              - 'App/**'
+              - 'Tester/**'
+              - '.github/workflows/macos.yml' 
+        ```
+
+    - **Windows**
+
+        1. Пуш изменений в репозиторий в следующих директориях: 'App/', 'Tester/', '.github/workflows/windows.yml', 'scripts/'
+        2. Открытие pull и pull_request с изменениями в тех же директориях.
+
+        ```yaml
+        name: Windows CI/CD
+        on: 
+          push:
+            paths:
+              - 'App/**'
+              - 'Tester/**'
+              - '.github/workflows/windows.yml'
+              - 'scripts/**'
+          pull_request:
+            paths:
+              - 'App/**'
+              - 'Tester/**'
+              - '.github/workflows/windows.yml'
+              - 'scripts/**'
+        ```
+
+        
+
+2. **Задача (Job) CI:**
+
+    - **MacOS**
+
+        - Наименование: macOS-CI-CD
+
+        - Выполнение на операционной системе: macOS 11.0
+
+        - Стратегия: Матрица, включающая разные версии Qt (6.2.2 и 6.6.0) и архитектуры (clang_64)
+
+        - Переменные окружения: Настройки для сборки Qt-приложения.
+
+    - **Windows**
+
+        - Наименование: Windows-CI-CD
+
+        - Выполнение на операционной системе: win64_msvc2019_64
+
+        - Стратегия: Матрица, включающая разные версии Qt (6.2.2 и 6.6.0) и архитектуры (msvc2019_64)
+
+        - Переменные окружения: Настройки для сборки Qt-приложения.
+
+    
+
+3. **Шаги CI:**
+
+    - Подготовка окружения: Обновление и установка необходимых компонентов для macOS 11.0 или Windows 2019.
+
+    - Установка Qt: Загрузка и установка выбранной версии Qt.
+
+    - Получение исходного кода: Клонирование репозитория и получение исходного кода.
+
+    - Тестирование на macOS/Windows: Сборка и запуск тестов с использованием QTest.
+
+    - Сборка на macOS/Windows: Сборка версии приложения для macOS.
+
+    - Упаковка: Упаковка приложения в dmg/zip-файл.
+
+    - Загрузка артефактов: Загрузка созданных файлов как артефактов CI.
+
+        
+
+![iShot_2023-10-24_16.07.04](doc/pic/iShot_2023-10-24_16.07.04.jpg)
+
+![image-20231024164656277](doc/pic/image-20231024164656277.png)
+
+![image-20231024160959353](doc/pic/image-20231024160959353.png)
+
+## CD (непрерывная доставка)
+
+Непрерывный выпуск осуществляется как на платформе MacOS, так и на платформе Windows.
+
+- **Условие для выполнения CD:**
+    - Событие создания нового тега (версии) в репозитории.
+
+- **Шаги CD:**
+    - Загрузка релиза: Загрузка dmg/zip-файла в релизе GitHub, связанного с созданным тегом (версией) репозитория.
+
+Этот процесс автоматизирует сборку, тестирование, упаковку и развертывание приложения на macOS/Windows. Новый релиз создается автоматически при создании нового тега, и dmg/zip-файл приложения загружается в релиз, что позволяет легко распространять приложение пользователям.
+
+Как видно на изображении ниже, приложение было успешно упаковано и опубликовано как на MacOS, так и на Windows.
+
+![image-20231024165220391](doc/pic/image-20231024165220391.png)
+
+![image-20231024170159500](doc/pic/image-20231024170159500.png)
+
+## Код
+
+### MacOS
+
+```yaml
+name: macOS CI/CD
+on: 
+  push:
+    paths:
+      - 'App/**'
+      - 'Tester/**'
+      - '.github/workflows/macos.yml'
+  pull_request:
+    paths:
+      - 'App/**'
+      - 'Tester/**'
+      - '.github/workflows/macos.yml' 
+jobs:
+  build:
+    name: macOS-CI-CD
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [macos-11.0]
+        qt_ver: [6.2.2, 6.6.0]
+        qt_arch: [clang_64]
+    env:
+      targetName: PolyChat
+      QtApplicationName: App
+    steps:
+      - name: prepare env
+        if: ${{ matrix.os == 'macos-11.0' }}
+        run: |
+          softwareupdate --all --install --force
+          sudo xcode-select --print-path
+          sudo xcode-select --switch /Library/Developer/CommandLineTools
+      # https://ddalcino.github.io/aqt-list-server/
+      - name: Install Qt
+        uses: jurplel/install-qt-action@v3
+        with:
+          version: ${{ matrix.qt_ver }}
+          cached: 'false'
+          aqtversion: '==3.1.*'
+          # host: 'mac'
+          # modules: 'qtnetworkauth'
+          # tools: 'tools_qtcreator'
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 1
+      - name: Test on macOS 
+        run: |
+          echo '-------------------'
+          cd ./Tester
+          echo '-------------------'
+          qmake CONFIG+=debug
+          make
+          ls
+          ./PolyChatTester -v2 -txt
+          echo '\n\n==============================./PolyChatTester  -txt==============================\n\n'
+          ./PolyChatTester -txt
+      - name: Build on macOS 
+        run: |
+          ls
+          cd ./${QtApplicationName}
+          qmake
+          make
+      - name: Package on MacOS
+        run: |
+          cd ./${QtApplicationName}
+          # mv ./${QtApplicationName}/${QtApplicationName}.app .
+          echo '------------------'
+          ls
+          macdeployqt ${QtApplicationName}.app -qmldir=. -verbose=1 -dmg
+      - uses: actions/upload-artifact@v2
+        with:
+          name: ${{ env.targetName }}_${{ matrix.os }}_${{matrix.qt_ver}}.zip
+          path: ${{ env.QtApplicationName }}/${{ env.QtApplicationName }}.app
+      - name: Upload Release
+        if: startsWith(github.event.ref, 'refs/tags/')
+        uses: svenstaro/upload-release-action@v2
+        with:
+          repo_token: ${{ secrets.GITHUB_TOKEN }}
+          file: ${{ env.QtApplicationName }}/${{ env.QtApplicationName }}.dmg
+          asset_name: ${{ env.targetName }}_${{ matrix.os }}_${{ matrix.qt_ver }}.dmg
+          tag: ${{ github.ref }}
+          overwrite: true
+```
+
+### Windows
+
+```yaml
+name: Windows CI/CD
+on: 
+  push:
+    paths:
+      - 'App/**'
+      - 'Tester/**'
+      - '.github/workflows/windows.yml'
+      - 'scripts/**'
+  pull_request:
+    paths:
+      - 'App/**'
+      - 'Tester/**'
+      - '.github/workflows/windows.yml'
+      - 'scripts/**'
+jobs:
+  build:
+    name: Windows-CI-CD
+    # 参考文档 https://github.com/actions/virtual-environments/blob/main/images/win/Windows2019-Readme.md
+    runs-on: windows-2019
+    strategy:
+      matrix:
+        include:
+          - qt_ver: 6.2.2
+            qt_arch: win64_msvc2019_64
+            msvc_arch: x64
+            qt_arch_install: msvc2019_64
+          - qt_ver: 6.6.0
+            qt_arch: win64_msvc2019_64
+            msvc_arch: x64
+            qt_arch_install: msvc2019_64
+    env:
+      targetName: PolyChat
+      QtApplicationName: App.exe
+    steps:
+      - name: Install Qt
+        uses: jurplel/install-qt-action@v3
+        with:
+          # Version of Qt to install
+          version: ${{ matrix.qt_ver }}
+          arch: ${{ matrix.qt_arch }}
+          cached: 'false'
+          # aqtversion: '==2.0.5'
+          aqtversion: '==3.1.*'
+          # host: 'windows'
+          # target: 'desktop'
+          # toolsOnly: 'true'
+          # modules: 'qtnetworkauth'
+          # tools: 'tools_qtcreator_gui'
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 1
+      - name: msvc-test
+        id: test
+        shell: cmd
+        run: |
+          call "C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\VC\Auxiliary\Build\vcvarsall.bat" ${{ matrix.msvc_arch }}
+          cd ./Tester
+          qmake CONFIG+=debug
+          nmake
+          echo winSdkDir=%WindowsSdkDir% >> %GITHUB_ENV%
+          echo winSdkVer=%WindowsSdkVersion% >> %GITHUB_ENV%
+          echo vcToolsInstallDir=%VCToolsInstallDir% >> %GITHUB_ENV%
+          echo vcToolsRedistDir=%VCToolsRedistDir% >> %GITHUB_ENV%
+      - name: msvc-build
+        id: build
+        shell: cmd
+        run: |
+          call "C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\VC\Auxiliary\Build\vcvarsall.bat" ${{ matrix.msvc_arch }}
+          cd ./${QtApplicationName}
+          qmake
+          nmake
+          echo winSdkDir=%WindowsSdkDir% >> %GITHUB_ENV%
+          echo winSdkVer=%WindowsSdkVersion% >> %GITHUB_ENV%
+          echo vcToolsInstallDir=%VCToolsInstallDir% >> %GITHUB_ENV%
+          echo vcToolsRedistDir=%VCToolsRedistDir% >> %GITHUB_ENV%
+          ls
+          tree /F
+      - name: package
+        id: package
+        env:
+          archiveName: ${{ matrix.qt_ver }}-${{ matrix.qt_target }}-${{ matrix.qt_arch }}
+          msvcArch: ${{ matrix.msvc_arch }}          
+        shell: pwsh
+        run: |
+          tree D: /F
+          echo '------- Run scripts\windows-publish.ps1'
+          & scripts\windows-publish.ps1 ${env:archiveName} ${env:QtApplicationName}
+          echo '------- Finish scripts windows-publish.ps1'
+          $name = ${env:archiveName}
+          echo "::set-output name=packageName::$name"
+      - uses: actions/upload-artifact@v2
+        with:
+          name: ${{ env.targetName }}_${{ steps.package.outputs.packageName }}
+          path: ${{ steps.package.outputs.packageName }}
+      - name: uploadRelease
+        if: startsWith(github.event.ref, 'refs/tags/')
+        uses: svenstaro/upload-release-action@v2
+        with:
+          repo_token: ${{ secrets.GITHUB_TOKEN }}
+          file: ${{ steps.package.outputs.packageName }}.zip
+          asset_name: ${{ env.targetName }}_${{ steps.package.outputs.packageName }}.zip
+          tag: ${{ github.ref }}
+          overwrite: true
+```
+
+
+
+**Windows scripts:**
+
+```cmd
+[CmdletBinding()]
+param (
+    [string] $archiveName, [string] $targetName
+)
+# archiveName: ${{ matrix.qt_ver }}-${{ matrix.qt_arch }}
+# winSdkDir: ${{ steps.build.outputs.winSdkDir }}
+# winSdkVer: ${{ steps.build.outputs.winSdkVer }}
+# vcToolsInstallDir: ${{ steps.build.outputs.vcToolsInstallDir }}
+# vcToolsRedistDir: ${{ steps.build.outputs.vcToolsRedistDir }}
+# msvcArch: ${{ matrix.msvc_arch }}
+
+
+# winSdkDir: C:\Program Files (x86)\Windows Kits\10\ 
+# winSdkVer: 10.0.19041.0\ 
+# vcToolsInstallDir: C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\VC\Tools\MSVC\14.28.29333\ 
+# vcToolsRedistDir: C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\VC\Redist\MSVC\14.28.29325\ 
+# archiveName: 5.9.9-win32_msvc2015
+# msvcArch: x86
+
+$scriptDir = $PSScriptRoot
+$currentDir = Get-Location
+Write-Host "currentDir" $currentDir
+Write-Host "scriptDir" $scriptDir
+
+function Main() {
+
+    New-Item -ItemType Directory $archiveName
+
+    Copy-Item .\App\release\$targetName $archiveName\
+    Write-Host "[INFO] Copy-Item from .\App\release\" $targetName " to " $archiveName "done"
+
+    windeployqt --qmldir . --plugindir $archiveName\plugins --no-translations --compiler-runtime $archiveName\$targetName
+    Write-Host "[INFO] windeployqt done"
+
+    $excludeList = @("*.qmlc", "*.ilk", "*.exp", "*.lib", "*.pdb")
+    Remove-Item -Path $archiveName -Include $excludeList -Recurse -Force
+    Write-Host "[INFO] Remove-Item done"
+
+    $redistDll="{0}{1}\*.CRT\*.dll" -f $env:vcToolsRedistDir.Trim(),$env:msvcArch
+    Copy-Item $redistDll $archiveName\
+    Write-Host "[INFO] Copy-Item vcRedist dll done"
+
+    $sdkDll="{0}Redist\{1}ucrt\DLLs\{2}\*.dll" -f $env:winSdkDir.Trim(),$env:winSdkVer.Trim(),$env:msvcArch
+    Copy-Item $sdkDll $archiveName\
+    Write-Host "[INFO] Copy-Item WinSDK dll done"
+
+    Compress-Archive -Path $archiveName $archiveName'.zip'
+    Write-Host "[INFO] Compress-Archive done"
+}
+
+if ($null -eq $archiveName || $null -eq $targetName) {
+    Write-Host "args missing, archiveName is" $archiveName ", targetName is" $targetName
+    return
+}
+Main
+
+```
+
