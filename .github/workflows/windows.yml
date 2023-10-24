@@ -110,7 +110,7 @@ jobs:
       # 上传artifacts
       - uses: actions/upload-artifact@v2
         with:
-          name: ${{ steps.package.outputs.packageName }}
+          name: ${{ env.targetName }}_${{ steps.package.outputs.packageName }}
           path: ${{ steps.package.outputs.packageName }}
       # tag 上传Release
       - name: uploadRelease
