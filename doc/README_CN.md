@@ -14,9 +14,9 @@
 
  <p align="center"></p>
 
-
 <p align="center">
     <a href="../README.md">Руский язык</a>
+    <a href="./README_EN.md">English</a>
 </p>
 
 
@@ -24,27 +24,19 @@
 <div align=left>
 <!-- SPbSTU 最后一行 -->
 
+
+
 <div align=center>
+
 [![License](https://img.shields.io/badge/license-Apache%202.0-brightgreen)](LICENSE)
 
-[![Build for MacOS](https://github.com/NekoSilverFox/PolyChat/actions/workflows/macos.yml/badge.svg)](https://github.com/NekoSilverFox/PolyChat/actions/workflows/macos.yml)
-[![Build for Windows](https://github.com/NekoSilverFox/PolyChat/actions/workflows/windows.yml/badge.svg)](https://github.com/NekoSilverFox/PolyChat/actions/workflows/windows.yml)
+[![MacOS CI/CD](https://github.com/NekoSilverFox/PolyChat/actions/workflows/macos.yml/badge.svg)](https://github.com/NekoSilverFox/PolyChat/actions/workflows/macos.yml)
+[![Windows CI/CD](https://github.com/NekoSilverFox/PolyChat/actions/workflows/windows.yml/badge.svg)](https://github.com/NekoSilverFox/PolyChat/actions/workflows/windows.yml)
 
 </div>
 
 
 [toc]
-
-
-# 项目成员及规划
-
-| 姓名            | 说明                                       |
-| --------------- | ------------------------------------------ |
-| Валерий Фофанов | 实现功能模块、编写文档                     |
-| Ли Ицзя         | 实现功能模块、                             |
-| Мэн Цзянин      | 窗体设计、代码框架搭建及组织、实现功能模块 |
-
-
 
 # 需求
 
@@ -72,6 +64,7 @@ PolyChat 是一款跨平台即时通讯软件，旨在解决上述问题，提�
 - 文本消息传递采用 UDP 协议，而文件传输采用 TCP 协议。
 - 当用户发送消息时，会在端口上进行广播。
 - 在固定端口后绑定 UDP Socket，用信号与槽的方式进行监听是否有数据来临
+- 借助 GitHub 平台的 Action 实现 CI/CD，自动测试、构建、打包、发布
 
 
 
@@ -494,37 +487,6 @@ K、易扩展：用户自定义类型可以容易地加入到测试数据和测�
     }
     ```
 
-
-
-
-**持续集成：**
-
-使用了 GitHub 的持续集成服务器，当代码发生变化时触发触发器，并开始执行自动编译和自动测试。以下是触发器的代码：
-
-```yaml
-name: macOS Build and Test
-on: 
-  push:
-    paths:
-      - 'App/**'
-      - 'Tester/**'
-      - '.github/workflows/macos.yml'
-  pull_request:
-    paths:
-      - 'App/**'
-      - 'Tester/**'
-      - '.github/workflows/macos.yml' 
-```
-
-CI 的编译和测试环境：
-
-- Windows: Qt6.2.2, win64_msvc2019_64, msvc2019_64
-- macOS: Qt6.2.2, macos-10.15, clang_64
-
-![image-20230218155228161](./pic/image-20230218155228161.png)
-
-![image-20230218155712711](./pic/image-20230218155712711.png)
-
 **测试：**
 
 |      | 测试名                             | 所属模块  | 说明（预期结果）                                             |
@@ -552,11 +514,11 @@ CI 的编译和测试环境：
 
 **集成测试结果:**
 
-![image-20230218154016123](./pic/image-20230218154016123.png)
+![image-20230316201833405](./pic/image-20230316201833405.png)
 
 ## 系统/端到端和其他测试
 
-*关于持续集成和在GitHub中设置触发器的更多信息，请参见前面的集成测试部分。*
+*关于持续集成和在GitHub中设置触发器的更多信息，请参见后面的集成测试部分。*
 
 | 编号 | 测试名                   | 说明（预期结果）                                             |
 | ---- | ------------------------ | ------------------------------------------------------------ |
@@ -573,7 +535,7 @@ CI 的编译和测试环境：
 
 **GitHub 结果：**
 
-![image-20230219131232852](./pic/image-20230219131232852.png)
+![image-20230219131232852](pic/image-20230316204636445.png)
 
 ## 其他测试
 
@@ -615,11 +577,386 @@ CI 的编译和测试环境：
 
 
 
+## 在本地的测试结果
+
+测试环境为安装有 MacOS 14 的 MacBook Pro (Apple M1 Pro chip)
+
+![image-20231024155247741](pic/image-20231024155247741.png)
 
 
 
+# CI/CD
+
+> CI (持续集成) и CD (持续交付)
+
+CI/CD 是通过 Github Action 构建的。该 CI/CD 流程可分为两部分：持续集成（CI）和持续部署（CD）。
+
+**CI（持续集成）**是流程的第一部分。它负责在每次提交或拉取请求时自动构建和测试代码。这有助于在开发过程的早期发现并修复代码中的问题，确保应用程序的稳定性和质量。
+
+**CD（持续交付/部署）** 是流程的第二部分。当 CI 成功完成后，CD 会接管将应用程序自动部署到目标服务器或平台的工作。这可确保将新版本的应用程序快速、可靠地交付给最终用户。
+
+## CI（持续集成）
+
+1. **CI响应的事件：**
+
+    使用GitHub持续集成服务器，以在代码更改时触发触发器并执行自动编译和自动测试。
+
+    - **MacOS**
+
+        1. 在以下目录中推送更改到存储库：'App/'、'Tester/'、'.github/workflows/macos.yml'
+        2. 在相同目录中打开pull和pull_request的更改。
+
+        ```yaml
+        name: macOS构建和测试
+        on: 
+          push:
+            paths:
+              - 'App/**'
+              - 'Tester/**'
+              - '.github/workflows/macos.yml'
+          pull_request:
+            paths:
+              - 'App/**'
+              - 'Tester/**'
+              - '.github/workflows/macos.yml' 
+        ```
+
+    - **Windows**
+
+        1. 在以下目录中推送更改到存储库：'App/'、'Tester/'、'.github/workflows/windows.yml'、'scripts/'
+        2. 在相同目录中打开pull和pull_request的更改。
+
+        ```yaml
+        name: Windows CI/CD
+        on: 
+          push:
+            paths:
+              - 'App/**'
+              - 'Tester/**'
+              - '.github/workflows/windows.yml'
+              - 'scripts/**'
+          pull_request:
+            paths:
+              - 'App/**'
+              - 'Tester/**'
+              - '.github/workflows/windows.yml'
+              - 'scripts/**'
+        ```
+
+2. **CI任务：**
+
+    - **MacOS**
+
+        - 名称：macOS-CI-CD
+
+        - 执行操作系统：macOS 11.0
+
+        - 策略：矩阵，包括不同版本的Qt（6.2.2和6.6.0）和架构（clang_64）
+
+        - 环境变量：Qt应用程序构建设置。
+
+    - **Windows**
+
+        - 名称：Windows-CI-CD
+
+        - 执行操作系统：win64_msvc2019_64
+
+        - 策略：矩阵，包括不同版本的Qt（6.2.2和6.6.0）和架构（msvc2019_64）
+
+        - 环境变量：Qt应用程序构建设置。
+
+3. **CI步骤：**
+
+    - 准备环境：升级和安装macOS 11.0或Windows 2019所需的组件。
+    - 安装Qt：下载并安装所选版本的Qt。
+    - 获取源代码：克隆存储库并获取源代码。
+    - 在macOS/Windows上进行测试：使用QTest构建和运行测试。
+    - 在macOS/Windows上构建：构建macOS版本的应用程序。
+    - 打包：将应用程序打包为dmg/zip文件。
+    - 上传工件：将生成的文件作为CI工件上传。
+
+![iShot_2023-10-24_16.07.04](pic/iShot_2023-10-24_16.07.04.jpg)
+
+![image-20231024164656277](pic/image-20231024164656277.png)
+
+![image-20231024160959353](pic/image-20231024160959353.png)
+
+## CD（持续交付）
+
+持续交付在MacOS平台和Windows平台上进行。
+
+- **CD执行条件：**
+    - 在存储库中创建新tag标签（版本）的事件。
+
+- **CD步骤：**
+    - 发布下载：将dmg/zip文件上传到GitHub发布中，与存储库的新标签（版本）相关联。
+
+该流程自动化了应用的构建、测试、打包和在macOS/Windows上的部署。新的发布将在创建新标签时自动生成，应用的dmg/zip文件会上传到发布中，从而方便向用户分发应用程序。
+
+如下图所示，应用程序已成功打包，并已在MacOS和Windows上发布。
+
+![image-20231024165220391](pic/image-20231024165220391.png)
+
+![image-20231024170159500](pic/image-20231024170159500.png)
+
+## 代码
+
+### MacOS
+
+```yaml
+name: macOS CI/CD
+on: 
+  push:
+    paths:
+      - 'App/**'
+      - 'Tester/**'
+      - '.github/workflows/macos.yml'
+  pull_request:
+    paths:
+      - 'App/**'
+      - 'Tester/**'
+      - '.github/workflows/macos.yml' 
+jobs:
+  build:
+    name: macOS-CI-CD
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [macos-11.0]
+        qt_ver: [6.2.2, 6.6.0]
+        qt_arch: [clang_64]
+    env:
+      targetName: PolyChat
+      QtApplicationName: App
+    steps:
+      - name: prepare env
+        if: ${{ matrix.os == 'macos-11.0' }}
+        run: |
+          softwareupdate --all --install --force
+          sudo xcode-select --print-path
+          sudo xcode-select --switch /Library/Developer/CommandLineTools
+      # https://ddalcino.github.io/aqt-list-server/
+      - name: Install Qt
+        uses: jurplel/install-qt-action@v3
+        with:
+          version: ${{ matrix.qt_ver }}
+          cached: 'false'
+          aqtversion: '==3.1.*'
+          # host: 'mac'
+          # modules: 'qtnetworkauth'
+          # tools: 'tools_qtcreator'
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 1
+      - name: Test on macOS 
+        run: |
+          echo '-------------------'
+          cd ./Tester
+          echo '-------------------'
+          qmake CONFIG+=debug
+          make
+          ls
+          ./PolyChatTester -v2 -txt
+          echo '\n\n==============================./PolyChatTester  -txt==============================\n\n'
+          ./PolyChatTester -txt
+      - name: Build on macOS 
+        run: |
+          ls
+          cd ./${QtApplicationName}
+          qmake
+          make
+      - name: Package on MacOS
+        run: |
+          cd ./${QtApplicationName}
+          # mv ./${QtApplicationName}/${QtApplicationName}.app .
+          echo '------------------'
+          ls
+          macdeployqt ${QtApplicationName}.app -qmldir=. -verbose=1 -dmg
+      - uses: actions/upload-artifact@v2
+        with:
+          name: ${{ env.targetName }}_${{ matrix.os }}_${{matrix.qt_ver}}.zip
+          path: ${{ env.QtApplicationName }}/${{ env.QtApplicationName }}.app
+      - name: Upload Release
+        if: startsWith(github.event.ref, 'refs/tags/')
+        uses: svenstaro/upload-release-action@v2
+        with:
+          repo_token: ${{ secrets.GITHUB_TOKEN }}
+          file: ${{ env.QtApplicationName }}/${{ env.QtApplicationName }}.dmg
+          asset_name: ${{ env.targetName }}_${{ matrix.os }}_${{ matrix.qt_ver }}.dmg
+          tag: ${{ github.ref }}
+          overwrite: true
+```
+
+### Windows
+
+```yaml
+name: Windows CI/CD
+on: 
+  push:
+    paths:
+      - 'App/**'
+      - 'Tester/**'
+      - '.github/workflows/windows.yml'
+      - 'scripts/**'
+  pull_request:
+    paths:
+      - 'App/**'
+      - 'Tester/**'
+      - '.github/workflows/windows.yml'
+      - 'scripts/**'
+jobs:
+  build:
+    name: Windows-CI-CD
+    # 参考文档 https://github.com/actions/virtual-environments/blob/main/images/win/Windows2019-Readme.md
+    runs-on: windows-2019
+    strategy:
+      matrix:
+        include:
+          - qt_ver: 6.2.2
+            qt_arch: win64_msvc2019_64
+            msvc_arch: x64
+            qt_arch_install: msvc2019_64
+          - qt_ver: 6.6.0
+            qt_arch: win64_msvc2019_64
+            msvc_arch: x64
+            qt_arch_install: msvc2019_64
+    env:
+      targetName: PolyChat
+      QtApplicationName: App.exe
+    steps:
+      - name: Install Qt
+        uses: jurplel/install-qt-action@v3
+        with:
+          # Version of Qt to install
+          version: ${{ matrix.qt_ver }}
+          arch: ${{ matrix.qt_arch }}
+          cached: 'false'
+          # aqtversion: '==2.0.5'
+          aqtversion: '==3.1.*'
+          # host: 'windows'
+          # target: 'desktop'
+          # toolsOnly: 'true'
+          # modules: 'qtnetworkauth'
+          # tools: 'tools_qtcreator_gui'
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 1
+      - name: msvc-test
+        id: test
+        shell: cmd
+        run: |
+          call "C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\VC\Auxiliary\Build\vcvarsall.bat" ${{ matrix.msvc_arch }}
+          cd ./Tester
+          qmake CONFIG+=debug
+          nmake
+          echo winSdkDir=%WindowsSdkDir% >> %GITHUB_ENV%
+          echo winSdkVer=%WindowsSdkVersion% >> %GITHUB_ENV%
+          echo vcToolsInstallDir=%VCToolsInstallDir% >> %GITHUB_ENV%
+          echo vcToolsRedistDir=%VCToolsRedistDir% >> %GITHUB_ENV%
+      - name: msvc-build
+        id: build
+        shell: cmd
+        run: |
+          call "C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\VC\Auxiliary\Build\vcvarsall.bat" ${{ matrix.msvc_arch }}
+          cd ./${QtApplicationName}
+          qmake
+          nmake
+          echo winSdkDir=%WindowsSdkDir% >> %GITHUB_ENV%
+          echo winSdkVer=%WindowsSdkVersion% >> %GITHUB_ENV%
+          echo vcToolsInstallDir=%VCToolsInstallDir% >> %GITHUB_ENV%
+          echo vcToolsRedistDir=%VCToolsRedistDir% >> %GITHUB_ENV%
+          ls
+          tree /F
+      - name: package
+        id: package
+        env:
+          archiveName: ${{ matrix.qt_ver }}-${{ matrix.qt_target }}-${{ matrix.qt_arch }}
+          msvcArch: ${{ matrix.msvc_arch }}          
+        shell: pwsh
+        run: |
+          tree D: /F
+          echo '------- Run scripts\windows-publish.ps1'
+          & scripts\windows-publish.ps1 ${env:archiveName} ${env:QtApplicationName}
+          echo '------- Finish scripts windows-publish.ps1'
+          $name = ${env:archiveName}
+          echo "::set-output name=packageName::$name"
+      - uses: actions/upload-artifact@v2
+        with:
+          name: ${{ env.targetName }}_${{ steps.package.outputs.packageName }}
+          path: ${{ steps.package.outputs.packageName }}
+      - name: uploadRelease
+        if: startsWith(github.event.ref, 'refs/tags/')
+        uses: svenstaro/upload-release-action@v2
+        with:
+          repo_token: ${{ secrets.GITHUB_TOKEN }}
+          file: ${{ steps.package.outputs.packageName }}.zip
+          asset_name: ${{ env.targetName }}_${{ steps.package.outputs.packageName }}.zip
+          tag: ${{ github.ref }}
+          overwrite: true
+```
 
 
+
+**Windows scripts:**
+
+```cmd
+[CmdletBinding()]
+param (
+    [string] $archiveName, [string] $targetName
+)
+# archiveName: ${{ matrix.qt_ver }}-${{ matrix.qt_arch }}
+# winSdkDir: ${{ steps.build.outputs.winSdkDir }}
+# winSdkVer: ${{ steps.build.outputs.winSdkVer }}
+# vcToolsInstallDir: ${{ steps.build.outputs.vcToolsInstallDir }}
+# vcToolsRedistDir: ${{ steps.build.outputs.vcToolsRedistDir }}
+# msvcArch: ${{ matrix.msvc_arch }}
+
+
+# winSdkDir: C:\Program Files (x86)\Windows Kits\10\ 
+# winSdkVer: 10.0.19041.0\ 
+# vcToolsInstallDir: C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\VC\Tools\MSVC\14.28.29333\ 
+# vcToolsRedistDir: C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\VC\Redist\MSVC\14.28.29325\ 
+# archiveName: 5.9.9-win32_msvc2015
+# msvcArch: x86
+
+$scriptDir = $PSScriptRoot
+$currentDir = Get-Location
+Write-Host "currentDir" $currentDir
+Write-Host "scriptDir" $scriptDir
+
+function Main() {
+
+    New-Item -ItemType Directory $archiveName
+
+    Copy-Item .\App\release\$targetName $archiveName\
+    Write-Host "[INFO] Copy-Item from .\App\release\" $targetName " to " $archiveName "done"
+
+    windeployqt --qmldir . --plugindir $archiveName\plugins --no-translations --compiler-runtime $archiveName\$targetName
+    Write-Host "[INFO] windeployqt done"
+
+    $excludeList = @("*.qmlc", "*.ilk", "*.exp", "*.lib", "*.pdb")
+    Remove-Item -Path $archiveName -Include $excludeList -Recurse -Force
+    Write-Host "[INFO] Remove-Item done"
+
+    $redistDll="{0}{1}\*.CRT\*.dll" -f $env:vcToolsRedistDir.Trim(),$env:msvcArch
+    Copy-Item $redistDll $archiveName\
+    Write-Host "[INFO] Copy-Item vcRedist dll done"
+
+    $sdkDll="{0}Redist\{1}ucrt\DLLs\{2}\*.dll" -f $env:winSdkDir.Trim(),$env:winSdkVer.Trim(),$env:msvcArch
+    Copy-Item $sdkDll $archiveName\
+    Write-Host "[INFO] Copy-Item WinSDK dll done"
+
+    Compress-Archive -Path $archiveName $archiveName'.zip'
+    Write-Host "[INFO] Compress-Archive done"
+}
+
+if ($null -eq $archiveName || $null -eq $targetName) {
+    Write-Host "args missing, archiveName is" $archiveName ", targetName is" $targetName
+    return
+}
+Main
+
+```
 
 
 
