@@ -690,7 +690,7 @@ CI/CD 是通过 Github Action 构建的。该 CI/CD 流程可分为两部分：�
 
 - **CD步骤：**
 
-    发布下载：将dmg/zip文件上传到GitHub发布中，与存储库的新标签（版本）相关联。
+    - 发布下载：将dmg/zip文件上传到GitHub发布中，与存储库的新标签（版本）相关联。
 
     
 
@@ -844,7 +844,7 @@ CI/CD 是通过 Github Action 构建的。该 CI/CD 流程可分为两部分：�
 
     
 
-该流程自动化了应用在macOS/Windows上的构建、测试、打包和发布。新的发布将在创建新标签时自动生成，dmg/zip文件会上传到 GitHub Release 中，从而方便向用户分发应用程序。
+以上流程自动化了应用在macOS/Windows上的构建、测试、打包和发布。新的发布将在创建新标签时自动生成，dmg/zip文件会上传到 GitHub Release 中，从而方便向用户分发应用程序。
 
 如下图所示，应用程序已成功打包，并已在MacOS和Windows上发布。
 

@@ -691,13 +691,160 @@ CI/CD строится через Github Action. Данный процесс CI/
 - **Шаги CD:**
     - Загрузка релиза: Загрузка dmg/zip-файла в релизе GitHub, связанного с созданным тегом (версией) репозитория.
 
-Этот процесс автоматизирует сборку, тестирование, упаковку и развертывание приложения на macOS/Windows. Новый релиз создается автоматически при создании нового тега, и dmg/zip-файл приложения загружается в релиз, что позволяет легко распространять приложение пользователям.
+**Для MacOS:**
+
+1. Упаковка (package): На MacOS можем удобно упаковать проект в файл формата .dmg с помощью `macdeployqt`
+
+    ```yaml
+    - name: Package on MacOS
+      run: |
+        cd ./${QtApplicationName}
+        macdeployqt ${QtApplicationName}.app -qmldir=. -verbose=1 -dmg
+    ```
+
+2. Загрузка артефакта (artifact) на сервер GitHub Actions
+
+    ```yaml
+    - uses: actions/upload-artifact@v2
+      with:
+        name: ${{ env.targetName }}_${{ matrix.os }}_${{matrix.qt_ver}}.zip
+        path: ${{ env.QtApplicationName }}/${{ env.QtApplicationName }}.app
+    ```
+
+3. Если событие является событием тегов (tag), загрузите продукт сборки (файл .dmg) на GitHub Release
+
+    ```yaml
+    - name: Upload Release
+      if: startsWith(github.event.ref, 'refs/tags/')
+      uses: svenstaro/upload-release-action@v2
+      with:
+        repo_token: ${{ secrets.GITHUB_TOKEN }}
+        file: ${{ env.QtApplicationName }}/${{ env.QtApplicationName }}.dmg
+        asset_name: ${{ env.targetName }}_${{ matrix.os }}_${{ matrix.qt_ver }}.dmg
+        tag: ${{ github.ref }}
+        overwrite: true
+    ```
+
+---
+
+**Для Windows:**
+
+1. Упаковка нескольких версий под Windows осуществляется с помощью скрипта `windows-publish.ps1`, который мы написали
+
+    ```yaml
+    - name: package
+      id: package
+      env:
+        archiveName: ${{ matrix.qt_ver }}-${{ matrix.qt_target }}-${{ matrix.qt_arch }}
+        msvcArch: ${{ matrix.msvc_arch }}          
+      shell: pwsh
+      run: |
+        & scripts\windows-publish.ps1 ${env:archiveName} ${env:QtApplicationName}
+        # Запишите название пакета для последующего шага
+        $name = ${env:archiveName}
+        echo "::set-output name=packageName::$name"
+    ```
+
+    скрипт `windows-publish.ps1`：
+
+    ```cmd
+    [CmdletBinding()]
+    param (
+        [string] $archiveName, [string] $targetName
+    )
+    # К переменным внешней среды относятся:
+    # archiveName: ${{ matrix.qt_ver }}-${{ matrix.qt_arch }}
+    # winSdkDir: ${{ steps.build.outputs.winSdkDir }}
+    # winSdkVer: ${{ steps.build.outputs.winSdkVer }}
+    # vcToolsInstallDir: ${{ steps.build.outputs.vcToolsInstallDir }}
+    # vcToolsRedistDir: ${{ steps.build.outputs.vcToolsRedistDir }}
+    # msvcArch: ${{ matrix.msvc_arch }}
+    
+    
+    # winSdkDir: C:\Program Files (x86)\Windows Kits\10\ 
+    # winSdkVer: 10.0.19041.0\ 
+    # vcToolsInstallDir: C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\VC\Tools\MSVC\14.28.29333\ 
+    # vcToolsRedistDir: C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\VC\Redist\MSVC\14.28.29325\ 
+    # archiveName: 6.0.0-win64_msvc2019
+    # msvcArch: x64
+    
+    $scriptDir = $PSScriptRoot
+    $currentDir = Get-Location
+    Write-Host "currentDir" $currentDir
+    Write-Host "scriptDir" $scriptDir
+    
+    function Main() {
+    
+        New-Item -ItemType Directory $archiveName
+    
+        # Копирование exe
+        Copy-Item .\App\release\$targetName $archiveName\
+        Write-Host "[INFO] Copy-Item from .\App\release\" $targetName " to " $archiveName "done"
+    
+        # Копирование зависимостей
+        windeployqt --qmldir . --plugindir $archiveName\plugins --no-translations --compiler-runtime $archiveName\$targetName
+        Write-Host "[INFO] windeployqt done"
+    
+        # Удаление ненужных файлов
+        $excludeList = @("*.qmlc", "*.ilk", "*.exp", "*.lib", "*.pdb")
+        Remove-Item -Path $archiveName -Include $excludeList -Recurse -Force
+        Write-Host "[INFO] Remove-Item done"
+    
+        # Копирование vcRedist dll
+        $redistDll="{0}{1}\*.CRT\*.dll" -f $env:vcToolsRedistDir.Trim(),$env:msvcArch
+        Copy-Item $redistDll $archiveName\
+        Write-Host "[INFO] Copy-Item vcRedist dll done"
+    
+        # Копирование WinSDK dll
+        $sdkDll="{0}Redist\{1}ucrt\DLLs\{2}\*.dll" -f $env:winSdkDir.Trim(),$env:winSdkVer.Trim(),$env:msvcArch
+        Copy-Item $sdkDll $archiveName\
+        Write-Host "[INFO] Copy-Item WinSDK dll done"
+    
+        # Упаковка в виде zip
+        Compress-Archive -Path $archiveName $archiveName'.zip'
+        Write-Host "[INFO] Compress-Archive done"
+    }
+    
+    if ($null -eq $archiveName || $null -eq $targetName) {
+        Write-Host "args missing, archiveName is" $archiveName ", targetName is" $targetName
+        return
+    }
+    Main
+    ```
+
+2. Загрузка артефакта (artifact) на сервер GitHub Actions
+
+    ```yaml
+    - uses: actions/upload-artifact@v2
+      with:
+        name: ${{ env.targetName }}_${{ steps.package.outputs.packageName }}
+        path: ${{ steps.package.outputs.packageName }}
+    ```
+
+3. Если событие является событием тегов (tag), загрузите продукт сборки (файл .zip) на GitHub Release
+
+    ```yaml
+    - name: uploadRelease
+      if: startsWith(github.event.ref, 'refs/tags/')
+      uses: svenstaro/upload-release-action@v2
+      with:
+        repo_token: ${{ secrets.GITHUB_TOKEN }}
+        file: ${{ steps.package.outputs.packageName }}.zip
+        asset_name: ${{ env.targetName }}_${{ steps.package.outputs.packageName }}.zip
+        tag: ${{ github.ref }}
+        overwrite: true
+    ```
+
+
+Эти процессы автоматизирует сборку, тестирование, упаковку и выпуск приложения на macOS/Windows. Новый релиз создается автоматически при создании нового тега, и dmg/zip-файл приложения загружается в релиз, что позволяет легко распространять приложение пользователям.
 
 Как видно на изображении ниже, приложение было успешно упаковано и опубликовано как на MacOS, так и на Windows.
 
 ![image-20231024165220391](doc/pic/image-20231024165220391.png)
 
 ![image-20231024170159500](doc/pic/image-20231024170159500.png)
+
+![image-20231025141122572](doc/pic/image-20231025141122572.png)
 
 ## Код
 
@@ -721,14 +868,17 @@ jobs:
     name: macOS-CI-CD
     runs-on: ${{ matrix.os }}
     strategy:
+      # Матрица, включающая разные версии Qt (6.2.2 и 6.6.0) и архитектуры (clang_64)
       matrix:
         os: [macos-11.0]
         qt_ver: [6.2.2, 6.6.0]
         qt_arch: [clang_64]
     env:
       targetName: PolyChat
+      # TARGET в файле Qt pro
       QtApplicationName: App
     steps:
+      # изменилось окружение по умолчанию macos 11.0, нужно указать
       - name: prepare env
         if: ${{ matrix.os == 'macos-11.0' }}
         run: |
@@ -748,6 +898,7 @@ jobs:
       - uses: actions/checkout@v2
         with:
           fetch-depth: 1
+      # Тестирование под MacOS (с использованием QTest)
       - name: Test on macOS 
         run: |
           echo '-------------------'
@@ -759,12 +910,14 @@ jobs:
           ./PolyChatTester -v2 -txt
           echo '\n\n==============================./PolyChatTester  -txt==============================\n\n'
           ./PolyChatTester -txt
+      # Скомпилировать версию `Release`
       - name: Build on macOS 
         run: |
           ls
           cd ./${QtApplicationName}
           qmake
           make
+      # Упаковка
       - name: Package on MacOS
         run: |
           cd ./${QtApplicationName}
@@ -772,10 +925,12 @@ jobs:
           echo '------------------'
           ls
           macdeployqt ${QtApplicationName}.app -qmldir=. -verbose=1 -dmg
+      # Загрузка artifacts
       - uses: actions/upload-artifact@v2
         with:
           name: ${{ env.targetName }}_${{ matrix.os }}_${{matrix.qt_ver}}.zip
           path: ${{ env.QtApplicationName }}/${{ env.QtApplicationName }}.app
+      # загрузка тега Release
       - name: Upload Release
         if: startsWith(github.event.ref, 'refs/tags/')
         uses: svenstaro/upload-release-action@v2
@@ -807,9 +962,10 @@ on:
 jobs:
   build:
     name: Windows-CI-CD
-    # 参考文档 https://github.com/actions/virtual-environments/blob/main/images/win/Windows2019-Readme.md
+    # справочный документ https://github.com/actions/virtual-environments/blob/main/images/win/Windows2019-Readme.md
     runs-on: windows-2019
     strategy:
+      # Стратегия: Матрица, включающая разные версии Qt (6.2.2 и 6.6.0) и архитектуры (msvc2019_64)
       matrix:
         include:
           - qt_ver: 6.2.2
@@ -841,6 +997,7 @@ jobs:
       - uses: actions/checkout@v2
         with:
           fetch-depth: 1
+      # Тестирование под Windows (с использованием QTest)
       - name: msvc-test
         id: test
         shell: cmd
@@ -853,6 +1010,7 @@ jobs:
           echo winSdkVer=%WindowsSdkVersion% >> %GITHUB_ENV%
           echo vcToolsInstallDir=%VCToolsInstallDir% >> %GITHUB_ENV%
           echo vcToolsRedistDir=%VCToolsRedistDir% >> %GITHUB_ENV%
+      # Скомпилировать версию `Release`
       - name: msvc-build
         id: build
         shell: cmd
@@ -867,6 +1025,7 @@ jobs:
           echo vcToolsRedistDir=%VCToolsRedistDir% >> %GITHUB_ENV%
           ls
           tree /F
+      # Упаковка
       - name: package
         id: package
         env:
@@ -880,10 +1039,12 @@ jobs:
           echo '------- Finish scripts windows-publish.ps1'
           $name = ${env:archiveName}
           echo "::set-output name=packageName::$name"
+       # Загрузка artifacts
       - uses: actions/upload-artifact@v2
         with:
           name: ${{ env.targetName }}_${{ steps.package.outputs.packageName }}
           path: ${{ steps.package.outputs.packageName }}
+      # загрузка тега Release
       - name: uploadRelease
         if: startsWith(github.event.ref, 'refs/tags/')
         uses: svenstaro/upload-release-action@v2
@@ -916,8 +1077,8 @@ param (
 # winSdkVer: 10.0.19041.0\ 
 # vcToolsInstallDir: C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\VC\Tools\MSVC\14.28.29333\ 
 # vcToolsRedistDir: C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\VC\Redist\MSVC\14.28.29325\ 
-# archiveName: 5.9.9-win32_msvc2015
-# msvcArch: x86
+# archiveName: 6.0.0-win64_msvc2019
+# msvcArch: x64
 
 $scriptDir = $PSScriptRoot
 $currentDir = Get-Location
