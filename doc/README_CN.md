@@ -689,15 +689,170 @@ CI/CD 是通过 Github Action 构建的。该 CI/CD 流程可分为两部分：�
     - 在存储库中创建新tag标签（版本）的事件。
 
 - **CD步骤：**
+
     - 发布下载：将dmg/zip文件上传到GitHub发布中，与存储库的新标签（版本）相关联。
 
-该流程自动化了应用的构建、测试、打包和在macOS/Windows上的部署。新的发布将在创建新标签时自动生成，应用的dmg/zip文件会上传到发布中，从而方便向用户分发应用程序。
+    
+
+**在 MacOS 下：**
+
+1. 打包（package）：在 MacOS 下可以方便的借助 `macdeployqt` 将项目打包为 dmg 文件
+
+    ```yaml
+    - name: Package on MacOS
+      run: |
+        cd ./${QtApplicationName}
+        # 拷贝依赖 pro文件里的名称：
+        macdeployqt ${QtApplicationName}.app -qmldir=. -verbose=1 -dmg
+    ```
+
+2. 将构建产物（artifact）上传到 GitHub Actions 服务器
+
+    ```yaml
+    - uses: actions/upload-artifact@v2
+      with:
+        name: ${{ env.targetName }}_${{ matrix.os }}_${{matrix.qt_ver}}.zip
+        path: ${{ env.QtApplicationName }}/${{ env.QtApplicationName }}.app
+    ```
+
+3. 如果事件是一个标签(tag)事件，上传构建产物（.dmg 文件）到 GitHub Release
+
+    ```yaml
+    - name: Upload Release
+      if: startsWith(github.event.ref, 'refs/tags/')
+      uses: svenstaro/upload-release-action@v2
+      with:
+        repo_token: ${{ secrets.GITHUB_TOKEN }}
+        file: ${{ env.QtApplicationName }}/${{ env.QtApplicationName }}.dmg
+        asset_name: ${{ env.targetName }}_${{ matrix.os }}_${{ matrix.qt_ver }}.dmg
+        tag: ${{ github.ref }}
+        overwrite: true
+    ```
+
+
+---
+
+**在 Windows 下：**
+
+1. 在 Windows 下借助所编写的 `windows-publish.ps1` 脚本对多版本进行打包
+
+    ```yaml
+    - name: package
+      id: package
+      env:
+        archiveName: ${{ matrix.qt_ver }}-${{ matrix.qt_target }}-${{ matrix.qt_arch }}
+        msvcArch: ${{ matrix.msvc_arch }}          
+      shell: pwsh
+      run: |
+        & scripts\windows-publish.ps1 ${env:archiveName} ${env:QtApplicationName}
+        # 记录packageName给后续step
+        $name = ${env:archiveName}
+        echo "::set-output name=packageName::$name"
+    ```
+    
+    `windows-publish.ps1` 脚本：
+
+    ```scheme
+    [CmdletBinding()]
+    param (
+        [string] $archiveName, [string] $targetName
+    )
+    # 外部环境变量包括:
+    # archiveName: ${{ matrix.qt_ver }}-${{ matrix.qt_arch }}
+    # winSdkDir: ${{ steps.build.outputs.winSdkDir }}
+    # winSdkVer: ${{ steps.build.outputs.winSdkVer }}
+    # vcToolsInstallDir: ${{ steps.build.outputs.vcToolsInstallDir }}
+    # vcToolsRedistDir: ${{ steps.build.outputs.vcToolsRedistDir }}
+    # msvcArch: ${{ matrix.msvc_arch }}
+    
+    
+    # winSdkDir: C:\Program Files (x86)\Windows Kits\10\ 
+    # winSdkVer: 10.0.19041.0\ 
+    # vcToolsInstallDir: C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\VC\Tools\MSVC\14.28.29333\ 
+    # vcToolsRedistDir: C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\VC\Redist\MSVC\14.28.29325\ 
+    # archiveName: 5.9.9-win32_msvc2015
+    # msvcArch: x86
+    
+    $scriptDir = $PSScriptRoot
+    $currentDir = Get-Location
+    Write-Host "currentDir" $currentDir
+    Write-Host "scriptDir" $scriptDir
+    
+    function Main() {
+    
+        New-Item -ItemType Directory $archiveName
+    
+        # 拷贝exe
+        Copy-Item .\App\release\$targetName $archiveName\
+        Write-Host "[INFO] Copy-Item from .\App\release\" $targetName " to " $archiveName "done"
+    
+        # 拷贝依赖
+        windeployqt --qmldir . --plugindir $archiveName\plugins --no-translations --compiler-runtime $archiveName\$targetName
+        Write-Host "[INFO] windeployqt done"
+    
+        # 删除不必要的文件
+        $excludeList = @("*.qmlc", "*.ilk", "*.exp", "*.lib", "*.pdb")
+        Remove-Item -Path $archiveName -Include $excludeList -Recurse -Force
+        Write-Host "[INFO] Remove-Item done"
+    
+        # 拷贝vcRedist dll
+        $redistDll="{0}{1}\*.CRT\*.dll" -f $env:vcToolsRedistDir.Trim(),$env:msvcArch
+        Copy-Item $redistDll $archiveName\
+        Write-Host "[INFO] Copy-Item vcRedist dll done"
+    
+        # 拷贝WinSDK dll
+        $sdkDll="{0}Redist\{1}ucrt\DLLs\{2}\*.dll" -f $env:winSdkDir.Trim(),$env:winSdkVer.Trim(),$env:msvcArch
+        Copy-Item $sdkDll $archiveName\
+        Write-Host "[INFO] Copy-Item WinSDK dll done"
+    
+        # 打包zip
+        Compress-Archive -Path $archiveName $archiveName'.zip'
+        Write-Host "[INFO] Compress-Archive done"
+    }
+    
+    if ($null -eq $archiveName || $null -eq $targetName) {
+        Write-Host "args missing, archiveName is" $archiveName ", targetName is" $targetName
+        return
+    }
+    Main
+    ```
+
+
+
+2. 将构建产物（artifact）上传到 GitHub Actions 服务器
+
+    ```yaml
+    - uses: actions/upload-artifact@v2
+      with:
+        name: ${{ env.targetName }}_${{ steps.package.outputs.packageName }}
+        path: ${{ steps.package.outputs.packageName }}
+    ```
+
+3. 如果事件是一个标签(tag)事件，上传构建产物（.zip 文件）到 GitHub Release
+
+    ```yaml
+    - name: uploadRelease
+      if: startsWith(github.event.ref, 'refs/tags/')
+      uses: svenstaro/upload-release-action@v2
+      with:
+        repo_token: ${{ secrets.GITHUB_TOKEN }}
+        file: ${{ steps.package.outputs.packageName }}.zip
+        asset_name: ${{ env.targetName }}_${{ steps.package.outputs.packageName }}.zip
+        tag: ${{ github.ref }}
+        overwrite: true
+    ```
+
+    
+
+以上流程自动化了应用在macOS/Windows上的构建、测试、打包和发布。新的发布将在创建新标签时自动生成，dmg/zip文件会上传到 GitHub Release 中，从而方便向用户分发应用程序。
 
 如下图所示，应用程序已成功打包，并已在MacOS和Windows上发布。
 
 ![image-20231024165220391](pic/image-20231024165220391.png)
 
 ![image-20231024170159500](pic/image-20231024170159500.png)
+
+![image-20231025141122572](pic/image-20231025141122572.png)
 
 ## 代码
 
