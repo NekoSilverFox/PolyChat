@@ -1,16 +1,30 @@
 <!-- SPbSTU  -->
 
-<p align="center">
-    <img width="250px" src="https://github.com/NekoSilverFox/NekoSilverfox/blob/master/icons/logo_building_spbstu.png?raw=true" align="center" alt="ogo_building_spbstu" />
-    <br><br>
-    <b><font size=4>Санкт-Петербургский государственный политехнический университет</font></b><br>
-    <b>Институт компьютерных наук и технологий</b>
-</p>
-<p align="center"><b><font size=6>PolyChat</font></b></p>
-<p align="center"><b>Кроссплатформенный чат для локальной сети, основанный на разработке QT</b></p>
-<p align="center"><a href="/doc/README_CN.md">简体中文</a> <a href="/doc/README_EN.md">English</a></p>
+ <p align="center">
+  <img width="250px" src="https://github.com/NekoSilverFox/NekoSilverfox/blob/master/icons/logo_building_spbstu.png?raw=true" align="center" alt="ogo_building_spbstu" />
+  </br>
+  </br>
+  <b><font size=4>Санкт-Петербургский государственный политехнический университет</font></b></br>
+  <b>Институт компьютерных наук и технологий</b>
 
+  <br>
+
+ <p align="center"><b><font size=6>PolyChat</font></b></p>
+ <p align="center"><b>QT-based cross-platform LAN chat room</b></p>
+
+ <p align="center"></p>
+
+<p align="center">
+    <a href="./doc/README_RU.md">Руский язык</a>
+    <a href="./doc/README_CN.md">简体中文</a>
+</p>
+
+
+
+<div align=left>
 <!-- SPbSTU 最后一行 -->
+
+
 
 <div align=center>
 
@@ -21,275 +35,262 @@
 
 </div>
 
-<div style="page-break-after:always"></div>
-<p align="center"><b><font size=6>Содержание</font></b></p>
 
 [toc]
 
-# Требования
+# Requirements
 
-## Системные требования
+## System Requirements
 
-Преподавание в Политехническом университете постепенно переходит от онлайнового к офлайновому обучению. В аудиториях университетов преподаватели часто сталкиваются с проблемами при выдаче заданий или отправке документов студентам. Например, проектор в классе очень нечеткий, студенты на последнем ряду не могут прочитать слова, написанные на доске, преподавателю очень неудобно отправлять документы студентам по учебной сети и часто приходится отвечать на один и тот же вопрос несколько раз для разных студентов.
+Currently, teaching at the University of Science and Technology is gradually transitioning from online to offline mode. However, in the classrooms, teachers often encounter various issues when assigning tasks to students or sending files. These issues include a very unclear projector in the classroom, students in the back rows struggling to see what's written on the blackboard, the inconvenience of teachers sending files to students within the school's network environment, and the need for teachers to repeatedly answer the same questions from different students.
 
-PolyChat - это кроссплатформенное программное обеспечение для обмена мгновенными сообщениями, предназначенное для решения вышеперечисленных проблем и повышения продуктивности работы преподавателей и студентов. Оно имеет следующие основные характеристики:
+PolyChat is a cross-platform instant messaging software designed to address the above problems and improve the efficiency of both teachers and students. It has the following key features:
 
-- Благодаря закрытому характеру локальной сети, для входа в систему пользователям необходимо указать только свое имя и номер группы, чтобы обеспечить простоту использования и безопасность
+- Thanks to the closed nature of the local network for usability and security, users only need to provide their name and class number to log in and use the application.
+- Users can quickly create and join group chats and send messages and files within them.
+- Editable text message formatting.
+- Save message content as files.
+- Clear chat content.
 
-- Возможность пользователей быстро создавать групповые чаты и присоединяться к ним, а также отправлять в них сообщения и файлы
+## Technical Requirements
 
-- Редактируемое форматирование текстовых сообщений
+There are several main technical requirements:
 
-- Сохранение содержимого сообщения в txt-файл
-
-- Очищение содержимого чата
-
-## Технические требования
-
-Основные технические потребности (требования) следующие:
-
-- Для обеспечения кроссплатформенности разработка будет вестись в Qt
-
-- Чтобы соответствовать философии "высокая сплоченность, низкая связанность", разработка будет вестись с использованием трехуровневой архитектуры, разделяющей уровень представления (UI), уровень бизнес-логики (BLL) и уровень доступа к данным (DAL)
-
-- Qt будет использоваться для кроссплатформенности и масштабируемости
-
-- Для обмена текстовыми сообщениями используется протокол UDP, а для передачи файлов - протокол TCP
-
-- Когда пользователь отправляет сообщение, оно транслируется на порт
-
-- Socket UDP привязывается за фиксированным портом, а сигнал и слот используются для прослушивания входящих данных
-
-- Автоматизация тестирования, сборки, упаковки и выпуска с помощью CI/CD для Action на платформе GitHub
+- To ensure cross-platform compatibility, development will be done using Qt.
+- To adhere to the principle of "high cohesion, low coupling," a three-tier architecture will be used, separating the presentation layer (UI), business logic layer (BLL), and data access layer (DAL).
+- To achieve cross-platform and scalability, Qt will be used for development.
+- Text message delivery will use the UDP protocol, while file transmission will use the TCP protocol.
+- When a user sends a message, it will be broadcast on a specific port.
+- A UDP socket will be bound to a fixed port to listen for incoming data using the signal-slot mechanism.
+- GitHub platform's Actions will be used to implement CI/CD, allowing for automatic testing, building, packaging, and deployment.
 
 
 
-# Функциональная спецификация
+# Functional Specifications
 
-| Идентификатор                | Требование                                                                                                                                                                                                                                                                                |
-|------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| Login_Deficient              | Если имя и/или номер группы не введены, будет выведено уведомление с текстом ошибки                                                                                                                                                                                                       |
-| Login_Minimize               | При нажатии на кнопку минимизации окно сворачивается                                                                                                                                                                                                                                      |
-| Login_Exit                   | При нажатии на кнопку закрытия происходит выход из основной программы                                                                                                                                                                                                                     |
-|                              |                                                                                                                                                                                                                                                                                           |
-| DialogList_Load              | При успешном входе пользователя в систему будет вызван список чатов (групповой чат в локальной сети) и загружен соответствующий файл ресурсов                                                                                                                                             |
-| DialogList_Add_Chat          | Пользователи могут нажать на кнопку "Плюс", чтобы указать имя группового чата во всплывающем диалоговом окне, и будет создан групповой чат с таким именем. После создания нового группового чата список групповых чатов будет обновлен, чтобы добавить только что созданный групповой чат |
-| DialogList_Add_Chat_Clash    | Если групповой чат с определенным именем уже существует, при попытке создать его снова появится уведомление с сообщением об ошибке                                                                                                                                                        |
-| DialogList_View              | Пользователи могут использовать колесико мыши для просмотра содержимого списка                                                                                                                                                                                                            |
-| DialogList_Select            | Пользователи могут выбрать групповой чат из списка чатов                                                                                                                                                                                                                                  |
-| DialogList_Search            | Пользователи могут искать групповой чат по его названию через поисковую строку                                                                                                                                                                                                            |
-| DialogList_Join              | При нажатии (выборе) группового чата в списке чатов, пользователь присоединится к групповому чату и появится окно чата                                                                                                                                                                    |
-| DialogList_Join_Clash        | Когда пользователь присоединился к групповому чату, при повторном присоединении будет выведено уведомление с текстом ошибки                                                                                                                                                               |
-| DialogList_Minimize          | При нажатии на кнопку минимизации окно сворачивается                                                                                                                                                                                                                                      |
-| DialogList_Maximize          | При нажатии на кнопку полного экрана окно разворачивается на весь экран                                                                                                                                                                                                                   |
-| DialogList_Exit              | При нажатии на кнопку закрытия происходит выход из основной программы                                                                                                                                                                                                                     |
-|                              |                                                                                                                                                                                                                                                                                           |
-| ChatWidget_Text_Font_Type    | (Выделить текст) Изменить шрифт в раскрывающемся списке. Шрифты, которые можно изменять, - это шрифты, уже установленные на компьютере                                                                                                                                                    |
-| ChatWidget_Text_Font_Size    | (Выделить текст) Изменить размер текста в раскрывающемся списке, размер шрифта от 12 до 28                                                                                                                                                                                                |
-| ChatWidget_Text_Font_B       | (Выделить текст) Нажатие на кнопку "Жирный" сделает текст жирным                                                                                                                                                                                                                          |
-| ChatWidget_Text_Font_I       | (Выделить текст) Нажатие на кнопку "Курсив" сделает текст наклонным                                                                                                                                                                                                                       |
-| ChatWidget_Text_Font_L       | (Выделить текст) Нажатие на кнопку "Подчеркивание" добавит подчеркивание в нижнюю часть текста                                                                                                                                                                                            |
-| ChatWidget_Mess_View         | Пользователи могут использовать колесико мыши для просмотра журналов чата                                                                                                                                                                                                                 |
-| ChatWidget_Mess_Clean        | Нажатие на кнопку "Очистить чат" очистит все журналы чата в своем окне, содержимое окон других пользователей не затрагивается                                                                                                                                                             |
-| ChatWidget_Mess_Save         | Нажатие на кнопку "Сохранить" сохранит журнал чата в виде txt-файла                                                                                                                                                                                                                       |
-| ChatWidget_Mess_Send         | Нажатие на кнопку "Отправить" отправит текст в поле ввода в групповой чат                                                                                                                                                                                                                 |
-| ChatWidget_Mess_Send_Empty   | Когда поле ввода текста пустое, нажатие на кнопку "Отправить" ничего не отправляет                                                                                                                                                                                                        |
-| ChatWidget_File_Send         | Пользователи могут выбрать файл и отправить его в групповой чат                                                                                                                                                                                                                           |
-| ChatWidget_File_Send_Large   | Если размер файла превышает 1 Гб, он не будет отправлен                                                                                                                                                                                                                                   |
-| ChatWidget_File_Receive      | Когда пользователь отправляет файл, другие пользователи могут выбирать, принимать его или нет                                                                                                                                                                                             |
-| ChatWidget_File_Receive_Path | Если пользователь решит получить файл, то он может выбрать, где его сохранить                                                                                                                                                                                                             |
-| ChatWidget_User_In           | Когда пользователь присоединяется к групповому чату, все пользователи получают сообщение                                                                                                                                                                                                  |
-| ChatWidget_User_Out          | Пользователь, нажавший на кнопку выхода, выйдет из группового чата, в то время как другие пользователи не пострадают                                                                                                                                                                      |
-| ChatWidget_User_Out_Mess     | Когда пользователь покидает групповой чат, все получают сообщение о том, что пользователь покинул чат                                                                                                                                                                                     |
-| ChatWidget_Minimize          | При нажатии кнопки минимизации окно сворачивается                                                                                                                                                                                                                                         |
-| ChatWidget_Maximize          | При нажатии на кнопку полного экрана окно разворачивается на весь экран                                                                                                                                                                                                                   |
-
-
+| Identifier                   | Explanation                                                  |
+| ---------------------------- | ------------------------------------------------------------ |
+| Login_Deficient              | If either the name or class number is not entered, a notification will be displayed, including an error message. |
+| Login_Minimize               | When the minimize button is clicked, the window will be minimized. |
+| Login_Maximize               | When the close button is clicked, the main program exits.    |
+|                              |                                                              |
+| DialogList_Load              | After successful login, the dialog list (group chats in the local network) will be called, and the corresponding resource files will be loaded. |
+| DialogList_Add_Chat          | Users can click the plus button to specify a group chat name through a pop-up dialog, and a group chat with that name will be created. After creating a new group chat, the chat list will be refreshed to include the newly created chat. |
+| DialogList_Add_Chat_Clash    | When a chat with a particular name already exists, attempting to create it again will display a notification, including an error message. |
+| DialogList_View              | Users can use the mouse scroll wheel to view the contents of the list. |
+| DialogList_Select            | Users can select a specific group chat in the dialog list.   |
+| DialogList_Search            | Users can search for a group chat by name using the search box. |
+| DialogList_Join              | When a group chat in the dialog list is clicked (selected), the user will join the chat, and a chat window will pop up. |
+| DialogList_Join_Clash        | If a user has already joined a particular group chat and attempts to join it again, a notification will be displayed, including an error message. |
+| DialogList_Minimize          | When the minimize button is clicked, the window will be minimized. |
+| DialogList_Maximize          | When the full-screen button is clicked, the window will fill the entire screen. |
+| DialogList_Exit              | Pressing the close button exits the main program.            |
+|                              |                                                              |
+| ChatWidget_Text_Font_Type    | (Selecting a portion of text) Users can modify the font from a dropdown list, selecting from fonts already installed on the computer. |
+| ChatWidget_Text_Font_Size    | (Selecting a portion of text) Users can change the font size from a dropdown list, with sizes ranging from 12 to 28. |
+| ChatWidget_Text_Font_B       | (Selecting a portion of text) Clicking the bold button will make the text bold. |
+| ChatWidget_Text_Font_I       | (Selecting a portion of text) Clicking the italic button will make the text italic. |
+| ChatWidget_Text_Font_L       | (Selecting a portion of text) Clicking the underline button will add an underline at the bottom of the text. |
+| ChatWidget_Mess_View         | Users can use the mouse scroll wheel to view chat records.   |
+| ChatWidget_Mess_Clean        | Clicking the clear chat records button will clear all chat records within the user's window, without affecting the content in other users' windows. |
+| ChatWidget_Mess_Save         | Clicking the save button will save chat records as a txt file. |
+| ChatWidget_Mess_Send         | Clicking the send button will send the text content from the input box to the group chat. |
+| ChatWidget_Mess_Send_Empty   | When the text input box is empty, clicking the send button will not send any content. |
+| ChatWidget_File_Send         | Users can select a file and send it to the group chat.       |
+| ChatWidget_File_Send_Large   | Files larger than 1GB cannot be sent.                        |
+| ChatWidget_File_Receive      | After a user sends a file, other users can choose whether to accept the file. |
+| ChatWidget_File_Receive_Path | If a user chooses to receive a file, they can specify the file's save location. |
+| ChatWidget_User_In           | When a user joins a group chat, all users will receive a message. |
+| ChatWidget_User_Out          | When a user clicks the exit button, they leave the group chat, and other users are not affected. |
+| ChatWidget_User_Out_Mess     | When a user leaves the group chat, everyone will receive a message indicating that the user has exited. |
+| ChatWidget_Minimize          | When the minimize button is clicked, the window will be minimized. |
+| ChatWidget_Maximize          | When the full-screen button is clicked, the window will fill the entire screen. |
 
 # HLD
 
-## Дизайн GUI
 
-### Окно авторизации
+
+## User Interface Design
+
+### Login
 
 ![widget_login](doc/pic/README/widget_login.svg)
 
-### Окно списка групповых чатов
+### User List Interface
 
-<img src="doc/pic/README/chat_list.svg" alt="chat_list" style="zoom:67%;" />
+<img src="./doc/pic/README/chat_list.svg" alt="chat_list" style="zoom: 67%;" />
 
-### Окно чата
+### Chat Widget
 
-<img src="doc/pic/README/widget_chatbox.svg" alt="chat_widget" style="zoom:67%;" />
+<img src="./doc/pic/README/widget_chatbox.svg" alt="chat_widget" style="zoom:67%;" />
 
-## Архитектура
 
-Мы используем диаграмму Use Case для представления архитектуры программного обеспечения PolyChat:
+
+## Software Architecture
+
+We use use case diagrams to illustrate the software architecture of PolyChat:
 
 ![architecture](doc/pic/README/architecture.svg)
 
-## Диаграмма классов
+## Class Diagram
 
-В PolyChat существует 3 класса: список групп, группа и пользователь. Их взаимосвязь показана на диаграмме ниже:
+In PolyChat, there are three main classes: Chat List, Chat Group, and User. Their relationships are shown in the following diagram:
 
 ![class](doc/pic/README/class.svg)
 
-## Раздел группового чата UDP и список групп
+## UDP Group Chat and Chat List
 
-Это приложение реализует следующую функциональность: в пределах локальной сети пользователи могут добавить (создать) групповой чат, и когда групповой чат создан, список групповых чатов на других хостах синхронизируется и обновляется (через UDP).
+The functionality implemented in this program allows users to add (create) a group chat within a local area network. When a group chat is created, the chat lists on other hosts should be synchronized and updated (using UDP).
 
-После добавления каждого пользователя в групповой чат, в правой части экрана группового чата может быть отображен список онлайн-пользователей, показывающий имя пользователя, номер класса и ip-адрес соответственно. Слева от формы отображается содержание чата, т.е. групповой чат. Каждый человек может ввести текст (и изменить формат текста) и отправить его с экрана ввода чата.
+Once a user joins a group chat, the right side of the chat interface displays a list of online users, showing their usernames, class numbers, and IP addresses. On the left side is the chat content display area, which is the group chat itself. Each user can input text in the chat input interface (and also modify text formatting) and send messages.
 
-UDP-сообщения передаются по локальной сети с помощью механизма `Broadcast` и для удобства использования дополнены `ShareAddress` и `ReuseAddressHint`, которые описаны ниже.
+UDP messages are broadcast within the local area network using the `Broadcast` mechanism. The software uses `ShareAddress` and `ReuseAddressHint` to enhance usability. Here's an explanation of these:
 
-- `Broadcast`: широковещательная передача на все порты текущей локальной сети
+- `Broadcast`: Broadcasts messages to all ports within the current local network.
+- `ShareAddress`: Allows other services to bind to the same address and port. This is useful when multiple processes listen to the same address and port to distribute the load of a service (e.g., a web server with multiple pre-forked listeners can significantly improve response times). However, this option needs to be considered for certain security issues, which is why it's used in combination with `ReuseAddressHint`.
+- `ReuseAddressHint`: Even if the address and port are already bound by another socket, it should attempt to rebind the service.
 
-- `ShareAddress`: позволяет другим службам связываться с тем же адресом и портом. Это полезно, когда несколько процессов разделяют нагрузку на службу, прослушивая один и тот же адрес и порт (например, веб-сервер с несколькими предварительно вилочными слушателями может значительно улучшить время отклика). Однако, поскольку любой службе разрешено перепривязываться, этот вариант должен учитывать некоторые вопросы безопасности. Поэтому, комбинируя эту опцию с `ReuseAddressHint`.
-
-- `ReuseAddressHint`: он должен попытаться перепривязать сервис, даже если адрес и порт уже привязаны другим сокетом.
+These features allow users within the local network to communicate through group chats and ensure that the chat lists on different hosts stay up-to-date through UDP broadcasting.
 
 ![ui_ChatList_ChatBox](doc/pic/README/ui_ChatList_ChatBox.png)
 
-### Собственный протокол взаимодействия UDP
+## UDP Communication Protocol
 
-Для достижения вышеуказанной функциональности и обеспечения последующей расширяемости программы. Используется индивидуальный протокол связи, в котором 8 блоков.
+To implement the aforementioned features and ensure the software's future extensibility, a custom communication protocol is used. This protocol consists of 8 blocks:
 
-- `Блок 1`: типы сообщений. В настоящее время существует 6 типов.
-    - `ChatExist`: текущее окно группового чата существует и транслируется через регулярные промежутки времени
-    - `ChatDestory`: удаляет текущий групповой чат, отправляется, когда все (последние) участники группового чата покинули его.
-    - `Msg`: обычное текстовое сообщение
-    - `File`: запрос на отправку файла
-    - `UserJoin`: пользователь присоединяется к текущему групповому чату
-    - `UserLeft`: пользователь покидает текущий групповой чат
+- `Block 1`: Message type. Currently, there are 6 types:
+    - `ChatExist`: Indicates the current existence of the group chat window, broadcasted periodically.
+    - `ChatDestory`: Used to delete the current group chat when all users leave it (when the last user exits).
+    - `Msg`: For regular text messages.
+    - `File`: Used for file transfer requests.
+    - `UserJoin`: Sent when a user joins the current group chat.
+    - `UserLeft`: Sent when a user leaves the current group chat.
 
-- `Блок 2`: название текущего группового чата
-- `Блок 3`: порт, на котором находится текущий групповой чат
-- `Блок 4`: имя пользователя, отправившего это сообщение
-- `Блок 5`: группы пользователя, отправившего это сообщение
-- `Блок 6`: IP-адрес пользователя, отправившего это сообщение
-- `Блок 7`: содержание сообщения (переменной длины)
-- `Блок 8`: содержание сообщения (переменной длины, используется для расширения параграфа 7)
+- `Block 2`: Name of the current group chat.
+- `Block 3`: Port where the current group chat is located.
+- `Block 4`: Username of the message sender.
+- `Block 5`: Class number of the user sending the message.
+- `Block 6`: IP address of the user sending the message.
+- `Block 7`: Message content (variable length).
+- `Block 8`: Message content (variable length, for extending Block 7).
 
-Как показано на диаграмме ниже:
+Here's a graphical representation:
 
 ![udp-msg](doc/pic/README/udp-msg.png)
 
-### Сервер
 
-> **Примечание: Система чата в PolyChat похожа на P2P, в том смысле, что пользователь может выступать как в роли сервера, так и в роли клиента. Один пользователь может выступать в качестве и сервера, и клиента. **
 
-После создания UDP-сокета и привязки его к фиксированному порту, сервер отслеживает входящие данные, используя сигналы и слоты. Если появляется сообщение, он получает данные и анализирует тип сообщения. Если сообщение является входом нового пользователя, сервер обновляет список пользователей и добавляет уведомление о новом пользователе онлайн в окно отображения чата; аналогично, если пользователь находится в автономном режиме, сервер удаляет пользователя из списка пользователей и отображает уведомление об автономном режиме в окне отображения чата; если это сообщение чата, он получает сообщение и отображает его в окне. Технологическая схема выглядит следующим образом.
+
+
+###  Server
+
+**Note: In the PolyChat chat system, it operates similarly to P2P. A user can act as both a server and a client.**
+
+To implement this, a UDP socket is created and bound to a fixed port. It listens for incoming data using signals and slots. When data arrives, it is received, and the message type is analyzed. If the message indicates a new user login, the server updates the user list and adds a notification about the new user going online to the chat display window. Similarly, if it's a user logout message, the server removes that user from the user list and displays an offline notification in the chat window. If it's a chat message, the server receives the message and displays it in the chat window.
+
+Here's a flowchart to illustrate the process:
 
 ![udp_server](doc/pic/README/udp_server.svg)
 
-### Клиент
+###  Client
 
-> **Примечание: Система чата в PolyChat похожа на P2P, в том смысле, что пользователь может выступать как в роли сервера, так и в роли клиента. Один пользователь может выступать в качестве и сервера, и клиента. **
+**Note: In the PolyChat chat system, it operates similarly to P2P. A user can act as both a server and a client.**
 
-Когда пользователь присоединяется к групповому чату, имя пользователя, номер группы, имя хоста и ip-адрес получаются и передаются на LAN-сервер (ChatBoxWidget) для обновления списка пользователей справа. Затем, когда клиенту нужно отправить сообщение, он вводит его в поле ввода чата и нажимает кнопку отправки, чтобы отправить чат, одновременно транслируя различные сообщения из локальной системы. Технологическая схема выглядит следующим образом：
+Firstly, when a user joins a group chat, their username, class number, hostname, and IP address are obtained. These details are then broadcasted to the local area network's server (ChatBoxWidget) to update the user list on the right side of the chat interface. When the client needs to send a message, they input the message in the chat input bar and press the send key. At the same time, various local system information is also broadcasted. Here's a flowchart illustrating the process:
 
 ![udp_client](doc/pic/README/udp_client.svg)
 
-## Секция передачи файлов TCP
+##  TCP File Transfer Section
 
-### Собственный протокол взаимодействия TCP
+### TCP Communication Protocol
 
-TCP использует специализированный протокол связи, в котором есть 4 части.
+TCP uses a custom communication protocol consisting of four parts:
 
-Части с 1 по 3 - это заголовки файлов, а часть 4 - собственно данные.
+Parts 1-3 make up the file header, while Part 4 contains the actual data.
 
-- `Часть 1`: Имя файла
-- `Часть 2`: размер файла (байт)
-- `Часть 3`: MD5 файла
-- `Часть 4`: данные (4 Кб на блок)
+- `Part 1`: File name
+- `Part 2`: File size (in bytes)
+- `Part 3`: MD5 hash of the file
+- `Part 4`: Data (each data block is 4KB in size)
 
-При передаче сервер сначала отправляет заголовок файла. Для предотвращения "липких" пакетов TCP, подождите 20 мс перед началом отправки блока данных
+During transmission, the server first sends the file header. To prevent TCP packet sticking, it waits for 20ms before starting to send data blocks.
 
 ![tcp_data](doc/pic/README/tcp_data.png)
 
-### Сторона отправителя
+###  Sender
 
-> ***Сторона отправителя берет на себя роль сервера.***
+The sender acts as the server, responsible for sending files.
 
 ![ui_tcp_file_sender](doc/pic/README/ui_tcp_file_sender.png)
 
-Нажмите на кнопку Отправить, выберите файл для отправки на локальном компьютере, нажмите на кнопку Отправить, появится экран Отправителя, затем индикатор выполнения покажет информацию о файле, который в данный момент отправляется, ход передачи, подключенного в данный момент клиента и другую информацию. Если вы хотите закрыть процесс отправки, нажмите кнопку Закрыть. Технологическая схема выглядит следующим образом:
+Clicking the "File Send" button allows you to select the file you want to send from your local computer. When you click the "Send" button, a sender interface pops up. On this interface, a progress bar displays the current file transfer information, including the size of the file sent and the transfer speed. If you want to terminate the sending process, you can simply click the "Close" button. Here's a flowchart illustrating the process:
 
 ![tcp_sender](doc/pic/README/tcp_sender.svg)
 
-### Сторона получателя
+###  Receiver
 
-> ***Сторона получателя берет на себя роль клиента.***
+**The receiver acts as the client in this operation.**
 
-В интерфейсе появится диалоговое окно с вопросом, хотите ли вы принять сообщение о передаче файла от конкретного пользователя, если да, нажмите кнопку Yes, в противном случае нажмите кнопку No.
+When a file transfer request is received, a dialog box is displayed in the interface asking whether to accept the file transfer from a specific user. If the user chooses to accept, they click the "Yes" button; otherwise, they click the "No" button.
 
 ![ui_tcp_file_getter_req](doc/pic/README/ui_tcp_file_getter_req.png)
 
-После того как вы выбрали каталог и имя файла, в котором вы хотите получить файл, вы начнете получать файл, в процессе также будет отображаться ход передачи файла, информация о получателе и клиенте. Интерфейс на принимающей стороне показан ниже:
+When receiving a file, after choosing the directory and file name for the received file, the process begins, displaying the progress of the file transfer. The receiver's interface would resemble the one shown in the diagram below:
 
 ![ui_tcp_file_getter](doc/pic/README/ui_tcp_file_getter.png)
 
-Технологическая схема выглядит следующим образом:
+Here's a flowchart illustrating the process of receiving a file:
 
 ![tcp_getter](doc/pic/README/tcp_getter.svg)
 
-## Потоки данных
 
-Мы используем диаграмму потоков данных для представления обработки сообщений, полученных в окне группового чата PolyChat:
+
+## Data flow
+
+Data flow diagrams are used to represent the information receiving and processing process in the PolyChat group chat window:
 
 ![chat_port](doc/pic/README/chat_port.svg)
 
 
 
-# Тестирование
 
-## Описание
 
-PolyChat будет тестироваться с помощью QTest.
+# Test
 
-QTestlib — это среда модульного тестирования, предоставляемая Qt для программ или библиотек, написанных на основе Qt. QTestLib предоставляет базовые функции среды модульного тестирования и расширенные функции для тестирования графического интерфейса. Ниже перечислены особенности QTestlib:
+> Due to GitHub no longer supporting MacOS 10.15 and clang_64, the CI (Continuous Integration) for MacOS has been updated to MacOS 11.0.
 
-A. Легкость: QTestlib содержит только 6000 строк кода и 60 экспортируемых символов.
+## Explanation
 
-B. Автономность: для тестов без графического интерфейса QTestlib требуется только несколько символов базовой библиотеки Qt.
+Testing of PolyChat will be conducted using QTest. QTestlib is a unit testing framework provided by Qt for testing programs or libraries written using Qt. QTestlib offers basic unit testing capabilities and extends its functionality for GUI testing. Some of QTestlib's features include:
 
-C. Быстрота тестирования: QTestlib не требует специальной исполнительной программы тестирования и не требует специальной регистрации для тестирования.
+A. Lightweight: QTestlib consists of only 6000 lines of code and 60 exported symbols.
+B. Self-contained: For non-GUI testing, QTestlib requires only a few symbols from the Qt core library.
+C. Quick Testing: QTestlib doesn't require a special test runner, and tests don't need special registration.
+D. Data-Driven Testing: A test program can be executed multiple times with different sets of test data.
+E. Basic GUI Testing: QTestlib provides features to simulate mouse and keyboard events.
+F. Benchmark Testing: QTestlib supports benchmark testing and offers multiple measurement backends.
+G. IDE Friendly: QTestlib's output can be parsed by Visual Studio and KDevelop.
+H. Thread-Safe: Error reporting is thread-safe and atomic.
+J. Type-Safe: It extends template usage to prevent errors caused by implicit type conversions.
+K. Extensible: Users can easily add custom types to test data and test output.
 
-D. Тестирование на основе данных: тестовая программа может выполняться несколько раз на разных наборах тестовых данных.
+Testing must be automated and performed when building the project with the qmake build system that generates the executable. GitHub uses CI/CD, and triggers automatically build and test on both Windows and macOS platforms when code changes occur (testing on both platforms ensures PolyChat's cross-platform compatibility).
 
-E. Базовое тестирование GUI: QTestlib предоставляет функцию имитации событий мыши и клавиатуры.
+## Expanding Test Suites
 
-F. Контрольное тестирование: QTestlib поддерживает контрольное тестирование и предоставляет различные средства измерения.
+When new code is added, the test suite should be expanded by adding new test cases with the following attributes:
 
-G. Совместимость с IDE: выходные данные QTestlib могут быть проанализированы Visual Studio и KDevelop.
+- Test name (identifier) that includes the test level, related module, and the test subject.
+- Related modules impacted by the test.
+- Descriptions of the expected results and the application's response to them.
 
-H. Безопасность потоков: отчеты об ошибках являются потокобезопасными и атомарными.
+If new code also changes the software's behavior, all test cases related to affected product modules should be reviewed and rewritten to match the new behavior.
 
-J. Безопасность типов: шаблон расширен для предотвращения ошибок, вызванных неявным преобразованием типов.
+## Unit (Module) Testing
 
-K. Простота расширения: определяемые пользователем типы могут быть легко добавлены к тестовым данным и тестовым результатам.
+Several testing design techniques are applied:
 
-Тесты должны выполняться автоматически, когда проект собирается с помощью компоновщика qmake, создающего исполняемый файл. Используя CI/CD на GitHub, триггеры будут автоматически собирать и тестировать код на платформах Windows и macOS при изменении кода (одновременное тестирование на обеих платформах обеспечивает кроссплатформенный характер PolyChat).
-
-<div style="page-break-after:always"></div>
-
-## Процедура расширения тестового набора
-
-При добавлении нового кода необходимо расширить тестовый набор, добавив новые тест-кейсы со следующими атрибутами:
-
-- Название тестирования (идентификатор), включающее уровень тестирования, связанные модули и объект тестирования
-- Связанные модули, которые затрагиваются тестированием
-- Ожидаемые результаты, описывающие состояния/действия и реакцию на них приложения
-
-Если новый код также изменил поведение продукта, необходимо проверить и переписать все тест-кейсы, связанные с затронутыми модулями продукта, в соответствии с новым поведением.
-
-<div style="page-break-after:always"></div>
-
-## Модульное тестирование
-
-Были применены несколько техник тест-дизайна: 
-
-- классы эквивалентности
+- Equivalent Class
 
     ```c++
     void PolyChatTester::ut_login_login_empty()
@@ -299,9 +300,7 @@ K. Простота расширения: определяемые пользо�
     }
     ```
 
-    
-
-- граничные условия
+- Boundary Conditions
 
     ```c++
     void PolyChatTester::ut_chatbox_cbxFontSize_min_max()
@@ -314,9 +313,7 @@ K. Простота расширения: определяемые пользо�
     }
     ```
 
-    
-
-- попарное тестирование
+- Pairwise Testing
 
     ```c++
     void PolyChatTester::ut_chatbox_btnBold()
@@ -329,107 +326,104 @@ K. Простота расширения: определяемые пользо�
     }
     ```
 
+This table outlines the test cases for PolyChat, including test names, the associated modules, and the expected outcomes:
 
-|     | Название тестирования          | Связанные модули | Описание (ожидаемые результаты)                                                                                                                              |
-|-----|--------------------------------|------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| 1   | ut_login_login_empty           | Login            | Сбой входа в систему (имя пользователя не может быть пустым).                                                                                                |
-| 2   | ut_login_group_empty           | Login            | Сбой входа в систему (номер группы не может быть пустым).                                                                                                    |
-| 3   | ut_login_login_group_empty     | Login            | Сбой входа в систему (имя пользователя и номер группы не могут быть пустыми).                                                                                |
-| 4   | ut_login_init_login            | Login            | Локальная информация инициализируется правильно путем передачи имени пользователя в правильном формате.                                                      |
-| 5   | ut_login_init_group            | Login            | Локальная информация инициализируется правильно путем передачи номера группы в правильном формате.                                                           |
-| 6   | ut_login_btnlogin              | Login            | btnlogin не является отмечаемой кнопкой (Checkable-QToolButton), а отображение icon отключено.                                                               |
-| 7   | ut_login_btnlogin_emit         | Login            | Вход в систему. Сигнал (нажатие кнопки) входа в систему каждый раз срабатывает правильно и единожды.                                                         |
-| 8   | ut_login_btnInfo_emit          | Login            | Каждый раз, когда пользователь нажимает на btnInfo, сигнал (нажатие кнопки) гарантированно срабатывает правильно и единожды.                                 |
-| 9   | ut_login_window                | Login            | Размер Login отключен и составляет 400x250.                                                                                                                  |
-| 10  | ut_addchat_btnCancelAddChat    | Add Chat         | Каждый раз, когда пользователь нажимает кнопку отмены, сигнал (нажатие кнопки) срабатывает правильно и единожды.                                             |
-| 11  | ut_addchat_btnAddChat          | Add Chat         | Каждый раз, когда пользователь нажимает кнопку добавления, сигнал (нажатие кнопки) срабатывает правильно и единожды.                                         |
-| 12  | ut_chat_init                   | Chat(Class)      | Правильно инициализируется (используя конструктор) объект Chat.                                                                                              |
-| 13  | ut_chatlist_init               | ChatList         | Правильно инициализируется (используя конструктор) объект ChatList.                                                                                          |
-| 14  | ut_chatlist_btnNewChat         | ChatList         | btnNewChat не является отмечаемой кнопкой (Checkable-QToolButton), а отображение текста отключено.                                                           |
-| 15  | ut_chatlist_btnNewChat_emit    | ChatList         | Каждый раз, когда пользователь нажимает кнопку, чтобы добавить групповой чат, сигнал (нажатие кнопки) срабатывает правильно и единожды.                      |
-| 16  | ut_chatlist_leSearch           | ChatList         | Моделируется то, как пользователь нажимает и печатает на клавиатуре, чтобы убедиться, что вводимое содержимое правильно отображается в поле поиска leSearch. |
-| 17  | ut_chatlist_lbName             | ChatList         | Имя пользователя текущего пользователя правильно отображается в lbName.                                                                                      |
-| 18  | ut_chatlist_lbGroupNumber      | ChatList         | Номер группы текущего пользователя правильно отображается в lbGroupNumber.                                                                                   |
-| 19  | ut_chatlist_lbIP               | ChatList         | IP-адрес текущего пользователя корректно отображается в lbIP.                                                                                                |
-| 20  | ut_addchat_port_exist          | ChatList         | Возвращает true (групповой чат уже существует на текущем порту).                                                                                             |
-| 21  | ut_addchat_port_not_exist      | ChatList         | Возвращает false (групповой чат не существует на текущем порту).                                                                                             |
-| 22  | ut_addchat_chat_exist          | ChatList         | Возвращает true (групповой чат с таким названием уже существует).                                                                                            |
-| 23  | ut_addchat_chat_not_exist      | ChatList         | Возвращает false (групповой чат с таким названием не существует).                                                                                            |
-| 24  | ut_chatlist_chat_open          | ChatList         | Возвращает true (групповой чат с таким названием уже открыт).                                                                                                |
-| 25  | ut_chatlist_chat_not_open      | ChatList         | Возвращает false (групповой чат с таким названием не открыт).                                                                                                |
-| 26  | ut_chatlist_getRandomPort      | ChatList         | Генерирует случайные порты между PORT_MIN и PORT_MAX.                                                                                                        |
-| 27  | ut_chatlist_setChatState       | ChatList         | Окно чата открыто или закрыто.                                                                                                                               |
-| 28  | ut_tcpclient_lbClientIP        | TcpClient        | Содержимое lbClientIP правильно анализируется и отображается.                                                                                                |
-| 29  | ut_tcpclient_lbClientPort      | TcpClient        | Содержимое lbClientPort правильно анализируется и отображается.                                                                                              |
-| 30  | ut_tcpclient_lbServerIP        | TcpClient        | Содержимое lbServerIP правильно анализируется и отображается.                                                                                                |
-| 31  | ut_tcpclient_lbServerPort      | TcpClient        | Содержимое lbServerPort правильно анализируется и отображается.                                                                                              |
-| 32  | ut_tcpclient_lbFileName        | TcpClient        | Содержимое lbFileName правильно анализируется и отображается.                                                                                                |
-| 33  | ut_tcpclient_lbFileSize        | TcpClient        | Содержимое lbFileSize правильно анализируется и отображается.                                                                                                |
-| 34  | ut_tcpclient_progressBar       | TcpClient        | progressBar инициализирован 0.                                                                                                                               |
-| 35  | ut_tcpclient_btnCancel         | TcpClient        | btnCancel не является отмечаемой кнопкой (Checkable-QToolButton).                                                                                            |
-| 36  | ut_tcpclient_btnCancel_emit    | TcpClient        | Каждый раз, когда пользователь нажимает кнопку отмены, сигнал (нажатие кнопки) срабатывает правильно и единожды.                                             |
-| 37  | ut_tcpclient_btnSave           | TcpClient        | btnSave не является отмечаемой кнопкой (Checkable-QToolButton).                                                                                              |
-| 38  | ut_tcpclient_btnSave_emit      | TcpClient        | Каждый раз, когда пользователь нажимает кнопку сохранения, сигнал (нажатие кнопки) срабатывает правильно и единожды.                                         |
-| 39  | ut_tcpclient_closeEvent_emit   | TcpClient        | Запускает событие закрытия, когда пользователь закрывает окно.                                                                                               |
-| 40  | ut_tcpclient_textBrowser       | TcpClient        | textBrowser доступен только для чтения, запись запрещена.                                                                                                    |
-| 41  | ut_tcpserver_lbClientIP        | TcpServer        | Содержимое lbClientIP правильно анализируется и отображается.                                                                                                |
-| 42  | ut_tcpserver_lbClientPort      | TcpServer        | Содержимое lbClientPort правильно анализируется и отображается.                                                                                              |
-| 43  | ut_tcpserver_lbServerIP        | TcpServer        | Содержимое lbServerIP правильно анализируется и отображается.                                                                                                |
-| 44  | ut_tcpserver_lbServerPort      | TcpServer        | Содержимое lbServerPort правильно анализируется и отображается.                                                                                              |
-| 45  | ut_tcpserver_lbFilePath        | TcpServer        | Содержимое lbFilePath правильно анализируется и отображается.                                                                                                |
-| 46  | ut_tcpserver_lbFileSize        | TcpServer        | Содержимое lbFileSize правильно анализируется и отображается.                                                                                                |
-| 47  | ut_tcpserver_btnCancel         | TcpServer        | btnCancel не является отмечаемой кнопкой (Checkable-QToolButton).                                                                                            |
-| 48  | ut_tcpserver_btnCancel_emit    | TcpServer        | Каждый раз, когда пользователь нажимает кнопку отмены, сигнал (нажатие кнопки) срабатывает правильно и единожды.                                             |
-| 49  | ut_tcpserver_progressBar       | TcpServer        | progressBar инициализирован 0.                                                                                                                               |
-| 50  | ut_tcpserver_closeEvent_emit   | TcpServer        | Запускает событие закрытия, когда пользователь закрывает окно.                                                                                               |
-| 51  | ut_tcpserver_textBrowser       | TcpServer        | textBrowser доступен только для чтения, запись запрещена.                                                                                                    |
-| 52  | ut_chatbox_title               | ChatBox          | Заголовок окна ChatBox инициализирован корректно (соответствует формату).                                                                                    |
-| 53  | ut_chatbox_btnBold             | ChatBox          | btnBold является отмечаемой кнопкой (Checkable-QToolButton), а отображение текста отключено.                                                                 |
-| 54  | ut_chatbox_btnItalic           | ChatBox          | btnItalic является отмечаемой кнопкой (Checkable-QToolButton), а отображение текста отключено.                                                               |
-| 55  | ut_chatbox_btnUnderLine        | ChatBox          | btnUnderLine является отмечаемой кнопкой (Checkable-QToolButton), а отображение текста отключено.                                                            |
-| 56  | ut_chatbox_btnColor            | ChatBox          | btnColor не является отмечаемой кнопкой (Checkable-QToolButton), а отображение текста отключено.                                                             |
-| 57  | ut_chatbox_btnFileSend         | ChatBox          | btnFileSend не является отмечаемой кнопкой (Checkable-QToolButton), а отображение текста отключено.                                                          |
-| 58  | ut_chatbox_btnSave             | ChatBox          | btnSave не является отмечаемой кнопкой (Checkable-QToolButton), а отображение текста отключено.                                                              |
-| 59  | ut_chatbox_btnClean            | ChatBox          | btnClean не является отмечаемой кнопкой (Checkable-QToolButton), а отображение текста отключено.                                                             |
-| 60  | ut_chatbox_btnExit             | ChatBox          | btnExit не является отмечаемой кнопкой (Checkable-QToolButton).                                                                                              |
-| 61  | ut_chatbox_btnSend             | ChatBox          | btnSend не является отмечаемой кнопкой (Checkable-QToolButton).                                                                                              |
-| 62  | ut_chatbox_btnBold_emit        | ChatBox          | Нажатие btnBold активирует сигнал (нажатие кнопки), и состояние изменяется на «включено»; нажатие еще раз возвращает в исходное состояние.                   |
-| 63  | ut_chatbox_btnItalic_emit      | ChatBox          | Нажатие btnItalic активирует сигнал (нажатие кнопки), и состояние изменяется на «включено»; нажатие еще раз возвращает в исходное состояние.                 |
-| 64  | ut_chatbox_btnUnderLine_emit   | ChatBox          | Нажатие btnUnderLine активирует сигнал (нажатие кнопки), и состояние изменяется на «включено»; нажатие еще раз возвращает в исходное состояние.              |
-| 65  | ut_chatbox_btnColor_emit       | ChatBox          | Нажатие btnColor запускает сигнал (нажатие кнопки).                                                                                                          |
-| 66  | ut_chatbox_btnFileSend_emit    | ChatBox          | Нажатие btnFileSend запускает сигнал (нажатие кнопки).                                                                                                       |
-| 67  | ut_chatbox_btnSave_emit        | ChatBox          | Нажатие кнопки btnSave запускает сигнал (нажатие кнопки).                                                                                                    |
-| 68  | ut_chatbox_btnClean_emit       | ChatBox          | Нажатие кнопки btnClean запускает сигнал (нажатие кнопки).                                                                                                   |
-| 69  | ut_chatbox_btnExit_emit        | ChatBox          | Нажатие кнопки btnExit запускает сигнал (нажатие кнопки).                                                                                                    |
-| 70  | ut_chatbox_btnSend_emit        | ChatBox          | Нажатие кнопки btnSend запускает сигнал (нажатие кнопки).                                                                                                    |
-| 71  | ut_chatbox_msgTextBrowser      | ChatBox          | msgTextBrowser доступен только для чтения.                                                                                                                   |
-| 72  | ut_chatbox_msgTextEdit         | ChatBox          | msgTextEdit позволяет писать.                                                                                                                                |
-| 73  | ut_chatbox_init_cbxFontSize    | ChatBox          | Начальный шрифт 12.                                                                                                                                          |
-| 74  | ut_chatbox_cbxFontSize_min_max | ChatBox          | Минимальный размер шрифта 10, максимальный размер 28.                                                                                                        |
-| 75  | ut_chatbox_closeEvent_emit     | ChatBox          | Событие close срабатывает, когда пользователь закрывает окно (выход).                                                                                        |
-| 76  | ut_chatbox_tbUser              | ChatBox          | Ширина списка пользователей составляет 150-350.                                                                                                              |
-| 77  | ut_chatbox_lbNumberOnlineUse   | ChatBox          | UI инициализация онлайн-расчета численности в правильном формате.                                                                                            |
+| Test Case | Test Name                   | Module      | Description (Expected Results)                                 |
+|-----------|-----------------------------|-------------|-----------------------------------------------------------------|
+| 1         | ut_login_login_empty        | Login       | Login fails (username cannot be empty)                        |
+| 2         | ut_login_group_empty        | Login       | Login fails (class number cannot be empty)                    |
+| 3         | ut_login_login_group_empty  | Login       | Login fails (both username and class number cannot be empty)   |
+| 4         | ut_login_init_login         | Login       | Initialize local information with the correct format of login  |
+| 5         | ut_login_init_group         | Login       | Initialize local information with the correct format of class number |
+| 6         | ut_login_btnlogin           | Login       | Ensure btnlogin is non-checkable, and the icon display is disabled |
+| 7         | ut_login_btnlogin_emit      | Login       | Ensure the signal is correctly triggered every time the user clicks the login button |
+| 8         | ut_login_btnInfo_emit       | Login       | Ensure the signal is correctly triggered every time the user clicks the btnInfo button |
+| 9         | ut_login_window             | Login       | The Login window is not resizable and has a size of 400x250    |
+| 10        | ut_addchat_btnCancelAddChat  | Add Chat    | Ensure that btnCancelAddChat is a clickable button, and the text display is disabled |
+| 11        | ut_addchat_btnAddChat        | Add Chat    | Ensure that btnAddChat is a clickable button, and the text display is disabled |
+| 12        | ut_chat_init                | Chat(Class) | Correctly initialize a Chat object using the constructor       |
+| 13        | ut_chatlist_init            | ChatList    | Correctly initialize a ChatList object using the constructor   |
+| 14        | ut_chatlist_btnNewChat      | ChatList    | Ensure that btnNewChat is a checkable QToolButton, and the text display is disabled |
+| 15        | ut_chatlist_btnNewChat_emit | ChatList    | Ensure that the signal is correctly triggered every time the user clicks the "Add Chat" button |
+| 16        | ut_chatlist_leSearch        | ChatList    | Simulate user input by clicking and typing on the keyboard to ensure input content is correctly displayed in leSearch |
+| 17        | ut_chatlist_lbName          | ChatList    | Correctly display the user's username in lbName                |
+| 18        | ut_chatlist_lbGroupNumber   | ChatList    | Correctly display the user's class number in lbGroupNumber      |
+| 19        | ut_chatlist_lbIP            | ChatList    | Correctly display the user's IP address in lbIP                |
+| 20        | ut_addchat_port_exist       | ChatList    | Returns true (a group chat already exists on the current port) |
+| 21        | ut_addchat_port_not_exist   | ChatList    | Returns false (no group chat exists on the current port)       |
+| 22        | ut_addchat_chat_exist       | ChatList    | Returns true (a group chat with the same name already exists)  |
+| 23        | ut_addchat_chat_not_exist   | ChatList    | Returns false (no group chat with the same name exists)        |
+| 24        | ut_chatlist_chat_not_open   | ChatList    | Returns true (a group chat with a certain name is not open)    |
+| 25        | ut_chatlist_chat_open       | ChatList    | Returns false (a group chat with a certain name is open)       |
+| 26        | mt_chatlist_getRandomPort   | ChatList    | Generates a random port between PORT_MIN and PORT_MAX           |
+| 27        | mt_chatlist_setChatState    | ChatList    | Set the chat window to open or close normally                  |
+| 28        | ut_tcpclient_lbClientIP     | TcpClient   | lbClientIP content is correctly parsed and displayed           |
+| 29        | ut_tcpclient_lbClientPort   | TcpClient   | lbClientPort content is correctly parsed and displayed         |
+| 30        | ut_tcpclient_lbServerIP     | TcpClient   | lbServerIP content is correctly parsed and displayed           |
+| 31        | ut_tcpclient_lbServerPort   | TcpClient   | lbServerPort content is correctly parsed and displayed         |
+| 32        | ut_tcpclient_lbFileName     | TcpClient   | lbFileName content is correctly parsed and displayed           |
+| 33        | ut_tcpclient_lbFileSize     | TcpClient   | lbFileSize content is correctly parsed and displayed           |
+| 34        | ut_tcpclient_progressBar    | TcpClient   | progressBar is initialized to 0                                |
+| 35        | ut_tcpclient_btnCancel      | TcpClient   | Ensure that btnCancel is non-checkable                           |
+| 36        | ut_tcpclient_btnCancel_emit | TcpClient   | Ensure that the signal is correctly triggered every time the user clicks the Cancel button |
+| 37        | ut_tcpclient_btnSave        | TcpClient   | Ensure that btnSave is non-checkable                            |
+| 38        | ut_tcpclient_btnSave_emit   | TcpClient   | Ensure that the signal is correctly triggered every time the user clicks the Save button |
+| 39        | ut_tcpclient_closeEvent_emit | TcpClient   | Triggered when the user closes the window |
+| 40        | ut_tcpclient_textBrowser    | TcpClient   | textBrowser is in read-only mode and does not allow writing   |
+| 41        | ut_tcpserver_lbClientIP     | TcpServer   | lbClientIP content is correctly parsed and displayed           |
+| 42        | ut_tcpserver_lbClientPort   | TcpServer   | lbClientPort content is correctly parsed and displayed         |
+| 43        | ut_tcpserver_lbServerIP     | TcpServer   | lbServerIP content is correctly parsed and displayed           |
+| 44        | ut_tcpserver_lbServerPort   | TcpServer   | lbServerPort content is correctly parsed and displayed         |
+| 45        | ut_tcpserver_lbFilePath     | TcpServer   | lbFilePath content is correctly parsed and displayed           |
+| 46        | ut_tcpserver_lbFileSize     | TcpServer   | lbFileSize content is correctly parsed and displayed           |
+| 47        | ut_tcpserver_btnCancel      | TcpServer   | Ensure that btnCancel is non-checkable                           |
+| 48        | ut_tcpserver_btnCancel_emit | TcpServer   | Ensure that the signal is correctly triggered every time the user clicks the Cancel button |
+| 49        | ut_tcpserver_progressBar    | TcpServer   | progressBar is initialized to 0                                |
+| 50        | ut_tcpserver_closeEvent_emit | TcpServer   | Triggered when the user closes the window |
+| 51        | ut_tcpserver_textBrowser    | TcpServer   | textBrowser is in read-only mode and does not allow writing   |
+| 52        | ut_chatbox_title            | ChatBox     | The title of the ChatBox window is correctly initialized (complies with the format) |
+| 53        | ut_chatbox_btnBold          | ChatBox     | Ensure that btnBold is a checkable QToolButton, and the text display is disabled |
+| 54        | ut_chatbox_btnItalic        | ChatBox     | Ensure that btnItalic is a checkable QToolButton, and the text display is disabled |
+| 55        | ut_chatbox_btnUnderLine     | ChatBox     | Ensure that btnUnderLine is a checkable QToolButton, and the text display is disabled |
+| 56        | ut_chatbox_btnColor         | ChatBox     | Ensure that btnColor is not a checkable QToolButton, and the text display is disabled |
+| 57        | ut_chatbox_btnFileSend      | ChatBox     | Ensure that btnFileSend is not a checkable QToolButton, and the text display is disabled |
+| 58        | ut_chatbox_btnSave          | ChatBox     | Ensure that btnSave is not a checkable QToolButton, and the text display is disabled |
+| 59        | ut_chatbox_btnClean         | ChatBox     | Ensure that btnClean is not a checkable QToolButton, and the text display is disabled |
+| 60        | ut_chatbox_btnExit          | ChatBox     | Ensure that btnExit is not checkable                            |
+| 61        | ut_chatbox_btnSend          | ChatBox     | Ensure that btnSend is not checkable                            |
+| 62        | ut_chatbox_btnBold_emit     | ChatBox     | Clicking btnBold triggers a signal, and the state changes to enabled; clicking again restores the initial state |
+| 63        | ut_chatbox_btnItalic_emit   | ChatBox     | Clicking btnItalic triggers a signal, and the state changes to enabled; clicking again restores the initial state |
+| 64        | ut_chatbox_btnUnderLine_emit | ChatBox     | Clicking btnUnderLine triggers a signal, and the state changes to enabled; clicking again restores the initial state |
+| 65        | ut_chatbox_btnColor_emit     | ChatBox     | Clicking btnColor triggers a signal                           |
+| 66        | ut_chatbox_btnFileSend_emit  | ChatBox     | Clicking btnFileSend triggers a signal                        |
+| 67        | ut_chatbox_btnSave_emit      | ChatBox     | Clicking btnSave triggers a signal                            |
+| 68        | ut_chatbox_btnClean_emit     | ChatBox     | Clicking btnClean triggers a signal                           |
+| 69        | ut_chatbox_btnExit_emit      | ChatBox     | Clicking btnExit triggers a signal                            |
+| 70        | ut_chatbox_btnSend_emit      | ChatBox     | Clicking btnSend triggers a signal                            |
+| 71        | ut_chatbox_msgTextBrowser   | ChatBox     | msgTextBrowser is read-only                                    |
+| 72        | ut_chatbox_msgTextEdit      | ChatBox     | msgTextEdit allows writing                                    |
+| 73        | ut_chatbox_init_cbxFontSize | ChatBox     | Initial font size is 12                                        |
+| 74        | ut_chatbox_cbxFontSize_min_max | ChatBox | Minimum font size is 10, maximum is 28                        |
+| 75        | ut_chatbox_closeEvent_emit | ChatBox     | Triggered when the user closes the window                     |
+| 76        | ut_chatbox_tbUser          | ChatBox     | The width of the user list is between 150-350                  |
+| 77        | ut_chatbox_lbNumberOnlineUse | ChatBox     | The UI for online users is initialized in the correct format  |
 
-**Результаты прохождения тестов и оценка покрытия кода тестами:**
+These tests are designed to ensure that PolyChat operates as expected and complies with the specified requirements.
 
-<img src="doc/pic/image-20230218125527470.png" alt="image-20230218125527470" style="zoom:50%;" />
+## Integration (Interface) Testing
 
+Integration testing has been performed on the following modules: Login, Add Chat, ChatList, ChatBox, TcpClient, and TcpServer. These tests were conducted in Qt by initializing (calling) individual windows to isolate the external environment and eliminate potential impacts from other windows. In some of these tests, we also simulated user keyboard input to reflect real-world user scenarios.
 
+Several testing design techniques were applied:
 
-## Интеграционное тестирование
-
-Интеграционные тесты были проведены на следующих модулях: Login, Add Chat, ChatList, ChatBox, TcpClient, TcpServer. В Qt инициализируется (вызывается) одно окно, чтобы изолировать внешнюю среду и исключить возможное влияние других окон. А в некоторых из этих тестов была проведена имитация использования пользователем клавиатурного ввода, чтобы отразить реалистичный сценарий использования.
-
-**Были применены несколько техник тест-дизайна:** 
-
-- классы эквивалентности
+- Equivalence Classes
 
     ```c++
     void PolyChatTester::mt_chatlist_leSearch_change_emit()
     {
         DAL::initLocalUser("Fox", "3530904/90102");
         ChatList widget(nullptr, DAL::getLocalUserName(), DAL::getLocalUserGroupNumber(), DAL::getLocalIpAddress());
-        QLineEdit* lineEdit = widget.findChild<QLineEdit*>("leSearch");
+        QLineEdit* lineEdit = widget findChild<QLineEdit*>("leSearch");
     
         QSignalSpy spy(lineEdit, &QLineEdit::textEdited);
         QTest::keyClicks(lineEdit, "90111");
@@ -437,416 +431,259 @@ K. Простота расширения: определяемые пользо�
     }
     ```
 
-    
-
-- попарное тестирование
+- Boundary Conditions
 
     ```c++
-    void PolyChatTester::mt_chatbox_save_empty()
+    bool PolyChatTester::mt_chatlist_getRandomPort()
     {
-        QTimer* timer = new QTimer(this);
-        connect(timer, &QTimer::timeout, this, [=](){
-            QWidgetList topWidgets = QApplication::topLevelWidgets();
-            foreach (QWidget *w, topWidgets) {
-                if (QMessageBox *mb = qobject_cast<QMessageBox *>(w)) {
-                    QTest::keyClick(mb, Qt::Key_Enter);
-                } else if (QFileDialog* dialog = qobject_cast<QFileDialog *>(w)) {
-                    QTest::keyClick(dialog, Qt::Key_Cancel);
-                } else if (QColorDialog* dialog = qobject_cast<QColorDialog *>(w)) {
-                    QTest::keyClick(dialog, Qt::Key_Enter);
-                } else {
-                    w->close();
-                }
-            }
-        });
-      
-        timer->start(50);
-        ChatBoxWidget chatBox(nullptr, "3530409/90102", 2333);
-    
-        QTextBrowser* msgTextBrowser = chatBox.findChild<QTextBrowser*>("msgTextBrowser");
-        QCOMPARE(msgTextBrowser->toPlainText(), "");
-    
-    
-        QToolButton* button = chatBox.findChild<QToolButton*>("btnSave");
-        QTest::mouseClick(button, Qt::LeftButton);
-        timer->stop();
+        ChatList widget(nullptr, DAL::getLocalUserName(), DAL::getLocalUserGroupNumber(), DAL::getLocalIpAddress());
+        for (int i = 0; i < PORT_MAX - PORT_MIN; i++)
+        {
+            qint16 port = widget.getRandomPort();
+            if (port > PORT_MAX || port < PORT_MIN) return false;
+        }
+        return true;
     }
     ```
 
-**Тестирования:**
+- Pairwise Testing
 
-|     | Название тестирования              | Связанные модули | Описание (ожидаемые результаты)                                                                                                                                                                                  |
-|-----|------------------------------------|------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| 78  | mt_login_init_success              | Login            | Имитация использования пользователем клавиатуры для ввода текста в поле ввода, а затем нажатие кнопки входа в систему (вход выполнен успешно, и информация о локальном пользователе правильно инициализирована). |
-| 79  | mt_login_leUserName                | Login            | Имитация щелчка пользователя и ввода с клавиатуры, чтобы убедиться, что вводимый контент правильно отображается в поле ввода leUserName.                                                                         |
-| 80  | mt_login_leUserGroupNumber         | Login            | Имитация щелчка пользователя и ввода с клавиатуры, чтобы убедиться, что вводимый контент правильно отображается в поле ввода leUserGroupNumber.                                                                  |
-| 81  | mt_addchat_leNameNewChat           | Add Chat         | Имитация щелчка пользователя и ввода с клавиатуры, чтобы убедиться, что вводимое содержимое правильно отображается в поле ввода leNameNewChat.                                                                   |
-| 82  | mt_chatlist_leSearch_change_emit   | ChatList         | Сигнал инициируется нужное количество раз, когда пользователь меняет содержимое в поле поиска.                                                                                                                   |
-| 83  | mt_chatlist_getNewBtn              | ChatList         | В соответствии с переданными параметрами создается новый объект кнопки с правильной информацией.                                                                                                                 |
-| 84  | mt_chatlist_btnchat_exist          | ChatList         | ui интерфейс обновляется корректно при добавлении нового группового чата.                                                                                                                                        |
-| 85  | mt_chatbox_userjoin_list           | ChatBox          | Пользователь присоединился (список пользователей обновляется корректно).                                                                                                                                         |
-| 86  | mt_chatbox_userjoin_counter        | ChatBox          | Пользователь присоединился (счетчик правильно увеличивается и ui отображается в правильном формате и с правильным содержанием).                                                                                  |
-| 87  | mt_chatbox_userjoin_msgTextBrowser | ChatBox          | Пользователь присоединился (msgTextBrowser обновляется).                                                                                                                                                         |
-| 88  | mt_chatbox_userleft_list           | ChatBox          | Пользователь вышел (список пользователей обновляется корректно).                                                                                                                                                 |
-| 89  | mt_chatbox_userleft_counter        | ChatBox          | Пользователь вышел (счетчик правильно увеличивается и ui отображается в правильном формате и с правильным содержанием).                                                                                          |
-| 90  | mt_chatbox_userleft_msgTextBrowser | ChatBox          | Пользователь вышел (msgTextBrowser обновляется).                                                                                                                                                                 |
-| 91  | mt_chatbox_clean                   | ChatBox          | Предупреждающее сообщение при очистке окна чата.                                                                                                                                                                 |
-| 92  | mt_chatbox_save_empty              | ChatBox          | Имитация нажатия симулированным пользователем кнопки "Save", когда в пустом поле чата нет содержимого (с предупреждающим сообщением).                                                                            |
-| 93  | mt_chatbox_send_success            | ChatBox          | Имитация ввода пользователем текста в поле чата с помощью клавиатуры и последующее нажатие кнопки отправки. Введенная информация правильно отображается в сводке окна сообщения (сообщение успешно отправлено).  |
-| 94  | mt_tcpclient                       | TcpClient        | Все элементы управления интерфейса ui инициализируются правильным содержимым через интерфейс.                                                                                                                    |
-| 95  | mt_tcpserver                       | TcpServer        | Все элементы управления интерфейса ui инициализируются правильным содержимым через интерфейс.                                                                                                                    |
+```c++
+void PolyChatTester::mt_chatbox_save_empty()
+{
+    QTimer* timer = new QTimer(this);
+    connect(timer, &QTimer::timeout, this, [=](){
+        QWidgetList topWidgets = QApplication::topLevelWidgets();
+        foreach (QWidget *w, topWidgets) {
+            if (QMessageBox *mb = qobject_cast<QMessageBox *>(w)) {
+                QTest::keyClick(mb, Qt::Key_Enter);
+            } else if (QFileDialog* dialog = qobject_cast<QFileDialog *>(w)) {
+                QTest::keyClick(dialog, Qt::Key_Cancel);
+            } else if (QColorDialog* dialog = qobject_cast<QColorDialog *>(w)) {
+                QTest::keyClick(dialog, Qt::Key_Enter);
+            } else {
+                w->close();
+            }
+        }
+    });
+  
+    timer->start(50);
+    ChatBoxWidget chatBox(nullptr, "3530409/90102", 2333);
 
-**Результаты интеграционного тестирования:**
+    QTextBrowser* msgTextBrowser = chatBox.findChild<QTextBrowser*>("msgTextBrowser");
+    QCOMPARE(msgTextBrowser->toPlainText(), "");
 
-![image-20230316201833405](doc/pic/image-20230316201833405.png)
 
-<div style="page-break-after:always"></div>
+    QToolButton* button = chatBox.findChild<QToolButton*>("btnSave");
+    QTest::mouseClick(button, Qt::LeftButton);
+    timer->stop();
+}
+```
 
-## Системное/End-to-End тестирование
+**Tests:**
 
-*Более подробную информацию о непрерывной интеграции и настройке триггеров в GitHub см. в разделе "Интеграционное тестирование".*
+|      | Test Name                          | Module    | Description (Expected Result)                                |
+| ---- | ---------------------------------- | --------- | ------------------------------------------------------------ |
+| 78   | mt_login_init_succ                 | Login     | Simulate the user to input content in the input boxes using the keyboard, then click the login button (Login successful, local user information is correctly initialized) |
+| 79   | mt_login_leUserName                | Login     | Simulate user clicking and inputting through the keyboard to ensure that the input content is correctly displayed in the leUserName input box |
+| 80   | mt_login_leUserGroupNumber         | Login     | Simulate user clicking and inputting through the keyboard to ensure that the input content is correctly displayed in the leUserGroupNumber input box |
+| 81   | mt_addchat_leNameNewChat           | Add Chat  | Simulate user clicking and inputting through the keyboard to ensure that the input content is correctly displayed in the leNameNewChat input box |
+| 82   | mt_chatlist_leSearch_change_emit   | ChatList  | When the user changes the content in the search box, trigger the correct number of signals |
+| 83   | mt_chatlist_getNewBtn              | ChatList  | Create a new button object with the correct information based on the passed parameters |
+| 84   |                                    |           |                                                              |
+| 85   |                                    |           |                                                              |
+| 86   | mt_chatlist_btnchat_exist          | ChatList  | When adding a new chat group, the UI is correctly refreshed  |
+| 87   | mt_chatbox_userjoin_list           | ChatBox   | User join (user list is correctly refreshed)                 |
+| 88   | mt_chatbox_userjoin_counter        | ChatBox   | User join (counter is correctly increased, and the UI display format and content are correct) |
+| 89   | mt_chatbox_userjoin_msgTextBrowser | ChatBox   | User join (msgTextBrowser is refreshed)                      |
+| 90   | mt_chatbox_userleft_list           | ChatBox   | User leave (user list is correctly refreshed)                |
+| 91   | mt_chatbox_userleft_conter         | ChatBox   | User leave (counter is correctly increased, and the UI display format and content are correct) |
+| 92   | mt_chatbox_userleft_msgTextBrowser | ChatBox   | User leave (msgTextBrowser is refreshed)                     |
+| 93   | mt_chatbox_clean                   | ChatBox   | When clearing the chat box, a warning message is displayed   |
+| 94   | mt_chatbox_save_empty              | ChatBox   | When there is no content in the chat box, simulate the user clicking the "Save Chat Record" button (display a warning message) |
+| 95   | mt_chatbox_send_success            | ChatBox   | Simulate the user to input content in the chat box using the keyboard and then click the send button. The entered information is correctly displayed in the message box (message sent successfully) |
+| 96   | mt_tcpclient                       | TcpClient | All controls on the UI interface are initialized with correct content |
+| 97   | mt_tcpserver                       | TcpServer | All controls on the UI interface are initialized with correct content |
 
-|     | Название тестирования    | Сценарии пользователя и ожидаемые результаты                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               |
-|-----|--------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| 96  | e2e_add_new_chat         | 1. Открытие программы пользователем<br />2. Пользователь щелкает мышью по полю ввода имени пользователя и вводит содержимое с помощью клавиатуры<br />3. Пользователь щелкает мышью по полю ввода номера группы и вводит содержимое с помощью клавиатуры<br />4. Пользователь щелкает мышью по кнопке входа в систему<br />5. Пользователь щелкает мышью по кнопке "Добавить новый групповой чат"<br />6. Пользователь вводит текст в появившемся диалоговом окне 'Add chat'<br />7. Пользователь нажимает кнопку Подтвердить, чтобы добавить новый групповой чат<br />**Результат**: данные пользователя успешно инициализированы и список чатов обновлен |
-| 97  | e2e_join_chat            | 1-4. Пользователь входит в систему<br />5. Пользователь щелкает мышью по кнопке чата в списке чатов<br />**Результат**: у пользователя открыто окно, он находится в списке пользователей чата и сообщение о его входе отправлено в чат                                                                                                                                                                                                                                                                                                                                                                                                                     |
-| 98  | e2e_search_chat          | 1-4. Пользователь входит в систему<br />5. Пользователь щелкает мышью по строке поиска чатов и вводит название с помощью клавиатуры<br />6. Пользователь щелкает мышью по кнопке чата в списке найденных чатов<br />**Результат**: поле поиска послало правильное количество сигналов, список групповых чатов обновлен и пользователь вошел в найденный им чат                                                                                                                                                                                                                                                                                             |
-| 99  | e2e_send_message         | 1-4. Пользователь входит в систему<br />5. Пользователь щелкает мышью по кнопке чата в списке чатов<br />6. Пользователь щелкает по полю чата и вводит содержимое с помощью клавиатуры<br />7. Пользователь нажимает кнопку Отправить<br />**Результат**: в чате появилось сообщение, отправленное пользователем                                                                                                                                                                                                                                                                                                                                           |
-| 100 | e2e_send_special_message | 1-4. Пользователь входит в систему<br />5. Пользователь щелкает мышью по кнопке чата в списке чатов<br />6. Пользователь щелкает по полю чата и вводит содержимое с помощью клавиатуры<br />7. Пользователь нажимает на кнопку изменения стиля текста (жирный, наклонный и т.д.)<br />8. Пользователь нажимает кнопку Отправить<br />**Результат**: в чате появилось особое сообщение, отправленное пользователем, с теми параметрами, которые указал пользователь                                                                                                                                                                                         |
-| 101 | e2e_send_file            | 1-4. Пользователь входит в систему<br />5. Пользователь щелкает мышью по кнопке чата в списке чатов<br />6. Пользователь нажимает кнопку Отправить файл<br />7. Пользователь выбирает файл для отправки<br />8. Пользователь нажимает кнопку Отправить<br />**Результат**: у пользователя появилось окно отправки с корректной информацией о файле                                                                                                                                                                                                                                                                                                         |
-| 102 | e2e_receive_file         | 1-4. Пользователь входит в систему<br />5. Пользователь щелкает мышью по кнопке чата в списке чатов<br />6. Пользователь нажимает кнопку Да, когда появляется диалоговое окно с вопросом о приеме файла<br />7. Пользователь выбирает каталог и имя файла, куда сохранится полученный файл<br />8. Пользователь нажимает кнопку Сохранить<br />**Результат**: у пользователя появилось окно получения с корректной информацией о файле и сигнал от кнопки Сохранить успешно отправлен                                                                                                                                                                      |
-| 103 | e2e_clean_chat           | 1-4. Пользователь входит в систему<br />5. Пользователь щелкает мышью по кнопке чата в списке чатов<br />6. Пользователь нажимает кнопку Очистить чат<br />**Результат**: чат очищен                                                                                                                                                                                                                                                                                                                                                                                                                                                                       |
-| 104 | e2e_save_chat            | 1-4. Пользователь входит в систему<br />5. Пользователь щелкает мышью по кнопке чата в списке чатов<br />6. Пользователь нажимает кнопку Сохранить чат<br />**Результат**: вся история сообщений сохранена и сигнал от кнопки Сохранить успешно отправлен                                                                                                                                                                                                                                                                                                                                                                                                  |
-| 105 | e2e_leave_chat           | 1-4. Пользователь входит в систему<br />5. Пользователь щелкает мышью по кнопке чата в списке чатов<br />6. Пользователь щелкает по полю чата и вводит содержимое с помощью клавиатуры<br />7. Пользователь нажимает кнопку Отправить<br />8. Другой пользователь входит в групповой чат<br/>9. Другой пользователь выходит из группового чата<br />10. Пользователь нажимает кнопку выхода из чата<br />**Результат**: сообщение о выходе пользователя появилось в чате, пользователь пропал из списка пользователей и у пользователя закрылось окно чата                                                                                                 |
+**Integration Testing Results:**
 
-**Результаты E2E тестирования на GitHub:**
+![image-20230316201833405](./pic/image-20230316201833405.png)
 
-![image-20230316204636445](doc/pic/image-20230316204636445.png)
+## System/End-to-End and Other Tests
 
-<div style="page-break-after:always"></div>
+*For more information about continuous integration and setting up triggers in GitHub, please see the Integration Testing section below.*
 
-## Другое тестирование
+| Test | Description                                                  |
+| ---- | ------------------------------------------------------------ |
+| 96   | 1. User opens the program<br />2. User clicks on the username input box and inputs text using the keyboard<br />3. User clicks on the group number input box and inputs text using the keyboard<br />4. User clicks the login button<br />5. User clicks the "Add New Group Chat" button<br />6. User enters text in the "Add Chat" dialog that appears<br />7. User clicks the "Confirm" button to add a new group chat |
+| 97   | 1-4. User is already logged in<br />5. User clicks on a chat button in the chat list |
+| 98   | 1-4. User is already logged in<br />5. User clicks on the chat search bar and inputs a name using the keyboard<br />6. User clicks on a chat button in the list of found chats |
+| 99   | 1-4. User is already logged in<br />5. User clicks on a chat button in the chat list<br />6. User clicks in the chat area and inputs text using the keyboard<br />7. User clicks the "Send" button |
+| 100  | 1-4. User is already logged in<br />5. User clicks on a chat button in the chat list<br />6. User clicks in the chat area and inputs text using the keyboard<br />7. User clicks on text formatting buttons (bold, italic, etc.)<br />8. User clicks the send button |
+| 101  | 1-4. User is already logged in<br />5. User clicks on a chat button in the chat list<br />6. User clicks the send file button<br />7. User selects a file to send<br />8. User clicks the send button |
+| 102  | 1-4. User is already logged in<br />5. User clicks on a chat button in the chat list<br />6. When prompted if they want to accept the file, the user clicks "Yes"<br />7. User selects a directory and filename for the received file<br />8. User clicks the save button |
+| 103  | 1-4. User is already logged in<br />5. User clicks on a chat button in the chat list<br />6. User clicks the "Clear Chat" button |
+| 104  | 1-4. User is already logged in<br />5. User clicks on a chat button in the chat list<br />6. User clicks the "Save Chat" button |
+| 105  | 1-4. User is already logged in<br />5. User clicks on a chat button in the chat list<br />6. User clicks in the chat area, inputs text using the keyboard<br />7. User clicks the send button<br />8. Another user joins the group chat<br />9. Another user leaves the group chat<br />10. User clicks the "Leave Chat" button |
 
-|     | Название тестирования        | Тип тестирования                                                   | Связанные модули | Описание (ожидаемые результаты)                                                                                                                                                                             |
-|-----|------------------------------|--------------------------------------------------------------------|------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| 106 | pt_Login_load                | Тестирование производительности                                    | Login            | Производительность загрузки/вызова окон.                                                                                                                                                                    |
-| 107 | pt_AddChat_load              | Тестирование производительности                                    | Add Chat         | Производительность загрузки/вызова окон.                                                                                                                                                                    |
-| 108 | pt_ChatList_load             | Тестирование производительности                                    | ChatList         | Производительность загрузки/вызова окон.                                                                                                                                                                    |
-| 109 | pt_TcpClient_load            | Тестирование производительности                                    | TcpClient        | Производительность загрузки/вызова окон.                                                                                                                                                                    |
-| 110 | pt_TcpServer_load            | Тестирование производительности                                    | ChatBox          | Производительность загрузки/вызова окон.                                                                                                                                                                    |
-| 111 | pt_ChatBox_load              | Тестирование производительности                                    | ChatBox          | Производительность загрузки/вызова окон.                                                                                                                                                                    |
-| 112 | pt_ChatBox_userjoin          | Тестирование производительности                                    | ChatBox          | Пользователи входят в групповой чат.                                                                                                                                                                        |
-| 113 | pt_ChatBox_userjoin_left     | Тестирование производительности                                    | ChatBox          | Пользователи входят в групповой чат и выходят из него вместе с другими пользователями.                                                                                                                      |
-| 114 | pt_ChatBox_msgTextEdit_input | Тестирование производительности                                    | ChatBox          | Имитация ввода пользователем с клавиатуры 100 символов в msgTextEdit и последующее нажатие кнопки отправить.                                                                                                |
-| 115 | pt_Login_to_system           | Тестирование производительности                                    | Login/ChatList   | Пользователи вводят свое имя и номер группы с клавиатуры, а затем нажимают кнопку входа для доступа к системе (ChatList).                                                                                   |
-| 116 | pt_AddChat_ui                | Тестирование производительности                                    | Add Chat/ChatBox | Добавление нового группового чата путем имитации ввода пользователем команды Add Chat и последующего нажатия кнопки Подтвердить (Тестирование производительности при создании нового окна группового чата). |
-| 117 | lt_ChatBox_x100              | Нагрузочное тестирование                                           | ChatBox          | Пользователь вступает в 100 групповых чатов.                                                                                                                                                                |
-| 118 | lt_ChatBox_200user           | Нагрузочное тестирование                                           | ChatBox          | Гарантированная возможность подключения 200 пользователей в один чат.                                                                                                                                       |
-| 119 | lt_ChatBox_2000char          | Нагрузочное тестирование                                           | ChatBox          | Пользователь отправляет 2000 символов.                                                                                                                                                                      |
-| 120 | lt_ChatBox_msg_change        | Нагрузочное тестирование                                           | ChatBox          | Пользователь вводит сообщение, а затем изменяет стиль шрифта (bold, italic).                                                                                                                                |
-| 121 | lt_TcpServer_x10             | Нагрузочное тестирование                                           | TcpServer        | Пользователь вызывает 10 окон отправки файлов TcpServer (отправляет 10 файлов).                                                                                                                             |
-| 122 | lt_TcpClient_x10             | Нагрузочное тестирование                                           | TcpClient        | Пользователь вызывает 10 окон отправки файлов TcpClient (получает 10 файлов).                                                                                                                               |
-| 123 | ct_ChatBox_code_normal       | Тестирование на совместимость                                      | ChatBox          | Имитация ввода пользователем английского, китайского и русского языков в msgTextEdit с клавиатуры. При этом ui отображается корректно, без искажений.                                                       |
-| 124 | GitHub CI                    | Кросс-платформенное тестирование (автоматизированное тестирование) | ALL              | Гарантированная компиляция и работа на macOS и Windows.                                                                                                                                                     |
-| 125 | GitHub CI                    | Автоматическое тестирование                                        | ALL              | Автоматизированная компиляция и тестирование на macOS и Windows.                                                                                                                                            |
-| 126 | GitHub CI                    | Тестирование на совместимость                                      | ALL              | Скомпилируйте в Qt6.2.2 и убедитесь, что минимальная версия для macOS - 10.12; минимальная версия для Windows - 2019.                                                                                       |
+**GitHub Results:**
 
-**Количество тестов:**
+![image-20230219131232852](pic/image-20230316204636445.png)
 
-| Тип тестирования                  | Количество |
-|-----------------------------------|------------|
-| Модульное тестирование            | 77         |
-| Интеграционное тестирование       | 18         |
-| Системное/End-to-End тестирование | 10         |
-| Другое тестирование               | 21         |
-| Всего                             | 126        |
+## Other Tests
 
-**Результаты всех тестов:**
+|      | Test Name                    | Type                                 | Module           | Description (Expected Results)                               |
+| ---- | ---------------------------- | ------------------------------------ | ---------------- | ------------------------------------------------------------ |
+| 106  | pt_Login_load                | Performance Test                     | Login            | Performance of window loading/calling                        |
+| 107  | pt_AddChat_load              | Performance Test                     | Add Chat         | Performance of window loading/calling                        |
+| 108  | pt_ChatList_load             | Performance Test                     | ChatList         | Performance of window loading/calling                        |
+| 109  | pt_TcpClient_load            | Performance Test                     | TcpClient        | Performance of window loading/calling                        |
+| 110  | pt_TcpServer_load            | Performance Test                     | ChatBox          | Performance of window loading/calling                        |
+| 111  | pt_ChatBox_load              | Performance Test                     | ChatBox          | Performance of window loading/calling                        |
+| 112  | pt_ChatBox_userjoin          | Performance Test                     | ChatBox          | User joins group chat                                        |
+| 113  | pt_ChatBox_userjoin_left     | Performance Test                     | ChatBox          | User joins group chat with others leaving                    |
+| 114  | pt_ChatBox_msgTextEdit_input | Performance Test                     | ChatBox          | Simulate user keyboard input of 100 characters in msgTextEdit and click the send button |
+| 115  | pt_Login_to_system           | Performance Test                     | Login/ChatList   | User enters the system (ChatList) by typing name and class number via keyboard and clicking login button |
+| 116  | pt_AddChat_ui                | Performance Test                     | Add Chat/ChatBox | Add a new chat via Add Chat by simulating user input and clicking the confirm button (Test the performance of creating a new chat window) |
+| 117  | lt_ChatBox_x100              | Load Test                            | ChatBox          | User joins 100 group chats                                   |
+| 118  | lt_ChatBox_200user           | Load Test                            | ChatBox          | Ensure 200 users can exist in each chat                      |
+| 119  | lt_ChatBox_2000char          | Load Test                            | ChatBox          | User sends 2000 characters                                   |
+| 120  | lt_ChatBox_msg_change        | Load Test                            | ChatBox          | User enters a message and then changes the font style (bold, italic) |
+| 121  | lt_TcpServer_x10             | Load Test                            | TcpServer        | User opens 10 TcpServer file sending windows (sends 10 files) |
+| 122  | lt_TcpCerver_x10             | Load Test                            | TcpClient        | User opens 10 TcpClient file receiving windows (receives 10 files) |
+| 123  | ct_ChatBox_code_normal       | Compatibility Test                   | ChatBox          | Simulate the user entering English, Chinese, and Russian in msgTextEdit using the keyboard. Ensure that the UI displays correctly without garbled characters |
+| 124  | GitHub CI                    | Cross-Platform Test (Automated Test) | ALL              | Ensure compilation and execution on macOS and Windows        |
+| 125  | GitHub CI                    | Automated Test                       | ALL              | Automated compilation and testing on macOS and Windows       |
+| 126  | GitHub CI                    | Compatibility Test                   | ALL              | Compile in Qt 6.2.2 environment, ensuring a minimum macOS version of 10.12 and a minimum Windows version of 2019 |
 
-![image-20230316204255954](doc/pic/image-20230316204255954.png)
+**Number of Tests:**
 
-![image-20230316221004870](doc/pic/image-20230316221004870.png)
+| Test Type               | Quantity |
+| ----------------------- | -------- |
+| Unit Tests              | 77       |
+| Interface Tests         | 18       |
+| System/End-to-End Tests | 10       |
+| Other Tests             | 21       |
+| Total                   | 126      |
 
-## Результаты локального тестирования
 
-Тестирование проводилось на MacBook Pro (чип Apple M1 Pro) с установленной операционной системой MacOS 14.
+## Local Test Results
 
-![image-20231024155247741](doc/pic/image-20231024155247741.png)
+Test environment: MacBook Pro with macOS 14 and Apple M1 Pro chip
+
+![image-20231024155247741](pic/image-20231024155247741.png)
+
+
 
 # CI/CD
 
-CI/CD строится через Github Action. Данный процесс CI/CD можно разделить на две части: Continuous Integration (CI) и Continuous Deployment (CD).
+> CI (Continuous Integration) and CD (Continuous Deployment)
 
-**CI (непрерывная интеграция)** - первая часть процесса. Она отвечает за автоматическую сборку и тестирование вашего кода при каждом коммите или запросе на объединение (pull request). Это помогает выявить и устранить проблемы в коде на ранних этапах разработки, обеспечивая стабильность и качество вашего приложения.
+CI/CD is built through Github Actions. The CI/CD process is divided into two parts: Continuous Integration (CI) and Continuous Deployment (CD).
 
-**CD (непрерывная доставка/развертывание)** - вторая часть процесса. Когда CI успешно завершается, CD берет на себя автоматическое развертывание вашего приложения на целевых серверах или платформах. Это обеспечивает быструю и надежную поставку новых версий вашего приложения конечным пользователям.
+**CI (Continuous Integration)** is the first part of the process. It is responsible for automatically building and testing the code with every commit or pull request. This helps identify and fix issues in the code early in the development process, ensuring the stability and quality of the application.
 
+**CD (Continuous Delivery/Deployment)** is the second part of the process. After successful completion of CI, CD takes over to automatically deploy the application to the target server or platform. This ensures that new versions of the application are delivered quickly and reliably to end-users.
 
+## CI (Continuous Integration)
 
-## CI (Непрерывная интеграция)
+1. **Events Triggering CI:**
 
-1. **События, на которые реагирует CI:**
+   GitHub's Continuous Integration server is used to trigger triggers and perform automatic builds and testing when code changes are made.
 
-    Использует сервер непрерывной интеграции GitHub для запуска триггеров при внесении изменений в код и запуска автоматической компиляции и автоматического тестирования.
+   - **MacOS:**
 
-    - **MacOS**
+     1. Push changes to the repository in the following directories: 'App/', 'Tester/', '.github/workflows/macos.yml'
+     2. Open changes for pull and pull_request in the same directories.
 
-        1. Пуш изменений в репозиторий в следующих директориях: 'App/', 'Tester/', '.github/workflows/macos.yml'
-        2. Открытие pull и pull_request с изменениями в тех же директориях.
+     ```yaml
+     name: macOS Build and Test
+     on: 
+       push:
+         paths:
+           - 'App/**'
+           - 'Tester/**'
+           - '.github/workflows/macos.yml'
+       pull_request:
+         paths:
+           - 'App/**'
+           - 'Tester/**'
+           - '.github/workflows/macos.yml' 
+     ```
 
-        ```yaml
-        name: macOS Build and Test
-        on: 
-          push:
-            paths:
-              - 'App/**'
-              - 'Tester/**'
-              - '.github/workflows/macos.yml'
-          pull_request:
-            paths:
-              - 'App/**'
-              - 'Tester/**'
-              - '.github/workflows/macos.yml' 
-        ```
+   - **Windows:**
 
-    - **Windows**
+     1. Push changes to the repository in the following directories: 'App/', 'Tester/', '.github/workflows/windows.yml', 'scripts/'
+     2. Open changes for pull and pull_request in the same directories.
 
-        1. Пуш изменений в репозиторий в следующих директориях: 'App/', 'Tester/', '.github/workflows/windows.yml', 'scripts/'
-        2. Открытие pull и pull_request с изменениями в тех же директориях.
+     ```yaml
+     name: Windows CI/CD
+     on: 
+       push:
+         paths:
+           - 'App/**'
+           - 'Tester/**'
+           - '.github/workflows/windows.yml'
+           - 'scripts/**'
+       pull_request:
+         paths:
+           - 'App/**'
+           - 'Tester/**'
+           - '.github/workflows/windows.yml'
+           - 'scripts/**'
+     ```
 
-        ```yaml
-        name: Windows CI/CD
-        on: 
-          push:
-            paths:
-              - 'App/**'
-              - 'Tester/**'
-              - '.github/workflows/windows.yml'
-              - 'scripts/**'
-          pull_request:
-            paths:
-              - 'App/**'
-              - 'Tester/**'
-              - '.github/workflows/windows.yml'
-              - 'scripts/**'
-        ```
+2. **CI Tasks:**
 
-        
+   - **MacOS:**
 
-2. **Задача (Job) CI:**
+     - Name: macOS CI/CD
+     - Operating System: macOS 11.0
+     - Strategy: Matrix, including different versions of Qt (6.2.2 and 6.6.0) and architectures (clang_64)
+     - Environment Variables: Qt application build settings.
 
-    - **MacOS**
+   - **Windows:**
 
-        - Наименование: macOS-CI-CD
+     - Name: Windows CI/CD
+     - Operating System: win64_msvc2019_64
+     - Strategy: Matrix, including different versions of Qt (6.2.2 and 6.6.0) and architectures (msvc2019_64)
+     - Environment Variables: Qt application build settings.
 
-        - Выполнение на операционной системе: macOS 11.0
+3. **CI Steps:**
 
-        - Стратегия: Матрица, включающая разные версии Qt (6.2.2 и 6.6.0) и архитектуры (clang_64)
+   - Prepare Environment: Upgrade and install the necessary components for macOS 11.0 or Windows 2019.
+   - Install Qt: Download and install the selected version of Qt.
+   - Get Source Code: Clone the repository and fetch the source code.
+   - Test on macOS/Windows: Build and run tests using QTest.
+   - Build on macOS/Windows: Build the application for macOS.
+   - Packaging: Package the application as a dmg/zip file.
+   - Upload Artifacts: Upload the generated files as CI artifacts.
 
-        - Переменные окружения: Настройки для сборки Qt-приложения.
+![iShot_2023-10-24_16.07.04](pic/iShot_2023-10-24_16.07.04.jpg)
 
-    - **Windows**
+![image-20231024164656277](pic/image-20231024164656277.png)
 
-        - Наименование: Windows-CI-CD
+![image-20231024160959353](pic/image-20231024160959353.png)
 
-        - Выполнение на операционной системе: win64_msvc2019_64
+## CD (Continuous Deployment)
 
-        - Стратегия: Матрица, включающая разные версии Qt (6.2.2 и 6.6.0) и архитектуры (msvc2019_64)
+Continuous Deployment is carried out on the MacOS and Windows platforms.
 
-        - Переменные окружения: Настройки для сборки Qt-приложения.
+- **CD Trigger:**
+    - Event of creating a new tag (version) in the repository.
 
-    
+- **CD Steps:**
+    - Release Deployment: Upload dmg/zip files to GitHub Releases, associated with the new tag (version) in the repository.
 
-3. **Шаги CI:**
+This process automates the build, testing, packaging, and deployment of the application on macOS and Windows. New releases are generated automatically when a new tag is created, and the application's dmg/zip files are uploaded to the Releases, making it easy to distribute the application to users.
 
-    - Подготовка окружения: Обновление и установка необходимых компонентов для macOS 11.0 или Windows 2019.
+As shown in the figure below, the application has been successfully packaged and published on MacOS and Windows.
 
-    - Установка Qt: Загрузка и установка выбранной версии Qt.
+![image-20231024165220391](pic/image-20231024165220391.png)
 
-    - Получение исходного кода: Клонирование репозитория и получение исходного кода.
+![image-20231024170159500](pic/image-20231024170159500.png)
 
-    - Тестирование на macOS/Windows: Сборка и запуск тестов с использованием QTest.
-
-    - Сборка на macOS/Windows: Сборка версии приложения для macOS.
-
-    - Упаковка: Упаковка приложения в dmg/zip-файл.
-
-    - Загрузка артефактов: Загрузка созданных файлов как артефактов CI.
-
-        
-
-![iShot_2023-10-24_16.07.04](doc/pic/iShot_2023-10-24_16.07.04.jpg)
-
-![image-20231024164656277](doc/pic/image-20231024164656277.png)
-
-![image-20231024160959353](doc/pic/image-20231024160959353.png)
-
-## CD (непрерывная доставка)
-
-Непрерывный выпуск осуществляется как на платформе MacOS, так и на платформе Windows.
-
-- **Условие для выполнения CD:**
-    - Событие создания нового тега (версии) в репозитории.
-
-- **Шаги CD:**
-    - Загрузка релиза: Загрузка dmg/zip-файла в релизе GitHub, связанного с созданным тегом (версией) репозитория.
-
-**Для MacOS:**
-
-1. Упаковка (package): На MacOS можем удобно упаковать проект в файл формата .dmg с помощью `macdeployqt`
-
-    ```yaml
-    - name: Package on MacOS
-      run: |
-        cd ./${QtApplicationName}
-        macdeployqt ${QtApplicationName}.app -qmldir=. -verbose=1 -dmg
-    ```
-
-2. Загрузка артефакта (artifact) на сервер GitHub Actions
-
-    ```yaml
-    - uses: actions/upload-artifact@v2
-      with:
-        name: ${{ env.targetName }}_${{ matrix.os }}_${{matrix.qt_ver}}.zip
-        path: ${{ env.QtApplicationName }}/${{ env.QtApplicationName }}.app
-    ```
-
-3. Если событие является событием тегов (tag), загрузите продукт сборки (файл .dmg) на GitHub Release
-
-    ```yaml
-    - name: Upload Release
-      if: startsWith(github.event.ref, 'refs/tags/')
-      uses: svenstaro/upload-release-action@v2
-      with:
-        repo_token: ${{ secrets.GITHUB_TOKEN }}
-        file: ${{ env.QtApplicationName }}/${{ env.QtApplicationName }}.dmg
-        asset_name: ${{ env.targetName }}_${{ matrix.os }}_${{ matrix.qt_ver }}.dmg
-        tag: ${{ github.ref }}
-        overwrite: true
-    ```
-
----
-
-**Для Windows:**
-
-1. Упаковка нескольких версий под Windows осуществляется с помощью скрипта `windows-publish.ps1`, который мы написали
-
-    ```yaml
-    - name: package
-      id: package
-      env:
-        archiveName: ${{ matrix.qt_ver }}-${{ matrix.qt_target }}-${{ matrix.qt_arch }}
-        msvcArch: ${{ matrix.msvc_arch }}          
-      shell: pwsh
-      run: |
-        & scripts\windows-publish.ps1 ${env:archiveName} ${env:QtApplicationName}
-        # Запишите название пакета для последующего шага
-        $name = ${env:archiveName}
-        echo "::set-output name=packageName::$name"
-    ```
-
-    скрипт `windows-publish.ps1`：
-
-    ```cmd
-    [CmdletBinding()]
-    param (
-        [string] $archiveName, [string] $targetName
-    )
-    # К переменным внешней среды относятся:
-    # archiveName: ${{ matrix.qt_ver }}-${{ matrix.qt_arch }}
-    # winSdkDir: ${{ steps.build.outputs.winSdkDir }}
-    # winSdkVer: ${{ steps.build.outputs.winSdkVer }}
-    # vcToolsInstallDir: ${{ steps.build.outputs.vcToolsInstallDir }}
-    # vcToolsRedistDir: ${{ steps.build.outputs.vcToolsRedistDir }}
-    # msvcArch: ${{ matrix.msvc_arch }}
-    
-    
-    # winSdkDir: C:\Program Files (x86)\Windows Kits\10\ 
-    # winSdkVer: 10.0.19041.0\ 
-    # vcToolsInstallDir: C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\VC\Tools\MSVC\14.28.29333\ 
-    # vcToolsRedistDir: C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\VC\Redist\MSVC\14.28.29325\ 
-    # archiveName: 6.0.0-win64_msvc2019
-    # msvcArch: x64
-    
-    $scriptDir = $PSScriptRoot
-    $currentDir = Get-Location
-    Write-Host "currentDir" $currentDir
-    Write-Host "scriptDir" $scriptDir
-    
-    function Main() {
-    
-        New-Item -ItemType Directory $archiveName
-    
-        # Копирование exe
-        Copy-Item .\App\release\$targetName $archiveName\
-        Write-Host "[INFO] Copy-Item from .\App\release\" $targetName " to " $archiveName "done"
-    
-        # Копирование зависимостей
-        windeployqt --qmldir . --plugindir $archiveName\plugins --no-translations --compiler-runtime $archiveName\$targetName
-        Write-Host "[INFO] windeployqt done"
-    
-        # Удаление ненужных файлов
-        $excludeList = @("*.qmlc", "*.ilk", "*.exp", "*.lib", "*.pdb")
-        Remove-Item -Path $archiveName -Include $excludeList -Recurse -Force
-        Write-Host "[INFO] Remove-Item done"
-    
-        # Копирование vcRedist dll
-        $redistDll="{0}{1}\*.CRT\*.dll" -f $env:vcToolsRedistDir.Trim(),$env:msvcArch
-        Copy-Item $redistDll $archiveName\
-        Write-Host "[INFO] Copy-Item vcRedist dll done"
-    
-        # Копирование WinSDK dll
-        $sdkDll="{0}Redist\{1}ucrt\DLLs\{2}\*.dll" -f $env:winSdkDir.Trim(),$env:winSdkVer.Trim(),$env:msvcArch
-        Copy-Item $sdkDll $archiveName\
-        Write-Host "[INFO] Copy-Item WinSDK dll done"
-    
-        # Упаковка в виде zip
-        Compress-Archive -Path $archiveName $archiveName'.zip'
-        Write-Host "[INFO] Compress-Archive done"
-    }
-    
-    if ($null -eq $archiveName || $null -eq $targetName) {
-        Write-Host "args missing, archiveName is" $archiveName ", targetName is" $targetName
-        return
-    }
-    Main
-    ```
-
-2. Загрузка артефакта (artifact) на сервер GitHub Actions
-
-    ```yaml
-    - uses: actions/upload-artifact@v2
-      with:
-        name: ${{ env.targetName }}_${{ steps.package.outputs.packageName }}
-        path: ${{ steps.package.outputs.packageName }}
-    ```
-
-3. Если событие является событием тегов (tag), загрузите продукт сборки (файл .zip) на GitHub Release
-
-    ```yaml
-    - name: uploadRelease
-      if: startsWith(github.event.ref, 'refs/tags/')
-      uses: svenstaro/upload-release-action@v2
-      with:
-        repo_token: ${{ secrets.GITHUB_TOKEN }}
-        file: ${{ steps.package.outputs.packageName }}.zip
-        asset_name: ${{ env.targetName }}_${{ steps.package.outputs.packageName }}.zip
-        tag: ${{ github.ref }}
-        overwrite: true
-    ```
-
-
-Эти процессы автоматизирует сборку, тестирование, упаковку и выпуск приложения на macOS/Windows. Новый релиз создается автоматически при создании нового тега, и dmg/zip-файл приложения загружается в релиз, что позволяет легко распространять приложение пользователям.
-
-Как видно на изображении ниже, приложение было успешно упаковано и опубликовано как на MacOS, так и на Windows.
-
-![image-20231024165220391](doc/pic/image-20231024165220391.png)
-
-![image-20231024170159500](doc/pic/image-20231024170159500.png)
-
-![image-20231025141122572](doc/pic/image-20231025141122572.png)
-
-## Код
+## Code
 
 ### MacOS
 
@@ -868,17 +705,14 @@ jobs:
     name: macOS-CI-CD
     runs-on: ${{ matrix.os }}
     strategy:
-      # Матрица, включающая разные версии Qt (6.2.2 и 6.6.0) и архитектуры (clang_64)
       matrix:
         os: [macos-11.0]
         qt_ver: [6.2.2, 6.6.0]
         qt_arch: [clang_64]
     env:
       targetName: PolyChat
-      # TARGET в файле Qt pro
       QtApplicationName: App
     steps:
-      # изменилось окружение по умолчанию macos 11.0, нужно указать
       - name: prepare env
         if: ${{ matrix.os == 'macos-11.0' }}
         run: |
@@ -898,7 +732,6 @@ jobs:
       - uses: actions/checkout@v2
         with:
           fetch-depth: 1
-      # Тестирование под MacOS (с использованием QTest)
       - name: Test on macOS 
         run: |
           echo '-------------------'
@@ -910,14 +743,12 @@ jobs:
           ./PolyChatTester -v2 -txt
           echo '\n\n==============================./PolyChatTester  -txt==============================\n\n'
           ./PolyChatTester -txt
-      # Скомпилировать версию `Release`
       - name: Build on macOS 
         run: |
           ls
           cd ./${QtApplicationName}
           qmake
           make
-      # Упаковка
       - name: Package on MacOS
         run: |
           cd ./${QtApplicationName}
@@ -925,12 +756,10 @@ jobs:
           echo '------------------'
           ls
           macdeployqt ${QtApplicationName}.app -qmldir=. -verbose=1 -dmg
-      # Загрузка artifacts
       - uses: actions/upload-artifact@v2
         with:
           name: ${{ env.targetName }}_${{ matrix.os }}_${{matrix.qt_ver}}.zip
           path: ${{ env.QtApplicationName }}/${{ env.QtApplicationName }}.app
-      # загрузка тега Release
       - name: Upload Release
         if: startsWith(github.event.ref, 'refs/tags/')
         uses: svenstaro/upload-release-action@v2
@@ -962,10 +791,9 @@ on:
 jobs:
   build:
     name: Windows-CI-CD
-    # справочный документ https://github.com/actions/virtual-environments/blob/main/images/win/Windows2019-Readme.md
+    # 参考文档 https://github.com/actions/virtual-environments/blob/main/images/win/Windows2019-Readme.md
     runs-on: windows-2019
     strategy:
-      # Стратегия: Матрица, включающая разные версии Qt (6.2.2 и 6.6.0) и архитектуры (msvc2019_64)
       matrix:
         include:
           - qt_ver: 6.2.2
@@ -997,7 +825,6 @@ jobs:
       - uses: actions/checkout@v2
         with:
           fetch-depth: 1
-      # Тестирование под Windows (с использованием QTest)
       - name: msvc-test
         id: test
         shell: cmd
@@ -1010,7 +837,6 @@ jobs:
           echo winSdkVer=%WindowsSdkVersion% >> %GITHUB_ENV%
           echo vcToolsInstallDir=%VCToolsInstallDir% >> %GITHUB_ENV%
           echo vcToolsRedistDir=%VCToolsRedistDir% >> %GITHUB_ENV%
-      # Скомпилировать версию `Release`
       - name: msvc-build
         id: build
         shell: cmd
@@ -1025,7 +851,6 @@ jobs:
           echo vcToolsRedistDir=%VCToolsRedistDir% >> %GITHUB_ENV%
           ls
           tree /F
-      # Упаковка
       - name: package
         id: package
         env:
@@ -1039,12 +864,10 @@ jobs:
           echo '------- Finish scripts windows-publish.ps1'
           $name = ${env:archiveName}
           echo "::set-output name=packageName::$name"
-       # Загрузка artifacts
       - uses: actions/upload-artifact@v2
         with:
           name: ${{ env.targetName }}_${{ steps.package.outputs.packageName }}
           path: ${{ steps.package.outputs.packageName }}
-      # загрузка тега Release
       - name: uploadRelease
         if: startsWith(github.event.ref, 'refs/tags/')
         uses: svenstaro/upload-release-action@v2
@@ -1077,8 +900,8 @@ param (
 # winSdkVer: 10.0.19041.0\ 
 # vcToolsInstallDir: C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\VC\Tools\MSVC\14.28.29333\ 
 # vcToolsRedistDir: C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\VC\Redist\MSVC\14.28.29325\ 
-# archiveName: 6.0.0-win64_msvc2019
-# msvcArch: x64
+# archiveName: 5.9.9-win32_msvc2015
+# msvcArch: x86
 
 $scriptDir = $PSScriptRoot
 $currentDir = Get-Location
@@ -1118,4 +941,18 @@ if ($null -eq $archiveName || $null -eq $targetName) {
 Main
 
 ```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
