@@ -1,15 +1,4 @@
-<!-- SPbSTU  -->
-
- <p align="center">
-  <img width="250px" src="https://github.com/NekoSilverFox/NekoSilverfox/blob/master/icons/logo_building_spbstu.png?raw=true" align="center" alt="ogo_building_spbstu" />
-  </br>
-  </br>
-  <b><font size=4>Санкт-Петербургский государственный политехнический университет</font></b></br>
-  <b>Институт компьютерных наук и технологий</b>
-
-  <br>
-
- <p align="center"><b><font size=6>PolyChat</font></b></p>
+ <p align="center"><b><font size=18>PolyChat</font></b></p>
  <p align="center"><b>QT-based cross-platform LAN chat room</b></p>
 
  <p align="center"></p>
@@ -20,9 +9,8 @@
 </p>
 
 
-
 <div align=left>
-<!-- SPbSTU 最后一行 -->
+
 
 
 
