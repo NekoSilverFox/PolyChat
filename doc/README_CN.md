@@ -15,8 +15,8 @@
  <p align="center"></p>
 
 <p align="center">
-    <a href="../README.md">Руский язык</a>
-    <a href="./README_EN.md">English</a>
+    <a href="./README_RU.md">Руский язык</a>
+    <a href="../README.md">English</a>
 </p>
 
 
