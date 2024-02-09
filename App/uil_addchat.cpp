@@ -1,8 +1,6 @@
 #include "uil_addchat.h"
 #include "ui_addchat.h"
-
 #include "uil_chatboxwidget.h"
-
 #include "dal_polychat.h"
 
 #include <QMessageBox>

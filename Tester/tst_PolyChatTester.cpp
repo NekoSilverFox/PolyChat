@@ -2909,6 +2909,7 @@ void PolyChatTester::e2e_TcpServer()
     widget.destroyed();
 }
 #endif
+
 //QTEST_APPLESS_MAIN(PolyChatTester)
 QTEST_MAIN(PolyChatTester)  // 自动为我们创建用于测试的 main 函数（带 GUI）
 
