@@ -8,7 +8,7 @@
 #include <QMessageBox>
 #include <QCloseEvent>
 
-TcpClient::TcpClient(QWidget *parent, QString fileName, qint64 fileSizeBytes, QHostAddress serverIp, qint16 serverPort) :
+TcpClient::TcpClient(QWidget *parent, const QString &fileName, qint64 fileSizeBytes, QHostAddress serverIp, qint16 serverPort) :
     QWidget(parent),
     ui(new Ui::TcpClient)
 {
@@ -75,6 +75,10 @@ TcpClient::TcpClient(QWidget *parent, QString fileName, qint64 fileSizeBytes, QH
             [=](){
         ui->progressBar->setValue(bytesReceived / fileSizeBytes * 100);  // 更新进度条
         ui->progressBar->update();
+
+#if !QT_NO_DEBUG
+        appendTextBrowser(Qt::darkCyan, QString("[DEBUG] TCP-Client bytesReceived:%1").arg(bytesReceived));
+#endif
     });
 }
 
@@ -133,8 +137,8 @@ void TcpClient::receiveTcpDataAndSave()
         appendTextBrowser(Qt::blue, "[INFO] Start parsing the data header");
         this->isHeaderReceived = true;
         this->bytesReceived = 0;
-        timer_progressBar->start(10);
         ui->progressBar->setValue(0);
+        timer_progressBar->start(100);
 
         /** 解析 header
         *   header第1段：文件名（QString）
@@ -157,10 +161,6 @@ void TcpClient::receiveTcpDataAndSave()
             this->bytesReceived += lenWrite;
         }
 
-
-#if !QT_NO_DEBUG
-        appendTextBrowser(Qt::darkCyan, QString("[DEBUG] TCP-Client bytesReceived:%1").arg(bytesReceived));
-#endif
         if (fileSizeBytes == bytesReceived)
         {
             timer_progressBar->stop();
