@@ -50,7 +50,7 @@ ChatBoxWidget::ChatBoxWidget(QWidget* parent, QString name, qint16 port)
 
     /* 点击发送按钮发送消息 */
     connect(ui->btnSend, &QPushButton::clicked,
-            [=](){sendUDPSignal(SignalType::Msg);});
+            this, [=](){sendUDPSignal(SignalType::Msg);});
 
 
     /* 点击退出按钮，关闭窗口 */
@@ -60,44 +60,42 @@ ChatBoxWidget::ChatBoxWidget(QWidget* parent, QString name, qint16 port)
     //////////////////////////////////////////////// 辅助功能 ////////////////////////////////////////////////
     /* 字体 */
     connect(ui->cbxFontType, &QFontComboBox::currentFontChanged,
-            [=](const QFont& font){
-        ui->msgTextEdit->setCurrentFont(font);
-        ui->msgTextEdit->setFocus();
+            this, [=](const QFont& font){
+                        ui->msgTextEdit->setCurrentFont(font);
+                        ui->msgTextEdit->setFocus();
     });
 
     /* 字号 */
     void(QComboBox::* cbxSingal)(const QString &text) = &QComboBox::currentTextChanged;
     connect(ui->cbxFontSize, cbxSingal,
-            [=](const QString &text){
-        ui->msgTextEdit->setFontPointSize(text.toDouble());
-        ui->msgTextEdit->setFocus();
+            this, [=](const QString &text){
+                        ui->msgTextEdit->setFontPointSize(text.toDouble());
+                        ui->msgTextEdit->setFocus();
     });
 
     /* 加粗 */
     connect(ui->btnBold, &QToolButton::clicked,
-            [=](bool isCheck){
-        if (isCheck) ui->msgTextEdit->setFontWeight(QFont::Bold);
-        else ui->msgTextEdit->setFontWeight(QFont::Normal);
+            this, [=](bool isCheck){
+                        if (isCheck) ui->msgTextEdit->setFontWeight(QFont::Bold);
+                        else ui->msgTextEdit->setFontWeight(QFont::Normal);
     });
 
     /* 倾斜 */
     connect(ui->btnItalic, &QToolButton::clicked,
-            [=](bool isCheck){
-        ui->msgTextEdit->setFontItalic(isCheck);
+            this, [=](bool isCheck){ ui->msgTextEdit->setFontItalic(isCheck);
     });
 
 
     /* 下划线 */
     connect(ui->btnUnderLine, &QToolButton::clicked,
-            [=](bool isCheck){
-        ui->msgTextEdit->setFontUnderline(isCheck);
+            this, [=](bool isCheck){ ui->msgTextEdit->setFontUnderline(isCheck);
     });
 
     /* 更改颜色 */
     connect(ui->btnColor, &QToolButton::clicked,
-            [=](){
-        QColor color = QColorDialog::getColor(Qt::black);
-        ui->msgTextEdit->setTextColor(color);
+            this, [=](){
+                        QColor color = QColorDialog::getColor(Qt::black);
+                        ui->msgTextEdit->setTextColor(color);
     });
 
     /* 清空聊天 */
@@ -338,7 +336,7 @@ void ChatBoxWidget::receiveUDPMessage()
                                            "[%1] on [%2] send a file, file information:\n"
                                            "Name: %3\n"
                                            "Size: %4Kb\n"
-                                           ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>").arg(localUserName_4).arg(time).arg(msg_7).arg(fileSize_8 / 1024));
+                                           ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>").arg(localUserName_4, time, msg_7, QString::number(fileSize_8 / 1024)));
 #if QT_NO_DEBUG
         /* 判断发送方是不是自己，如果是自己的话，就不用再接收了
          * 如果是不是自己的话，那么就询问是否接收
@@ -350,7 +348,7 @@ void ChatBoxWidget::receiveUDPMessage()
                                  "---------------------\n"
                                  "File information:\n"
                                  "Name: %3\n"
-                                 "Size: %4Kb").arg(localUserName_4).arg(localUserGroupNumber_5).arg(msg_7).arg(fileSize_8 / 1024),
+                                 "Size: %4Kb").arg(localUserName_4, localUserGroupNumber_5, msg_7, QString::number(fileSize_8 / 1024)),
                                  QMessageBox::No | QMessageBox::Yes,
                                  QMessageBox::Yes))
         {
@@ -405,11 +403,11 @@ void ChatBoxWidget::userLeft(QString name, QString time)
     if (!ui->tbUser->findItems(name, Qt::MatchExactly).isEmpty())
     {
         /* 更新用户列表 */
-        ui->tbUser->removeRow(ui->tbUser->findItems(name, Qt::MatchExactly).first()->row());
+        ui->tbUser->removeRow(ui->tbUser->findItems(name, Qt::MatchExactly).constFirst()->row());
 
         /* 追加聊天记录 */
         ui->msgTextBrowser->setTextColor(Qt::gray);
-        ui->msgTextBrowser->append(QString("%1 left on %2").arg(name).arg(time));
+        ui->msgTextBrowser->append(QString("%1 left on %2").arg(name, time));
 
         /* 在线用户更新 */
         ui->lbNumberOnlineUse->setText(QString("Number of online user: %1").arg(ui->tbUser->rowCount()));
@@ -443,16 +441,15 @@ void ChatBoxWidget::closeEvent(QCloseEvent* event)
     }
 
     udpSocketOnPortChatList->close();  // 关闭套接字
-    udpSocketOnPortChatList->destroyed();
+    emit udpSocketOnPortChatList->destroyed();
 
     udpSocketOnPortChatBox->close();
-    udpSocketOnPortChatBox->destroyed();
+    emit udpSocketOnPortChatBox->destroyed();
 
     QWidget::closeEvent(event);
 }
 
 void ChatBoxWidget::openURL(const QUrl& url)
 {
-    QString strUrl = url.toString();
     QDesktopServices::openUrl(url);
 }

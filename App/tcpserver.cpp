@@ -62,7 +62,7 @@ TcpServer::TcpServer(QWidget *parent, QString filePath, QHostAddress ip, qint16 
         ui->progressBar->setValue(0);
 
         /* 如果断开连接 */
-        connect(tcpSocket, &QTcpSocket::disconnected, [=](){
+        connect(tcpSocket, &QTcpSocket::disconnected, this, [=](){
             ui->lbClientIP->setText("[NONE] NO CONNECT");
             ui->lbClientPort->setText("[NONE] NO CONNECT");
             appendTextBrowser(Qt::darkYellow, QString("[WARRING] Disconnect with client %1:%2 ").arg(clientIp).arg(clientPort));
@@ -80,7 +80,7 @@ TcpServer::TcpServer(QWidget *parent, QString filePath, QHostAddress ip, qint16 
                               QString("[INFO] File opened successfully\n"
                                       "Name: %1\n"
                                       "Path: %2\n"
-                                      "Size: %3Kb").arg(this->fileName).arg(filePath).arg(fileSize / 1024));
+                                      "Size: %3Kb").arg(this->fileName, filePath, QString::number(fileSize / 1024)));
         }
         else
         {
@@ -121,7 +121,7 @@ TcpServer::TcpServer(QWidget *parent, QString filePath, QHostAddress ip, qint16 
 
 
     /* 点击取消按钮 */
-    connect(ui->btnCancel, &QPushButton::clicked, [=](){ this->close(); });
+    connect(ui->btnCancel, &QPushButton::clicked, this, [=](){ this->close(); });
 }
 
 

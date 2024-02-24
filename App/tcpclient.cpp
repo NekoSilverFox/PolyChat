@@ -102,7 +102,7 @@ void TcpClient::connectTcpServerAndOpenFile()
     bool isFileOpen = file.open(QIODevice::WriteOnly);
     if (!isFileOpen)
     {
-        appendTextBrowser(Qt::red, QString("[ERROR] Can not write file %1 to file: %2").arg(fileName).arg(savePath));
+        appendTextBrowser(Qt::red, QString("[ERROR] Can not write file %1 to file: %2").arg(fileName, savePath));
         return;
     }
 
@@ -168,7 +168,7 @@ void TcpClient::receiveTcpDataAndSave()
             ui->progressBar->update();
 
             ui->textBrowser->setTextColor(Qt::green);
-            ui->textBrowser->append(QString("[INFO] File %1 received successfully, already saved to the path: %2").arg(fileName).arg(file.fileName()));
+            ui->textBrowser->append(QString("[INFO] File %1 received successfully, already saved to the path: %2").arg(fileName, file.fileName()));
 
             this->isHeaderReceived = false;
             this->bytesReceived = 0;

@@ -191,6 +191,7 @@ bool ChatList::isChatExist(const QString &name)
         [&](auto pair) { return name == pair.first->name; });
 }
 
+
 /** 聊天已经记录（存在）的情况下，按钮不存在于 this 的 vPair_OChat_BtnChat 中
  * @brief ChatList::isBtnChatInVector
  * @param name
@@ -280,7 +281,7 @@ QToolButton* ChatList::getNewBtn(QString btn_text, qint16 port, bool isOpen)
     btn->setFixedSize(220, 50);
 
     /* 按钮添加信号和槽 */
-    connect(btn, &QToolButton::clicked,
+    connect(btn, &QToolButton::clicked,this,
             [=](){
                 /* 如果窗口已经被打开，就不要再执行 */
                 if (isChatOpen(btn_text))
@@ -340,16 +341,27 @@ bool ChatList::setChatState(const QString &name, bool state)
 
 bool ChatList::updateBtnInvPair(const QString &name, QToolButton* btn)
 {
-    for (auto i : this->vPair_OChat_BtnChat)
+//    for (auto i : this->vPair_OChat_BtnChat)
+//    {
+//        if (name == i.first->name)
+//        {
+//            i.second = btn;
+//            return true;
+//        }
+//    }
+    // 使用 std::find_if 算法查找是否存在满足条件的元素
+    auto it = std::find_if(this->vPair_OChat_BtnChat.begin(), this->vPair_OChat_BtnChat.end(),
+                           [&](const auto &pair) { return name == pair.first->name; });
+
+    // 如果找到满足条件的元素，则更新其对应的按钮，并返回 true
+    // 否则，输出错误信息，并返回 false
+    if (it != this->vPair_OChat_BtnChat.end())
     {
-        if (name == i.first->name)
-        {
-            i.second = btn;
-            return true;
-        }
+        it->second = btn;
+        return true;
     }
 
-    qDebug() << "[ERROR] File to update btn, ChatBox named" << name << "do not exits in local vPair_OChat_BtnChat";
+    qDebug() << "[ERROR] Fail to update btn, ChatBox named" << name << "do not exits in local vPair_OChat_BtnChat";
     return false;
 }
 
