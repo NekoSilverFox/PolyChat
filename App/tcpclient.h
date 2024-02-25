@@ -15,7 +15,7 @@ class TcpClient : public QWidget
     Q_OBJECT
 
 public:
-    explicit TcpClient(QWidget* parent, QString fileName, qint64 fileSizeBytes, QHostAddress serverIp, qint16 serverPort);
+    explicit TcpClient(QWidget* parent, const QString &fileName, qint64 fileSizeBytes, QHostAddress serverIp, qint16 serverPort);
     ~TcpClient();
 
     void connectTcpServerAndOpenFile();

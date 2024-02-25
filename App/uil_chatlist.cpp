@@ -36,7 +36,7 @@ ChatList::ChatList(QWidget* parent, QString localUserName, QString localUserGrou
         addChat->show();
 
         connect(addChat, &AddChat::addNewChat,
-                this, [=](QString name){
+                this, [=](const QString &name){
 
                 if (isChatExist(name))
                 {
@@ -177,30 +177,38 @@ void ChatList::receiveMessage()
  * @param name
  * @return 存在返回 true
  */
-bool ChatList::isChatExist(const QString name)
+bool ChatList::isChatExist(const QString &name)
 {
-    for (auto i : this->vPair_OChat_BtnChat)
-    {
-        if (name == i.first->name) return true;
-    }
+//    for (auto i : this->vPair_OChat_BtnChat)
+//    {
+//        if (name == i.first->name) return true;
+//    }
+//    return false;  使用标准库中的 std::any_of 算法来替代原始循环
 
-    return false;
+    return std::any_of(
+        this->vPair_OChat_BtnChat.begin(),
+        this->vPair_OChat_BtnChat.end(),
+        [&](auto pair) { return name == pair.first->name; });
 }
+
 
 /** 聊天已经记录（存在）的情况下，按钮不存在于 this 的 vPair_OChat_BtnChat 中
  * @brief ChatList::isBtnChatInVector
  * @param name
  * @return
  */
-bool ChatList::isChatExist_But_BtnNotExist(QString name)
+bool ChatList::isChatExist_But_BtnNotExist(const QString &name)
 {
     if (!isChatExist(name)) return false;
 
-    for (auto i: this->vPair_OChat_BtnChat)
-    {
-        if ((name == i.first->name) && (nullptr == i.second)) return true;
-    }
-    return false;
+//    for (auto i: this->vPair_OChat_BtnChat)
+//    {
+//        if ((name == i.first->name) && (nullptr == i.second)) return true;
+//    }
+//    return false;
+    // 使用 std::any_of 算法查找是否存在满足条件的元素
+    return std::any_of(this->vPair_OChat_BtnChat.begin(), this->vPair_OChat_BtnChat.end(),
+                       [&](const auto &pair) { return (name == pair.first->name) && (nullptr == pair.second); });
 }
 
 /** 查找一个端口号是否被占用
@@ -211,12 +219,15 @@ bool ChatList::isChatExist_But_BtnNotExist(QString name)
 bool ChatList::isPortExist(const qint16 port)
 {
     if (vPair_OChat_BtnChat.isEmpty()) return false;
-    for (auto i : vPair_OChat_BtnChat)
-    {
-        if ((port == i.first->port) || (port == PORT_CHAT_LIST) || (port == PORT_TCP_FILE)) return true;
-    }
+//    for (auto i : vPair_OChat_BtnChat)
+//    {
+//        if ((port == i.first->port) || (port == PORT_CHAT_LIST) || (port == PORT_TCP_FILE)) return true;
+//    }
+//    return false;
 
-    return false;
+    // 使用 std::any_of 算法查找是否存在满足条件的元素
+    return std::any_of(vPair_OChat_BtnChat.begin(), vPair_OChat_BtnChat.end(),
+                       [&](const auto &pair) { return (port == pair.first->port) || (port == PORT_CHAT_LIST) || (port == PORT_TCP_FILE); });
 }
 
 /** 获取一个不重复的随机端口号
@@ -233,13 +244,21 @@ qint16 ChatList::getRandomPort()
 }
 
 
-bool ChatList::isChatOpen(QString name)
+bool ChatList::isChatOpen(const QString &name)
 {
-    for (auto i : vPair_OChat_BtnChat)
-    {
-        if (name == i.first->name) return i.first->isOpen;
-    }
-    return true;  // FIX!
+//    for (auto i : vPair_OChat_BtnChat)
+//    {
+//        if (name == i.first->name) return i.first->isOpen;
+//    }
+//    return true;  // FIX!
+
+    // 使用 std::find_if 算法查找是否存在满足条件的元素
+    auto it = std::find_if(vPair_OChat_BtnChat.begin(), vPair_OChat_BtnChat.end(),
+                           [&](const auto &pair) { return name == pair.first->name; });
+
+    // 如果找到满足条件的元素，则返回其 isOpen 属性
+    // 否则，返回默认值 true
+    return (it != vPair_OChat_BtnChat.end()) ? it->first->isOpen : true;
 }
 
 /** 创建并返回一个 按钮对象
@@ -262,7 +281,7 @@ QToolButton* ChatList::getNewBtn(QString btn_text, qint16 port, bool isOpen)
     btn->setFixedSize(220, 50);
 
     /* 按钮添加信号和槽 */
-    connect(btn, &QToolButton::clicked,
+    connect(btn, &QToolButton::clicked,this,
             [=](){
                 /* 如果窗口已经被打开，就不要再执行 */
                 if (isChatOpen(btn_text))
@@ -294,33 +313,55 @@ QToolButton* ChatList::getNewBtn(QString btn_text, qint16 port, bool isOpen)
  * @param state
  * @return 如果设置成功返回 true，如果不成功返回 false
  */
-bool ChatList::setChatState(QString name, bool state)
+bool ChatList::setChatState(const QString &name, bool state)
 {
-    for (auto i : this->vPair_OChat_BtnChat)
-    {
-        if (name == i.first->name)
-        {
-            i.first->isOpen = state;
-            return true;
-        }
-    }
+//    for (auto i : this->vPair_OChat_BtnChat)
+//    {
+//        if (name == i.first->name)
+//        {
+//            i.first->isOpen = state;
+//            return true;
+//        }
+//    }
+//    return false;
+    // 使用 std::find_if 算法查找是否存在满足条件的元素
+    auto it = std::find_if(this->vPair_OChat_BtnChat.begin(), this->vPair_OChat_BtnChat.end(),
+                           [&](const auto &pair) { return name == pair.first->name; });
 
+    // 如果找到满足条件的元素，则设置其 isOpen 属性，并返回 true
+    // 否则，返回 false
+    if (it != this->vPair_OChat_BtnChat.end())
+    {
+        it->first->isOpen = state;
+        return true;
+    }
     return false;
 }
 
 
-bool ChatList::updateBtnInvPair(QString name, QToolButton* btn)
+bool ChatList::updateBtnInvPair(const QString &name, QToolButton* btn)
 {
-    for (auto i : this->vPair_OChat_BtnChat)
+//    for (auto i : this->vPair_OChat_BtnChat)
+//    {
+//        if (name == i.first->name)
+//        {
+//            i.second = btn;
+//            return true;
+//        }
+//    }
+    // 使用 std::find_if 算法查找是否存在满足条件的元素
+    auto it = std::find_if(this->vPair_OChat_BtnChat.begin(), this->vPair_OChat_BtnChat.end(),
+                           [&](const auto &pair) { return name == pair.first->name; });
+
+    // 如果找到满足条件的元素，则更新其对应的按钮，并返回 true
+    // 否则，输出错误信息，并返回 false
+    if (it != this->vPair_OChat_BtnChat.end())
     {
-        if (name == i.first->name)
-        {
-            i.second = btn;
-            return true;
-        }
+        it->second = btn;
+        return true;
     }
 
-    qDebug() << "[ERROR] File to update btn, ChatBox named" << name << "do not exits in local vPair_OChat_BtnChat";
+    qDebug() << "[ERROR] Fail to update btn, ChatBox named" << name << "do not exits in local vPair_OChat_BtnChat";
     return false;
 }
 

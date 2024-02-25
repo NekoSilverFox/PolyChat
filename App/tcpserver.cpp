@@ -62,7 +62,7 @@ TcpServer::TcpServer(QWidget *parent, QString filePath, QHostAddress ip, qint16 
         ui->progressBar->setValue(0);
 
         /* 如果断开连接 */
-        connect(tcpSocket, &QTcpSocket::disconnected, [=](){
+        connect(tcpSocket, &QTcpSocket::disconnected, this, [=](){
             ui->lbClientIP->setText("[NONE] NO CONNECT");
             ui->lbClientPort->setText("[NONE] NO CONNECT");
             appendTextBrowser(Qt::darkYellow, QString("[WARRING] Disconnect with client %1:%2 ").arg(clientIp).arg(clientPort));
@@ -80,7 +80,7 @@ TcpServer::TcpServer(QWidget *parent, QString filePath, QHostAddress ip, qint16 
                               QString("[INFO] File opened successfully\n"
                                       "Name: %1\n"
                                       "Path: %2\n"
-                                      "Size: %3Kb").arg(this->fileName).arg(filePath).arg(fileSize / 1024));
+                                      "Size: %3Kb").arg(this->fileName, filePath, QString::number(fileSize / 1024)));
         }
         else
         {
@@ -115,15 +115,13 @@ TcpServer::TcpServer(QWidget *parent, QString filePath, QHostAddress ip, qint16 
 
     /* 发送完文件头之后，每隔固定时间发送一个数据包 */
     this->timer = new QTimer(this);
-    connect(timer, &QTimer::timeout,
-            [=](){
+    connect(timer, &QTimer::timeout, this, [=](){
         timer->stop();
-        sendData();
-    });
+        sendData(); });
 
 
     /* 点击取消按钮 */
-    connect(ui->btnCancel, &QPushButton::clicked, [=](){ this->close(); });
+    connect(ui->btnCancel, &QPushButton::clicked, this, [=](){ this->close(); });
 }
 
 
@@ -136,30 +134,31 @@ void TcpServer::sendData()
     this->bytesAlreadySend = 0;
 
     // 使用定时器更新进度条
-    QTimer* timer = new QTimer(this);
-    connect(timer, &QTimer::timeout, this,
+    QTimer* timer_progressBar = new QTimer(this);
+    connect(timer_progressBar, &QTimer::timeout, this,
             [=](){
         ui->progressBar->setValue(this->bytesAlreadySend / this->fileSize * 100);
         ui->progressBar->update();
+
+#if !QT_NO_DEBUG
+        appendTextBrowser(Qt::darkCyan, QString("[DEBUG] TCP-Server this->bytesAlreadySend:%1").arg(this->bytesAlreadySend));
+#endif
     });
 
+    timer_progressBar->start(100);
     do {
-        timer->start(10);
         char buf[4 * 1024] = {0};  // 【数据包】每次发送的数据 4Kb
         lenPackage = file.read(buf, sizeof(buf));
         lenPackage = tcpSocket->write(buf, lenPackage);  // 发送数据，读多少，发多少
 
         this->bytesAlreadySend += lenPackage;  // 发送的数据需要累积
 
-#if !QT_NO_DEBUG
-        appendTextBrowser(Qt::darkCyan, QString("[DEBUG] TCP-Server this->bytesAlreadySend:%1").arg(this->bytesAlreadySend));
-#endif
 
     } while (lenPackage > 0);
 
     if (this->bytesAlreadySend == this->fileSize)
     {
-        timer->stop();
+        timer_progressBar->stop();
         ui->progressBar->setValue(this->bytesAlreadySend / this->fileSize * 100);
         ui->progressBar->update();
 
