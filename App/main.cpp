@@ -7,8 +7,6 @@
 
 #include "db_localdata.h"
 
-#define ENABLE_UNUSED_FUNCTION       0            // 是否编译未使用的函数
-
 QString      localUserName           = "";               // User Name (will get in user login)
 QString      localUserGroupNumber    = "";               // Group number (will get in user login)
 QHostAddress localIpAddress          = QHostAddress();
