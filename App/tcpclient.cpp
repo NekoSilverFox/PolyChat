@@ -102,7 +102,7 @@ void TcpClient::connectTcpServerAndOpenFile()
     bool isFileOpen = file.open(QIODevice::WriteOnly);
     if (!isFileOpen)
     {
-        appendTextBrowser(Qt::red, QString("[ERROR] Can not write file %1 to file: %2").arg(fileName, savePath));
+        appendTextBrowser(Qt::red, QString("[ERROR] Can not write file %1 to %2").arg(fileName, savePath));
         return;
     }
 

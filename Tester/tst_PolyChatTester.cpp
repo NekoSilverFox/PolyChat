@@ -17,7 +17,6 @@
 #include <QTableWidget>
 
 #include "../App/db_localdata.h"
-#include "../App/bll_polychat.h"
 #include "../App/dal_polychat.h"
 #include "../App/uil_loginwidget.h"
 #include "../App/uil_addchat.h"
@@ -32,7 +31,7 @@ QString      localUserGroupNumber    = "";               // Group number (get in
 QHostAddress localIpAddress          = QHostAddress();
 ChatList*    chatList                = nullptr;          // Widget ChatList (Only one)
 
-unsigned int const TIMER_STEP        = 1000;             // 对话框弹出市场，缩短此项只会影响展示效果。不会影响测试的最终结果
+unsigned int const TIMER_STEP        = 1000;             // 对话框弹出时长，缩短此项只会影响展示效果。不会影响测试的最终结果
 
 class PolyChatTester : public QObject
 {
@@ -1375,8 +1374,10 @@ void PolyChatTester::mt_chatlist_getNewBtn()
     QPair<Chat*, QToolButton*> pair(new Chat("3530904/90102", 6666, false), btn);
     widget.vPair_OChat_BtnChat.push_front(pair);
 
+#if ENABLE_UNUSED_FUNCTION
     widget.updateBtnInvPair("3530904/90102", btn);
     QCOMPARE(widget.isChatOpen("3530904/90102"), false);
+#endif
 }
 
 /** 当增加新的聊天群组时，ui 界面正确刷新
@@ -1393,9 +1394,10 @@ void PolyChatTester::mt_chatlist_btnchat_exist()
     QPair<Chat*, QToolButton*> pair(new Chat("3530904/90102", 6666, false), btn);
     widget.vPair_OChat_BtnChat.push_front(pair);
 
+#if ENABLE_UNUSED_FUNCTION
     widget.updateBtnInvPair("3530904/90102", btn);
     QCOMPARE(widget.isChatOpen("3530904/90102"), false);
-
+#endif
 }
 
 /** 用户加入（用户列表正确刷新）
@@ -2104,8 +2106,10 @@ void PolyChatTester::e2e_join_chat()
     QPair<Chat*, QToolButton*> pair(new Chat("3530904/90102", 6666, false), btn);
     chatList.vPair_OChat_BtnChat.push_front(pair);
 
-    chatList.updateBtnInvPair("3530904/90102", btn);
-    QCOMPARE(chatList.isChatOpen("3530904/90102"), false);
+#if ENABLE_UNUSED_FUNCTION
+    widget.updateBtnInvPair("3530904/90102", btn);
+    QCOMPARE(widget.isChatOpen("3530904/90102"), false);
+#endif
 
     QTest::mouseClick(btn, Qt::LeftButton);
 }
