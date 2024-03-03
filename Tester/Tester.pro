@@ -41,4 +41,5 @@ FORMS += \
     ../App/tcpclient.ui \
     ../App/tcpserver.ui
 
-QMAKE_CXXFLAGS += -w
+QMAKE_CXXFLAGS += -w -fprofile-arcs -ftest-coverage
+QMAKE_LFLAGS += -fprofile-arcs -ftest-coverage

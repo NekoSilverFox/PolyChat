@@ -42,44 +42,44 @@ static QHostAddress getIPAddress()
  */
 static bool initLocalUser(QString name, QString groupNumber)
 {
-    localUserName           = name;
-    localUserGroupNumber    = groupNumber;
-    localIpAddress          = getIPAddress();
+    ::localUserName           = name;
+    ::localUserGroupNumber    = groupNumber;
+    ::localIpAddress          = getIPAddress();
 
     return true;
 }
 
 static QString getLocalUserName()
 {
-    return localUserName;
+    return ::localUserName;
 }
 static void setLocalUserName(QString localUserName)
 {
-    localUserName = localUserName;
+    ::localUserName = localUserName;
 }
 
 static QString getLocalUserGroupNumber()
 {
-    return localUserGroupNumber;
+    return ::localUserGroupNumber;
 }
 static void setLocalUserGroupNumber(QString localUserGroupNumber)
 {
-    localUserGroupNumber = localUserGroupNumber;
+    ::localUserGroupNumber = localUserGroupNumber;
 }
 
 
 static QHostAddress getLocalIpAddress()
 {
-    return localIpAddress;
+    return ::localIpAddress;
 }
 static void setLocalIpAddress(QHostAddress localIpAddress)
 {
-    localIpAddress = localIpAddress;
+    ::localIpAddress = localIpAddress;
 }
 
 static qint16 getPortChatList()
 {
-    return PORT_CHAT_LIST;
+    return ::PORT_CHAT_LIST;
 }
 
 /** Show ChatList Widget
@@ -87,8 +87,8 @@ static qint16 getPortChatList()
  */
 static void initAndShowChatList(QWidget* parent)
 {
-    chatList = new ChatList(parent, localUserName, localUserGroupNumber, localIpAddress);
-    chatList->show();
+    ::chatList = new ChatList(parent, ::localUserName, ::localUserGroupNumber, ::localIpAddress);
+    ::chatList->show();
 }
 
 }

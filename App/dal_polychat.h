@@ -15,7 +15,7 @@ namespace DAL
  * @return false in name or group have error,
  *          if not init local user and return true
  */
-static bool initLocalUser(const QString name, const QString groupNumber)
+static bool initLocalUser(const QString &name, const QString &groupNumber)
 {
     if (name.isEmpty() || groupNumber.isEmpty())
     {
@@ -31,7 +31,7 @@ static QString getLocalUserName()
 {
     return BLL::getLocalUserName();
 }
-static void setLocalUserName(QString localUserName)
+static void setLocalUserName(const QString &localUserName)
 {
     BLL::setLocalUserName(localUserName);
 }
@@ -41,7 +41,7 @@ static QString getLocalUserGroupNumber()
 {
     return BLL::getLocalUserGroupNumber();
 }
-static void setLocalUserGroupNumber(QString localUserGroupNumber)
+static void setLocalUserGroupNumber(const QString &localUserGroupNumber)
 {
     BLL::setLocalUserGroupNumber(localUserGroupNumber);
 }
@@ -51,7 +51,7 @@ static QHostAddress getLocalIpAddress()
 {
     return BLL::getLocalIpAddress();
 }
-static void setLocalIpAddress(QHostAddress localIpAddress)
+static void setLocalIpAddress(const QHostAddress &localIpAddress)
 {
     BLL::setLocalIpAddress(localIpAddress);
 }

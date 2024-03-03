@@ -7,6 +7,8 @@
 #include "uil_chatlist.h"
 #include "chat.h"
 
+#define ENABLE_UNUSED_FUNCTION       0            // 是否编译未使用的函数
+
 /**
  * 在此修改配置
  */

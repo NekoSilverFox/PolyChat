@@ -17,7 +17,6 @@
 #include <QTableWidget>
 
 #include "../App/db_localdata.h"
-#include "../App/bll_polychat.h"
 #include "../App/dal_polychat.h"
 #include "../App/uil_loginwidget.h"
 #include "../App/uil_addchat.h"
@@ -26,17 +25,24 @@
 #include "../App/tcpclient.h"
 #include "../App/tcpserver.h"
 
+/* 是否启用对应测试 */
+#define      ENABLE_UT      1   // 激活单元测试
+#define      ENABLE_MT      1
+#define      ENABLE_PT      1
+#define      ENABLE_LT      1
+#define      ENABLE_CT      1
+#define      ENABLE_E2E     1
 
 QString      localUserName           = "";               // User Name (get in user login)
 QString      localUserGroupNumber    = "";               // Group number (get in user login)
 QHostAddress localIpAddress          = QHostAddress();
 ChatList*    chatList                = nullptr;          // Widget ChatList (Only one)
 
-unsigned int const TIMER_STEP        = 1000;             // 对话框弹出市场，缩短此项只会影响展示效果。不会影响测试的最终结果
+unsigned int const TIMER_STEP        = 1000;             // 对话框弹出时长，缩短此项只会影响展示效果。不会影响测试的最终结果
 
 class PolyChatTester : public QObject
 {
-    Q_OBJECT
+    Q_OBJECT  // 要想使用 QTestlib 工具，必须包含 Q_OBJECT 工具
 
 public:
     PolyChatTester();
@@ -46,6 +52,7 @@ private slots:
     void initTestCase();
     void cleanupTestCase();
 
+#if ENABLE_UT
     void ut_login_login_empty            ();
     void ut_login_group_empty            ();
     void ut_login_login_group_empty      ();
@@ -130,7 +137,9 @@ private slots:
     void ut_chatbox_closeEvent_emit      ();
     void ut_chatbox_tbUser               ();
     void ut_chatbox_lbNumberOnlineUse    ();
+#endif
 
+#if ENABLE_MT
     void mt_login_init_success           ();
     void mt_login_leUserName             ();
     void mt_login_leUserGroupNumber      ();
@@ -151,7 +160,9 @@ private slots:
     void mt_chatbox_send_success            ();
     void mt_tcpclient                       ();
     void mt_tcpserver                       ();
+#endif
 
+#if ENABLE_PT
     void pt_Login_load               ();
     void pt_AddChat_load             ();
     void pt_ChatList_load            ();
@@ -163,14 +174,22 @@ private slots:
     void pt_ChatBox_msgTextEdit_input();
     void pt_Login_to_system          ();
     void pt_AddChat_ui               ();
+#endif
+
+#if ENABLE_LT
     void lt_ChatBox_x100             ();
     void lt_ChatBox_200user          ();
     void lt_ChatBox_2000char         ();
     void lt_ChatBox_msg_change       ();
     void lt_TcpServer_x10            ();
     void lt_TcpClient_x10            ();
-    void ct_ChatBox_code_normal      ();
+#endif
 
+#if ENABLE_CT
+    void ct_ChatBox_code_normal      ();
+#endif
+
+#if ENABLE_E2E
     void e2e_add_new_chat            ();
     void e2e_join_chat               ();
     void e2e_search_chat             ();
@@ -181,6 +200,8 @@ private slots:
     void e2e_clean_chat              ();
     void e2e_save_chat               ();
     void e2e_leave_chat              ();
+#endif
+
 #if 0
     void e2e_Login_normal           ();
     void e2e_Login_empty_all        ();
@@ -246,6 +267,8 @@ void PolyChatTester::cleanupTestCase()
 {
     qDebug() << "End of all test runs";
 }
+
+#if ENABLE_UT
 
 /** 登录失败（用户名不能为空）
  *  Сбой входа в систему (имя пользователя не может быть пустым).
@@ -1290,6 +1313,11 @@ void PolyChatTester::ut_chatbox_lbNumberOnlineUse()
 }
 
 
+#endif
+
+#if ENABLE_MT
+
+
 /** 登陆成功，本地用户信息被正确初始化
  *  Имитация использования пользователем клавиатуры для ввода текста в поле ввода, а затем нажатие кнопки входа в систему (вход выполнен успешно, и информация о локальном пользователе правильно инициализирована).
  *  @brief PolyChatTester::mt_login_init_success
@@ -1375,8 +1403,10 @@ void PolyChatTester::mt_chatlist_getNewBtn()
     QPair<Chat*, QToolButton*> pair(new Chat("3530904/90102", 6666, false), btn);
     widget.vPair_OChat_BtnChat.push_front(pair);
 
+#if ENABLE_UNUSED_FUNCTION
     widget.updateBtnInvPair("3530904/90102", btn);
     QCOMPARE(widget.isChatOpen("3530904/90102"), false);
+#endif
 }
 
 /** 当增加新的聊天群组时，ui 界面正确刷新
@@ -1393,9 +1423,10 @@ void PolyChatTester::mt_chatlist_btnchat_exist()
     QPair<Chat*, QToolButton*> pair(new Chat("3530904/90102", 6666, false), btn);
     widget.vPair_OChat_BtnChat.push_front(pair);
 
+#if ENABLE_UNUSED_FUNCTION
     widget.updateBtnInvPair("3530904/90102", btn);
     QCOMPARE(widget.isChatOpen("3530904/90102"), false);
-
+#endif
 }
 
 /** 用户加入（用户列表正确刷新）
@@ -1694,6 +1725,9 @@ void PolyChatTester::mt_tcpserver()
     QCOMPARE(textBrowser->isReadOnly(), true);
 }
 
+#endif
+
+#if ENABLE_PT
 
 /** 窗口加载/调用的性能
  *  Производительность загрузки/вызова окон.
@@ -2020,6 +2054,10 @@ void PolyChatTester::lt_TcpClient_x10()
     }
 }
 
+#endif
+
+#if ENABLE_CT
+
 /** 模拟用户通过键盘在 msgTextEdit 输入英文、中文、俄文。且 ui 显示正常，不乱码
  *  Имитация ввода пользователем английского, китайского и русского языков в msgTextEdit с клавиатуры. При этом ui отображается корректно, без искажений.
  *  @brief PolyChatTester::ct_ChatBox_code_normal
@@ -2041,6 +2079,10 @@ void PolyChatTester::ct_ChatBox_code_normal()
     QCOMPARE(textBrowser->toPlainText(), "测试！");
     textBrowser->clear();
 }
+
+#endif
+
+#if ENABLE_E2E
 
 void PolyChatTester::e2e_add_new_chat()
 {
@@ -2104,8 +2146,10 @@ void PolyChatTester::e2e_join_chat()
     QPair<Chat*, QToolButton*> pair(new Chat("3530904/90102", 6666, false), btn);
     chatList.vPair_OChat_BtnChat.push_front(pair);
 
-    chatList.updateBtnInvPair("3530904/90102", btn);
-    QCOMPARE(chatList.isChatOpen("3530904/90102"), false);
+#if ENABLE_UNUSED_FUNCTION
+    widget.updateBtnInvPair("3530904/90102", btn);
+    QCOMPARE(widget.isChatOpen("3530904/90102"), false);
+#endif
 
     QTest::mouseClick(btn, Qt::LeftButton);
 }
@@ -2607,6 +2651,7 @@ void PolyChatTester::e2e_leave_chat()
 }
 
 
+#endif
 
 
 

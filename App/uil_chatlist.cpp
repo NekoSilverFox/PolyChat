@@ -7,6 +7,7 @@
 
 #include <QMessageBox>
 
+
 ChatList::ChatList(QWidget* parent, QString localUserName, QString localUserGroupNumber, QHostAddress localIpAddress) :
     QWidget(parent),
     ui(new Ui::ChatList)
@@ -197,6 +198,7 @@ bool ChatList::isChatExist(const QString &name)
  * @param name
  * @return
  */
+#if ENABLE_UNUSED_FUNCTION
 bool ChatList::isChatExist_But_BtnNotExist(const QString &name)
 {
     if (!isChatExist(name)) return false;
@@ -210,6 +212,7 @@ bool ChatList::isChatExist_But_BtnNotExist(const QString &name)
     return std::any_of(this->vPair_OChat_BtnChat.begin(), this->vPair_OChat_BtnChat.end(),
                        [&](const auto &pair) { return (name == pair.first->name) && (nullptr == pair.second); });
 }
+#endif
 
 /** 查找一个端口号是否被占用
  * @brief isPortExist
@@ -338,7 +341,7 @@ bool ChatList::setChatState(const QString &name, bool state)
     return false;
 }
 
-
+#if ENABLE_UNUSED_FUNCTION
 bool ChatList::updateBtnInvPair(const QString &name, QToolButton* btn)
 {
 //    for (auto i : this->vPair_OChat_BtnChat)
@@ -364,7 +367,7 @@ bool ChatList::updateBtnInvPair(const QString &name, QToolButton* btn)
     qDebug() << "[ERROR] Fail to update btn, ChatBox named" << name << "do not exits in local vPair_OChat_BtnChat";
     return false;
 }
-
+#endif
 
 /** 根据搜索框中的内容，并使用正则表达式，判断是否需要隐藏按钮
  * @brief isNeedHideBtn

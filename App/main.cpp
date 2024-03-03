@@ -6,8 +6,9 @@
 #include "tcpserver.h"
 
 #include "db_localdata.h"
-QString      localUserName           = "";               // User Name (get in user login)
-QString      localUserGroupNumber    = "";               // Group number (get in user login)
+
+QString      localUserName           = "";               // User Name (will get in user login)
+QString      localUserGroupNumber    = "";               // Group number (will get in user login)
 QHostAddress localIpAddress          = QHostAddress();
 ChatList*    chatList                = nullptr;          // Widget ChatList (Only one)
 
