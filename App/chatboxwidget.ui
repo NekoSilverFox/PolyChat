@@ -386,9 +386,16 @@
              </spacer>
             </item>
             <item>
+             <widget class="QLabel" name="lbTrNumOnlineUser">
+              <property name="text">
+               <string>Number of online user: </string>
+              </property>
+             </widget>
+            </item>
+            <item>
              <widget class="QLabel" name="lbNumberOnlineUse">
               <property name="text">
-               <string>Number of online user: 0</string>
+               <string>0</string>
               </property>
              </widget>
             </item>

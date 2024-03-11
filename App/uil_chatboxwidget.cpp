@@ -389,7 +389,7 @@ void ChatBoxWidget::userJoin(QString name, QString groupNumber, QHostAddress ip)
         ui->msgTextBrowser->append(QString("%1 online！").arg(name));
 
         /* 在线用户更新 */
-        ui->lbNumberOnlineUse->setText(QString("Number of online user: %1").arg(ui->tbUser->rowCount()));
+        ui->lbNumberOnlineUse->setText(QString::number(ui->tbUser->rowCount()));
 
         /* 把自身信息广播 */
         sendUDPSignal(SignalType::UserJoin);
@@ -410,7 +410,7 @@ void ChatBoxWidget::userLeft(QString name, QString time)
         ui->msgTextBrowser->append(QString("%1 left on %2").arg(name, time));
 
         /* 在线用户更新 */
-        ui->lbNumberOnlineUse->setText(QString("Number of online user: %1").arg(ui->tbUser->rowCount()));
+        ui->lbNumberOnlineUse->setText(QString::number(ui->tbUser->rowCount()));
     }
 }
 
