@@ -276,7 +276,7 @@ void PolyChatTester::cleanupTestCase()
  */
 void PolyChatTester::ut_login_login_empty()
 {
-    bool isSuccInitLocalUser = DAL::initLocalUser("", "3530904/90102");
+    bool isSuccInitLocalUser = DAL::initLocalUser("", "5140904/30202");
     QCOMPARE(isSuccInitLocalUser, false);
 }
 
@@ -306,7 +306,7 @@ void PolyChatTester::ut_login_login_group_empty()
  */
 void PolyChatTester::ut_login_init_login()
 {
-    bool isSuccInitLocalUser = DAL::initLocalUser("Fox", "3530904/90102");
+    bool isSuccInitLocalUser = DAL::initLocalUser("Fox", "5140904/30202");
     QCOMPARE(isSuccInitLocalUser, true);
     QCOMPARE(localUserName, "Fox");
 }
@@ -317,9 +317,9 @@ void PolyChatTester::ut_login_init_login()
  */
 void PolyChatTester::ut_login_init_group()
 {
-    bool isSuccInitLocalUser = DAL::initLocalUser("Fox", "3530904/90102");
+    bool isSuccInitLocalUser = DAL::initLocalUser("Fox", "5140904/30202");
     QCOMPARE(isSuccInitLocalUser, true);
-    QCOMPARE(localUserGroupNumber, "3530904/90102");
+    QCOMPARE(localUserGroupNumber, "5140904/30202");
 }
 
 /** 保证 btnlogin 是非可选按钮，且图标显示被禁用
@@ -347,7 +347,7 @@ void PolyChatTester::ut_login_btnlogin_emit()
     QPushButton* pushButton = loginWidget.findChild<QPushButton*>("btnLogin");
 
     QTest::keyClicks(leUserName, "Fox");
-    QTest::keyClicks(leUserGroupNumber, "3530904/90102");
+    QTest::keyClicks(leUserGroupNumber, "5140904/30202");
 
     QSignalSpy spy(pushButton, &QPushButton::clicked);
     pushButton->click();
@@ -407,7 +407,7 @@ void PolyChatTester::ut_addchat_btnAddChat()
     QLineEdit* lineEdit = widget.findChild<QLineEdit*>("leNameNewChat");
     QPushButton* pushButton = widget.findChild<QPushButton*>("btnAddChat");
 
-    QTest::keyClicks(lineEdit, "3530904/90102");
+    QTest::keyClicks(lineEdit, "5140904/30202");
 
     QSignalSpy spy(pushButton, &QPushButton::clicked);
     pushButton->click();
@@ -420,8 +420,8 @@ void PolyChatTester::ut_addchat_btnAddChat()
  */
 void PolyChatTester::ut_chat_init()
 {
-    Chat chat("3530904/90102", 6666, true);
-    QCOMPARE(chat.name, "3530904/90102");
+    Chat chat("5140904/30202", 6666, true);
+    QCOMPARE(chat.name, "5140904/30202");
     QCOMPARE(chat.port, 6666);
     QCOMPARE(chat.isOpen, true);
 }
@@ -432,11 +432,11 @@ void PolyChatTester::ut_chat_init()
  */
 void PolyChatTester::ut_chatlist_init()
 {
-    DAL::initLocalUser("Fox", "3530904/90102");
+    DAL::initLocalUser("Fox", "5140904/30202");
 
     ChatList widget(nullptr, DAL::getLocalUserName(), DAL::getLocalUserGroupNumber(), DAL::getLocalIpAddress());
     QCOMPARE("Fox", localUserName);
-    QCOMPARE("3530904/90102", localUserGroupNumber);
+    QCOMPARE("5140904/30202", localUserGroupNumber);
     QCOMPARE(DAL::getLocalIpAddress(), localIpAddress);
 }
 
@@ -446,7 +446,7 @@ void PolyChatTester::ut_chatlist_init()
  */
 void PolyChatTester::ut_chatlist_btnNewChat()
 {
-    DAL::initLocalUser("Fox", "3530904/90102");
+    DAL::initLocalUser("Fox", "5140904/30202");
     ChatList widget(nullptr, DAL::getLocalUserName(), DAL::getLocalUserGroupNumber(), DAL::getLocalIpAddress());
     QToolButton* button = widget.findChild<QToolButton*>("btnNewChat");
 
@@ -461,7 +461,7 @@ void PolyChatTester::ut_chatlist_btnNewChat()
 void PolyChatTester::ut_chatlist_btnNewChat_emit()
 {
     timer->start(TIMER_STEP);
-    DAL::initLocalUser("Fox", "3530904/90102");
+    DAL::initLocalUser("Fox", "5140904/30202");
     ChatList widget(nullptr, DAL::getLocalUserName(), DAL::getLocalUserGroupNumber(), DAL::getLocalIpAddress());
     QToolButton* pushButton = widget.findChild<QToolButton*>("btnNewChat");
 
@@ -478,12 +478,12 @@ void PolyChatTester::ut_chatlist_btnNewChat_emit()
  */
 void PolyChatTester::ut_chatlist_leSearch()
 {
-    DAL::initLocalUser("Fox", "3530904/90102");
+    DAL::initLocalUser("Fox", "5140904/30202");
     ChatList widget(nullptr, DAL::getLocalUserName(), DAL::getLocalUserGroupNumber(), DAL::getLocalIpAddress());
     QLineEdit* lineEdit = widget.findChild<QLineEdit*>("leSearch");
 
-    QTest::keyClicks(lineEdit, "3530904/90102");
-    QCOMPARE(lineEdit->text(), "3530904/90102");
+    QTest::keyClicks(lineEdit, "5140904/30202");
+    QCOMPARE(lineEdit->text(), "5140904/30202");
 }
 
 /** lbName 中正确显示本用户的用户名
@@ -492,7 +492,7 @@ void PolyChatTester::ut_chatlist_leSearch()
  */
 void PolyChatTester::ut_chatlist_lbName()
 {
-    DAL::initLocalUser("Fox", "3530904/90102");
+    DAL::initLocalUser("Fox", "5140904/30202");
     ChatList widget(nullptr, DAL::getLocalUserName(), DAL::getLocalUserGroupNumber(), DAL::getLocalIpAddress());
     QLabel* label = widget.findChild<QLabel*>("lbName");
 
@@ -505,11 +505,11 @@ void PolyChatTester::ut_chatlist_lbName()
  */
 void PolyChatTester::ut_chatlist_lbGroupNumber()
 {
-    DAL::initLocalUser("Fox", "3530904/90102");
+    DAL::initLocalUser("Fox", "5140904/30202");
     ChatList widget(nullptr, DAL::getLocalUserName(), DAL::getLocalUserGroupNumber(), DAL::getLocalIpAddress());
     QLabel* label = widget.findChild<QLabel*>("lbGroupNumber");
 
-    QCOMPARE(label->text(), "3530904/90102");
+    QCOMPARE(label->text(), "5140904/30202");
 }
 
 /** lbIP 中正确显示本用户的 ip 地址
@@ -518,7 +518,7 @@ void PolyChatTester::ut_chatlist_lbGroupNumber()
  */
 void PolyChatTester::ut_chatlist_lbIP()
 {
-    DAL::initLocalUser("Fox", "3530904/90102");
+    DAL::initLocalUser("Fox", "5140904/30202");
     ChatList widget(nullptr, DAL::getLocalUserName(), DAL::getLocalUserGroupNumber(), DAL::getLocalIpAddress());
     QLabel* label = widget.findChild<QLabel*>("lbIP");
 
@@ -531,12 +531,12 @@ void PolyChatTester::ut_chatlist_lbIP()
  */
 void PolyChatTester::ut_chatlist_chat_not_open()
 {
-    DAL::initLocalUser("Fox", "3530904/90102");
+    DAL::initLocalUser("Fox", "5140904/30202");
     ChatList widget(nullptr, DAL::getLocalUserName(), DAL::getLocalUserGroupNumber(), DAL::getLocalIpAddress());
-    QPair<Chat*, QToolButton*> pair(new Chat("3530904/90102", 6666, false), widget.getNewBtn("3530904/90102", 6666, false));
+    QPair<Chat*, QToolButton*> pair(new Chat("5140904/30202", 6666, false), widget.getNewBtn("5140904/30202", 6666, false));
     widget.vPair_OChat_BtnChat.push_front(pair);
 
-    QCOMPARE(widget.isChatOpen("3530904/90102"), false);
+    QCOMPARE(widget.isChatOpen("5140904/30202"), false);
 }
 
 /** 返回 true（如果某个名称的群聊被打开了）
@@ -545,12 +545,12 @@ void PolyChatTester::ut_chatlist_chat_not_open()
  */
 void PolyChatTester::ut_chatlist_chat_open()
 {
-    DAL::initLocalUser("Fox", "3530904/90102");
+    DAL::initLocalUser("Fox", "5140904/30202");
     ChatList widget(nullptr, DAL::getLocalUserName(), DAL::getLocalUserGroupNumber(), DAL::getLocalIpAddress());
-    QPair<Chat*, QToolButton*> pair(new Chat("3530904/90102", 6666, true), widget.getNewBtn("3530904/90102", 6666, false));
+    QPair<Chat*, QToolButton*> pair(new Chat("5140904/30202", 6666, true), widget.getNewBtn("5140904/30202", 6666, false));
     widget.vPair_OChat_BtnChat.push_front(pair);
 
-    QCOMPARE(widget.isChatOpen("3530904/90102"), true);
+    QCOMPARE(widget.isChatOpen("5140904/30202"), true);
 }
 
 /** 生成的随机端口介于 PORT_MIN 与 PORT_MAX
@@ -574,11 +574,11 @@ bool PolyChatTester::ut_chatlist_getRandomPort()
  */
 void PolyChatTester::ut_chatlist_setChatState()
 {
-    DAL::initLocalUser("Fox", "3530904/90102");
+    DAL::initLocalUser("Fox", "5140904/30202");
     ChatList widget(nullptr, DAL::getLocalUserName(), DAL::getLocalUserGroupNumber(), DAL::getLocalIpAddress());
-    QPair<Chat*, QToolButton*> pair1(new Chat("3530904/90102", 6666, true), widget.getNewBtn("3530904/90102", 6666, false));
+    QPair<Chat*, QToolButton*> pair1(new Chat("5140904/30202", 6666, true), widget.getNewBtn("5140904/30202", 6666, false));
     widget.vPair_OChat_BtnChat.push_front(pair1);
-    QCOMPARE(widget.isChatOpen("3530904/90102"), true);
+    QCOMPARE(widget.isChatOpen("5140904/30202"), true);
 
     QPair<Chat*, QToolButton*> pair2(new Chat("3530904/90103", 7777, false), widget.getNewBtn("3530904/90103", 7777, false));
     widget.vPair_OChat_BtnChat.push_front(pair2);
@@ -592,9 +592,9 @@ void PolyChatTester::ut_chatlist_setChatState()
  */
 void PolyChatTester::ut_addchat_port_exist()
 {
-    DAL::initLocalUser("Fox", "3530904/90102");
+    DAL::initLocalUser("Fox", "5140904/30202");
     ChatList widget(nullptr, DAL::getLocalUserName(), DAL::getLocalUserGroupNumber(), DAL::getLocalIpAddress());
-    QPair<Chat*, QToolButton*> pair(new Chat("3530904/90102", 6666, true), widget.getNewBtn("3530904/90102", 6666, false));
+    QPair<Chat*, QToolButton*> pair(new Chat("5140904/30202", 6666, true), widget.getNewBtn("5140904/30202", 6666, false));
     widget.vPair_OChat_BtnChat.push_front(pair);
 
     QCOMPARE(widget.isPortExist(6666), true);
@@ -606,9 +606,9 @@ void PolyChatTester::ut_addchat_port_exist()
  */
 void PolyChatTester::ut_addchat_port_not_exist()
 {
-    DAL::initLocalUser("Fox", "3530904/90102");
+    DAL::initLocalUser("Fox", "5140904/30202");
     ChatList widget(nullptr, DAL::getLocalUserName(), DAL::getLocalUserGroupNumber(), DAL::getLocalIpAddress());
-    QPair<Chat*, QToolButton*> pair(new Chat("3530904/90102", 6666, true), widget.getNewBtn("3530904/90102", 6666, false));
+    QPair<Chat*, QToolButton*> pair(new Chat("5140904/30202", 6666, true), widget.getNewBtn("5140904/30202", 6666, false));
     widget.vPair_OChat_BtnChat.push_front(pair);
 
     QCOMPARE(widget.isPortExist(7777), false);
@@ -620,12 +620,12 @@ void PolyChatTester::ut_addchat_port_not_exist()
  */
 void PolyChatTester::ut_addchat_chat_exist()
 {
-    DAL::initLocalUser("Fox", "3530904/90102");
+    DAL::initLocalUser("Fox", "5140904/30202");
     ChatList widget(nullptr, DAL::getLocalUserName(), DAL::getLocalUserGroupNumber(), DAL::getLocalIpAddress());
-    QPair<Chat*, QToolButton*> pair(new Chat("3530904/90102", 6666, true), widget.getNewBtn("3530904/90102", 6666, false));
+    QPair<Chat*, QToolButton*> pair(new Chat("5140904/30202", 6666, true), widget.getNewBtn("5140904/30202", 6666, false));
     widget.vPair_OChat_BtnChat.push_front(pair);
 
-    QCOMPARE(widget.isChatExist("3530904/90102"), true);
+    QCOMPARE(widget.isChatExist("5140904/30202"), true);
 }
 
 /** 返回 false（不存在同名的群聊）
@@ -634,9 +634,9 @@ void PolyChatTester::ut_addchat_chat_exist()
  */
 void PolyChatTester::ut_addchat_chat_not_exist()
 {
-    DAL::initLocalUser("Fox", "3530904/90102");
+    DAL::initLocalUser("Fox", "5140904/30202");
     ChatList widget(nullptr, DAL::getLocalUserName(), DAL::getLocalUserGroupNumber(), DAL::getLocalIpAddress());
-    QPair<Chat*, QToolButton*> pair(new Chat("3530904/90102", 6666, true), widget.getNewBtn("3530904/90102", 6666, false));
+    QPair<Chat*, QToolButton*> pair(new Chat("5140904/30202", 6666, true), widget.getNewBtn("5140904/30202", 6666, false));
     widget.vPair_OChat_BtnChat.push_front(pair);
 
     QCOMPARE(widget.isChatExist("111111/88888"), false);
@@ -1309,7 +1309,7 @@ void PolyChatTester::ut_chatbox_lbNumberOnlineUse()
 {
     ChatBoxWidget chatBox(nullptr, "3530409/90102", 2333);
     QLabel* label = chatBox.findChild<QLabel*>("lbNumberOnlineUse");
-    QCOMPARE(label->text(), QString("Number of online user: %1").arg(0));
+    QCOMPARE(label->text(), QString::number(0));
 }
 
 
@@ -1359,8 +1359,8 @@ void PolyChatTester::mt_login_leUserGroupNumber()
     LoginWidget loginWidget;
 
     QLineEdit* leUserGroupNumber = loginWidget.findChild<QLineEdit*>("leUserName");
-    QTest::keyClicks(leUserGroupNumber, "3530904/90102");
-    QCOMPARE(leUserGroupNumber->text(), "3530904/90102");
+    QTest::keyClicks(leUserGroupNumber, "5140904/30202");
+    QCOMPARE(leUserGroupNumber->text(), "5140904/30202");
 }
 
 /** 模拟用户点击并且通过键盘输入，确保输入内容在 leNameNewChat 输入框中正确显示
@@ -1371,8 +1371,8 @@ void PolyChatTester::mt_addchat_leNameNewChat()
 {
     AddChat widget;
     QLineEdit* lineEdit = widget.findChild<QLineEdit*>("leNameNewChat");
-    QTest::keyClicks(lineEdit, "3530904/90102");
-    QCOMPARE(lineEdit->text(), "3530904/90102");
+    QTest::keyClicks(lineEdit, "5140904/30202");
+    QCOMPARE(lineEdit->text(), "5140904/30202");
 }
 
 /** 当用户改变搜索框中的内容时，触发信号
@@ -1381,7 +1381,7 @@ void PolyChatTester::mt_addchat_leNameNewChat()
  */
 void PolyChatTester::mt_chatlist_leSearch_change_emit()
 {
-    DAL::initLocalUser("Fox", "3530904/90102");
+    DAL::initLocalUser("Fox", "5140904/30202");
     ChatList widget(nullptr, DAL::getLocalUserName(), DAL::getLocalUserGroupNumber(), DAL::getLocalIpAddress());
     QLineEdit* lineEdit = widget.findChild<QLineEdit*>("leSearch");
 
@@ -1396,16 +1396,16 @@ void PolyChatTester::mt_chatlist_leSearch_change_emit()
  */
 void PolyChatTester::mt_chatlist_getNewBtn()
 {
-    DAL::initLocalUser("Fox", "3530904/90102");
+    DAL::initLocalUser("Fox", "5140904/30202");
     ChatList widget(nullptr, DAL::getLocalUserName(), DAL::getLocalUserGroupNumber(), DAL::getLocalIpAddress());
 
-    QToolButton* btn = widget.getNewBtn("3530904/90102", 6666, false);
-    QPair<Chat*, QToolButton*> pair(new Chat("3530904/90102", 6666, false), btn);
+    QToolButton* btn = widget.getNewBtn("5140904/30202", 6666, false);
+    QPair<Chat*, QToolButton*> pair(new Chat("5140904/30202", 6666, false), btn);
     widget.vPair_OChat_BtnChat.push_front(pair);
 
 #if ENABLE_UNUSED_FUNCTION
-    widget.updateBtnInvPair("3530904/90102", btn);
-    QCOMPARE(widget.isChatOpen("3530904/90102"), false);
+    widget.updateBtnInvPair("5140904/30202", btn);
+    QCOMPARE(widget.isChatOpen("5140904/30202"), false);
 #endif
 }
 
@@ -1415,17 +1415,17 @@ void PolyChatTester::mt_chatlist_getNewBtn()
  */
 void PolyChatTester::mt_chatlist_btnchat_exist()
 {
-    DAL::initLocalUser("Fox", "3530904/90102");
-    DAL::initLocalUser("Fox", "3530904/90102");
+    DAL::initLocalUser("Fox", "5140904/30202");
+    DAL::initLocalUser("Fox", "5140904/30202");
     ChatList widget(nullptr, DAL::getLocalUserName(), DAL::getLocalUserGroupNumber(), DAL::getLocalIpAddress());
 
-    QToolButton* btn = widget.getNewBtn("3530904/90102", 6666, false);
-    QPair<Chat*, QToolButton*> pair(new Chat("3530904/90102", 6666, false), btn);
+    QToolButton* btn = widget.getNewBtn("5140904/30202", 6666, false);
+    QPair<Chat*, QToolButton*> pair(new Chat("5140904/30202", 6666, false), btn);
     widget.vPair_OChat_BtnChat.push_front(pair);
 
 #if ENABLE_UNUSED_FUNCTION
-    widget.updateBtnInvPair("3530904/90102", btn);
-    QCOMPARE(widget.isChatOpen("3530904/90102"), false);
+    widget.updateBtnInvPair("5140904/30202", btn);
+    QCOMPARE(widget.isChatOpen("5140904/30202"), false);
 #endif
 }
 
@@ -1440,15 +1440,15 @@ void PolyChatTester::mt_chatbox_userjoin_list()
 
     QCOMPARE(table->rowCount(), 0);
 
-    chatBox.userJoin("Fox", "3530904/90102", DAL::getLocalIpAddress());
+    chatBox.userJoin("Fox", "5140904/30202", DAL::getLocalIpAddress());
     QCOMPARE(table->rowCount(), 1);
     QCOMPARE(table->item(0, 0)->text(), "Fox");
-    QCOMPARE(table->item(0, 1)->text(), "3530904/90102");
+    QCOMPARE(table->item(0, 1)->text(), "5140904/30202");
 
-    chatBox.userJoin("Fox2", "3530904/90102", DAL::getLocalIpAddress());
+    chatBox.userJoin("Fox2", "5140904/30202", DAL::getLocalIpAddress());
     QCOMPARE(table->rowCount(), 2);
     QCOMPARE(table->item(0, 0)->text(), "Fox2");
-    QCOMPARE(table->item(0, 1)->text(), "3530904/90102");
+    QCOMPARE(table->item(0, 1)->text(), "5140904/30202");
 
     chatBox.userJoin("Fox3", "3530904/90103", DAL::getLocalIpAddress());
     QCOMPARE(table->rowCount(), 3);
@@ -1467,19 +1467,19 @@ void PolyChatTester::mt_chatbox_userjoin_counter()
     QLabel* label = chatBox.findChild<QLabel*>("lbNumberOnlineUse");
 
     QCOMPARE(table->rowCount(), 0);
-    QCOMPARE(label->text(), QString("Number of online user: %1").arg(table->rowCount()));
+    QCOMPARE(label->text(), QString::number(table->rowCount()));
 
-    chatBox.userJoin("Fox", "3530904/90102", DAL::getLocalIpAddress());
+    chatBox.userJoin("Fox", "5140904/30202", DAL::getLocalIpAddress());
     QCOMPARE(table->rowCount(), 1);
-    QCOMPARE(label->text(), QString("Number of online user: %1").arg(table->rowCount()));
+    QCOMPARE(label->text(), QString::number(table->rowCount()));
 
-    chatBox.userJoin("Fox2", "3530904/90102", DAL::getLocalIpAddress());
+    chatBox.userJoin("Fox2", "5140904/30202", DAL::getLocalIpAddress());
     QCOMPARE(table->rowCount(), 2);
-    QCOMPARE(label->text(), QString("Number of online user: %1").arg(table->rowCount()));
+    QCOMPARE(label->text(), QString::number(table->rowCount()));
 
     chatBox.userJoin("Fox3", "3530904/90103", DAL::getLocalIpAddress());
     QCOMPARE(table->rowCount(), 3);
-    QCOMPARE(label->text(), QString("Number of online user: %1").arg(table->rowCount()));
+    QCOMPARE(label->text(), QString::number(table->rowCount()));
 }
 
 /** 用户加入（msgTextBrowser 被刷新）
@@ -1492,7 +1492,7 @@ void PolyChatTester::mt_chatbox_userjoin_msgTextBrowser()
     QTextBrowser* msgTextBrowser = chatBox.findChild<QTextBrowser*>("msgTextBrowser");
 
     QString initString = msgTextBrowser->toPlainText();
-    chatBox.userJoin("Fox", "3530904/90102", DAL::getLocalIpAddress());
+    chatBox.userJoin("Fox", "5140904/30202", DAL::getLocalIpAddress());
     QVERIFY(initString != msgTextBrowser->toPlainText());
 
     QCOMPARE(msgTextBrowser->toPlainText(), QString("%1 online！").arg("Fox"));
@@ -1509,15 +1509,15 @@ void PolyChatTester::mt_chatbox_userleft_list()
 
     QCOMPARE(table->rowCount(), 0);
 
-    chatBox.userJoin("Fox", "3530904/90102", DAL::getLocalIpAddress());
+    chatBox.userJoin("Fox", "5140904/30202", DAL::getLocalIpAddress());
     QCOMPARE(table->rowCount(), 1);
     QCOMPARE(table->item(0, 0)->text(), "Fox");
-    QCOMPARE(table->item(0, 1)->text(), "3530904/90102");
+    QCOMPARE(table->item(0, 1)->text(), "5140904/30202");
 
-    chatBox.userJoin("Fox2", "3530904/90102", DAL::getLocalIpAddress());
+    chatBox.userJoin("Fox2", "5140904/30202", DAL::getLocalIpAddress());
     QCOMPARE(table->rowCount(), 2);
     QCOMPARE(table->item(0, 0)->text(), "Fox2");
-    QCOMPARE(table->item(0, 1)->text(), "3530904/90102");
+    QCOMPARE(table->item(0, 1)->text(), "5140904/30202");
 
     chatBox.userJoin("Fox3", "3530904/90103", DAL::getLocalIpAddress());
     QCOMPARE(table->rowCount(), 3);
@@ -1534,7 +1534,7 @@ void PolyChatTester::mt_chatbox_userleft_list()
     chatBox.userLeft("Fox3", time);
     QCOMPARE(table->rowCount(), 1);
     QCOMPARE(table->item(0, 0)->text(), "Fox2");
-    QCOMPARE(table->item(0, 1)->text(), "3530904/90102");
+    QCOMPARE(table->item(0, 1)->text(), "5140904/30202");
 
     chatBox.userLeft("Fox2", time);
     QCOMPARE(table->rowCount(), 0);
@@ -1551,33 +1551,33 @@ void PolyChatTester::mt_chatbox_userleft_counter()
     QLabel* label = chatBox.findChild<QLabel*>("lbNumberOnlineUse");
 
     QCOMPARE(table->rowCount(), 0);
-    QCOMPARE(label->text(), QString("Number of online user: %1").arg(table->rowCount()));
+    QCOMPARE(label->text(), QString::number(table->rowCount()));
 
-    chatBox.userJoin("Fox", "3530904/90102", DAL::getLocalIpAddress());
+    chatBox.userJoin("Fox", "5140904/30202", DAL::getLocalIpAddress());
     QCOMPARE(table->rowCount(), 1);
-    QCOMPARE(label->text(), QString("Number of online user: %1").arg(table->rowCount()));
+    QCOMPARE(label->text(), QString::number(table->rowCount()));
 
-    chatBox.userJoin("Fox2", "3530904/90102", DAL::getLocalIpAddress());
+    chatBox.userJoin("Fox2", "5140904/30202", DAL::getLocalIpAddress());
     QCOMPARE(table->rowCount(), 2);
-    QCOMPARE(label->text(), QString("Number of online user: %1").arg(table->rowCount()));
+    QCOMPARE(label->text(), QString::number(table->rowCount()));
 
     chatBox.userJoin("Fox3", "3530904/90103", DAL::getLocalIpAddress());
     QCOMPARE(table->rowCount(), 3);
-    QCOMPARE(label->text(), QString("Number of online user: %1").arg(table->rowCount()));
+    QCOMPARE(label->text(), QString::number(table->rowCount()));
 
     QString time = QDateTime::currentDateTime().toString("dd-MM-yyyy hh:mm:ss");
 
     chatBox.userLeft("Fox2", time);
     QCOMPARE(table->rowCount(), 2);
-    QCOMPARE(label->text(), QString("Number of online user: %1").arg(table->rowCount()));
+    QCOMPARE(label->text(), QString::number(table->rowCount()));
 
     chatBox.userLeft("Fox", time);
     QCOMPARE(table->rowCount(), 1);
-    QCOMPARE(label->text(), QString("Number of online user: %1").arg(table->rowCount()));
+    QCOMPARE(label->text(), QString::number(table->rowCount()));
 
     chatBox.userLeft("Fox3", time);
     QCOMPARE(table->rowCount(), 0);
-    QCOMPARE(label->text(), QString("Number of online user: %1").arg(table->rowCount()));
+    QCOMPARE(label->text(), QString::number(table->rowCount()));
 }
 
 /** 用户离开（msgTextBrowser 被刷新）
@@ -1590,7 +1590,7 @@ void PolyChatTester::mt_chatbox_userleft_msgTextBrowser()
     QTextBrowser* msgTextBrowser = chatBox.findChild<QTextBrowser*>("msgTextBrowser");
 
     QString curString = msgTextBrowser->toPlainText();
-    chatBox.userJoin("Fox", "3530904/90102", DAL::getLocalIpAddress());
+    chatBox.userJoin("Fox", "5140904/30202", DAL::getLocalIpAddress());
     QVERIFY(curString != msgTextBrowser->toPlainText());
 
     QCOMPARE(msgTextBrowser->toPlainText(), QString("%1 online！").arg("Fox"));
@@ -1767,7 +1767,7 @@ void PolyChatTester::pt_ChatList_load()
 {
     QBENCHMARK
     {
-        DAL::initLocalUser("Fox", "3530904/90102");
+        DAL::initLocalUser("Fox", "5140904/30202");
         ChatList widget(nullptr, DAL::getLocalUserName(), DAL::getLocalUserGroupNumber(), DAL::getLocalIpAddress());
         widget.show();
         widget.close();
@@ -1827,7 +1827,7 @@ void PolyChatTester::pt_ChatBox_userjoin()
 
     QBENCHMARK
     {
-        chatBox.userJoin("Fox2", "3530904/90102", DAL::getLocalIpAddress());
+        chatBox.userJoin("Fox2", "5140904/30202", DAL::getLocalIpAddress());
     }
 }
 
@@ -1842,10 +1842,10 @@ void PolyChatTester::pt_ChatBox_userjoin_left()
 
     QBENCHMARK
     {
-        chatBox.userJoin("Fox1", "3530904/90102", DAL::getLocalIpAddress());
-        chatBox.userJoin("Fox2", "3530904/90102", DAL::getLocalIpAddress());
+        chatBox.userJoin("Fox1", "5140904/30202", DAL::getLocalIpAddress());
+        chatBox.userJoin("Fox2", "5140904/30202", DAL::getLocalIpAddress());
         chatBox.userLeft("Fox1", time);
-        chatBox.userJoin("Fox1", "3530904/90102", DAL::getLocalIpAddress());
+        chatBox.userJoin("Fox1", "5140904/30202", DAL::getLocalIpAddress());
     }
 }
 
@@ -1912,7 +1912,7 @@ void PolyChatTester::pt_AddChat_ui()
 
     QBENCHMARK
     {
-        QTest::keyClicks(lineEdit, "3530904/90102");
+        QTest::keyClicks(lineEdit, "5140904/30202");
         QTest::mouseClick(button, Qt::LeftButton);
     }
 }
@@ -1932,7 +1932,7 @@ void PolyChatTester::lt_ChatBox_x100()
         for (int i = 0; i < 100; i++)
         {
             vectorChat.push_back(new ChatBoxWidget(nullptr, QString("3530409/9010%1").arg(i), i));
-            vectorChat[i]->userJoin("Fox1", "3530904/90102", DAL::getLocalIpAddress());
+            vectorChat[i]->userJoin("Fox1", "5140904/30202", DAL::getLocalIpAddress());
         }
     }
 }
@@ -1950,7 +1950,7 @@ void PolyChatTester::lt_ChatBox_200user()
     {
         for (int i = 0; i < 200; i++)
         {
-            chatBox.userJoin(QString("Fox%1").arg(i), "3530904/90102", DAL::getLocalIpAddress());
+            chatBox.userJoin(QString("Fox%1").arg(i), "5140904/30202", DAL::getLocalIpAddress());
         }
     }
 }
@@ -2104,10 +2104,10 @@ void PolyChatTester::e2e_add_new_chat()
 
 
     timer->start(TIMER_STEP);
-    DAL::initLocalUser("Fox", "3530904/90102");
+    DAL::initLocalUser("Fox", "5140904/30202");
     ChatList chatList(nullptr, DAL::getLocalUserName(), DAL::getLocalUserGroupNumber(), DAL::getLocalIpAddress());
-    QToolButton* btn = chatList.getNewBtn("3530904/90102", 6666, false);
-    QPair<Chat*, QToolButton*> pair(new Chat("3530904/90102", 6666, false), btn);
+    QToolButton* btn = chatList.getNewBtn("5140904/30202", 6666, false);
+    QPair<Chat*, QToolButton*> pair(new Chat("5140904/30202", 6666, false), btn);
     QToolButton* btnNewChat = chatList.findChild<QToolButton*>("btnNewChat");
     QTest::mouseClick(btnNewChat, Qt::LeftButton);
     chatList.vPair_OChat_BtnChat.push_front(pair);
@@ -2115,7 +2115,7 @@ void PolyChatTester::e2e_add_new_chat()
     AddChat addChat;
     QLineEdit* leNameNewChat = addChat.findChild<QLineEdit*>("leNameNewChat");
     QTest::mouseClick(leNameNewChat, Qt::LeftButton);
-    QTest::keyClicks(leNameNewChat, "3530904/90102");
+    QTest::keyClicks(leNameNewChat, "5140904/30202");
 
     QPushButton* btnAddChat = addChat.findChild<QPushButton*>("btnAddChat");
     QTest::mouseClick(btnAddChat, Qt::LeftButton);
@@ -2142,13 +2142,13 @@ void PolyChatTester::e2e_join_chat()
     QCOMPARE(DAL::getLocalUserGroupNumber(), "3530409/90102");
 
     ChatList chatList(nullptr, DAL::getLocalUserName(), DAL::getLocalUserGroupNumber(), DAL::getLocalIpAddress());
-    QToolButton* btn = chatList.getNewBtn("3530904/90102", 6666, false);
-    QPair<Chat*, QToolButton*> pair(new Chat("3530904/90102", 6666, false), btn);
+    QToolButton* btn = chatList.getNewBtn("5140904/30202", 6666, false);
+    QPair<Chat*, QToolButton*> pair(new Chat("5140904/30202", 6666, false), btn);
     chatList.vPair_OChat_BtnChat.push_front(pair);
 
 #if ENABLE_UNUSED_FUNCTION
-    widget.updateBtnInvPair("3530904/90102", btn);
-    QCOMPARE(widget.isChatOpen("3530904/90102"), false);
+    widget.updateBtnInvPair("5140904/30202", btn);
+    QCOMPARE(widget.isChatOpen("5140904/30202"), false);
 #endif
 
     QTest::mouseClick(btn, Qt::LeftButton);
@@ -2173,8 +2173,8 @@ void PolyChatTester::e2e_search_chat()
     QCOMPARE(DAL::getLocalUserGroupNumber(), "3530409/90102");
 
     ChatList chatList(nullptr, DAL::getLocalUserName(), DAL::getLocalUserGroupNumber(), DAL::getLocalIpAddress());
-    QToolButton* btn = chatList.getNewBtn("3530904/90102", 6666, false);
-    QPair<Chat*, QToolButton*> pair(new Chat("3530904/90102", 6666, false), btn);
+    QToolButton* btn = chatList.getNewBtn("5140904/30202", 6666, false);
+    QPair<Chat*, QToolButton*> pair(new Chat("5140904/30202", 6666, false), btn);
     chatList.vPair_OChat_BtnChat.push_front(pair);
 
     QLineEdit* lineEdit = chatList.findChild<QLineEdit*>("leSearch");
@@ -2206,8 +2206,8 @@ void PolyChatTester::e2e_send_message()
     QCOMPARE(DAL::getLocalUserGroupNumber(), "3530409/90102");
 
     ChatList chatList(nullptr, DAL::getLocalUserName(), DAL::getLocalUserGroupNumber(), DAL::getLocalIpAddress());
-    QToolButton* btn = chatList.getNewBtn("3530904/90102", 6666, false);
-    QPair<Chat*, QToolButton*> pair(new Chat("3530904/90102", 6666, false), btn);
+    QToolButton* btn = chatList.getNewBtn("5140904/30202", 6666, false);
+    QPair<Chat*, QToolButton*> pair(new Chat("5140904/30202", 6666, false), btn);
     chatList.vPair_OChat_BtnChat.push_front(pair);
     QTest::mouseClick(btn, Qt::LeftButton);
 
@@ -2219,23 +2219,23 @@ void PolyChatTester::e2e_send_message()
     QCOMPARE(table->rowCount(), 0);
 
     QCOMPARE(table->rowCount(), 0);
-    QCOMPARE(label->text(), QString("Number of online user: %1").arg(table->rowCount()));
+    QCOMPARE(label->text(), QString::number(table->rowCount()));
 
     QCOMPARE(table->rowCount(), 0);
-    QCOMPARE(label->text(), QString("Number of online user: %1").arg(table->rowCount()));
+    QCOMPARE(label->text(), QString::number(table->rowCount()));
 
     QCOMPARE(msgTextBrowser->toPlainText(), "");
 
-    chatBox.userJoin("Fox", "3530904/90102", DAL::getLocalIpAddress());
+    chatBox.userJoin("Fox", "5140904/30202", DAL::getLocalIpAddress());
     QCOMPARE(table->rowCount(), 1);
     QCOMPARE(table->item(0, 0)->text(), "Fox");
-    QCOMPARE(table->item(0, 1)->text(), "3530904/90102");
+    QCOMPARE(table->item(0, 1)->text(), "5140904/30202");
 
     QCOMPARE(table->rowCount(), 1);
-    QCOMPARE(label->text(), QString("Number of online user: %1").arg(table->rowCount()));
+    QCOMPARE(label->text(), QString::number(table->rowCount()));
 
     QCOMPARE(table->rowCount(), 1);
-    QCOMPARE(label->text(), QString("Number of online user: %1").arg(table->rowCount()));
+    QCOMPARE(label->text(), QString::number(table->rowCount()));
 
     QTextEdit* textEdit = chatBox.findChild<QTextEdit*>("msgTextEdit");
     QTest::keyClicks(textEdit, "HelloThere");
@@ -2268,8 +2268,8 @@ void PolyChatTester::e2e_send_special_message()
     QCOMPARE(DAL::getLocalUserGroupNumber(), "3530409/90102");
 
     ChatList chatList(nullptr, DAL::getLocalUserName(), DAL::getLocalUserGroupNumber(), DAL::getLocalIpAddress());
-    QToolButton* btn = chatList.getNewBtn("3530904/90102", 6666, false);
-    QPair<Chat*, QToolButton*> pair(new Chat("3530904/90102", 6666, false), btn);
+    QToolButton* btn = chatList.getNewBtn("5140904/30202", 6666, false);
+    QPair<Chat*, QToolButton*> pair(new Chat("5140904/30202", 6666, false), btn);
     chatList.vPair_OChat_BtnChat.push_front(pair);
     QTest::mouseClick(btn, Qt::LeftButton);
 
@@ -2281,23 +2281,23 @@ void PolyChatTester::e2e_send_special_message()
     QCOMPARE(table->rowCount(), 0);
 
     QCOMPARE(table->rowCount(), 0);
-    QCOMPARE(label->text(), QString("Number of online user: %1").arg(table->rowCount()));
+    QCOMPARE(label->text(), QString::number(table->rowCount()));
 
     QCOMPARE(table->rowCount(), 0);
-    QCOMPARE(label->text(), QString("Number of online user: %1").arg(table->rowCount()));
+    QCOMPARE(label->text(), QString::number(table->rowCount()));
 
     QCOMPARE(msgTextBrowser->toPlainText(), "");
 
-    chatBox.userJoin("Fox", "3530904/90102", DAL::getLocalIpAddress());
+    chatBox.userJoin("Fox", "5140904/30202", DAL::getLocalIpAddress());
     QCOMPARE(table->rowCount(), 1);
     QCOMPARE(table->item(0, 0)->text(), "Fox");
-    QCOMPARE(table->item(0, 1)->text(), "3530904/90102");
+    QCOMPARE(table->item(0, 1)->text(), "5140904/30202");
 
     QCOMPARE(table->rowCount(), 1);
-    QCOMPARE(label->text(), QString("Number of online user: %1").arg(table->rowCount()));
+    QCOMPARE(label->text(), QString::number(table->rowCount()));
 
     QCOMPARE(table->rowCount(), 1);
-    QCOMPARE(label->text(), QString("Number of online user: %1").arg(table->rowCount()));
+    QCOMPARE(label->text(), QString::number(table->rowCount()));
 
     QTextEdit* textEdit = chatBox.findChild<QTextEdit*>("msgTextEdit");
     QTest::keyClicks(textEdit, "HelloThere");
@@ -2338,8 +2338,8 @@ void PolyChatTester::e2e_send_file()
     QCOMPARE(DAL::getLocalUserGroupNumber(), "3530409/90102");
 
     ChatList chatList(nullptr, DAL::getLocalUserName(), DAL::getLocalUserGroupNumber(), DAL::getLocalIpAddress());
-    QToolButton* btn = chatList.getNewBtn("3530904/90102", 6666, false);
-    QPair<Chat*, QToolButton*> pair(new Chat("3530904/90102", 6666, false), btn);
+    QToolButton* btn = chatList.getNewBtn("5140904/30202", 6666, false);
+    QPair<Chat*, QToolButton*> pair(new Chat("5140904/30202", 6666, false), btn);
     chatList.vPair_OChat_BtnChat.push_front(pair);
     QTest::mouseClick(btn, Qt::LeftButton);
 
@@ -2350,21 +2350,21 @@ void PolyChatTester::e2e_send_file()
     QCOMPARE(table->rowCount(), 0);
 
     QCOMPARE(table->rowCount(), 0);
-    QCOMPARE(label->text(), QString("Number of online user: %1").arg(table->rowCount()));
+    QCOMPARE(label->text(), QString::number(table->rowCount()));
 
     QCOMPARE(table->rowCount(), 0);
-    QCOMPARE(label->text(), QString("Number of online user: %1").arg(table->rowCount()));
+    QCOMPARE(label->text(), QString::number(table->rowCount()));
 
-    chatBox.userJoin("Fox", "3530904/90102", DAL::getLocalIpAddress());
+    chatBox.userJoin("Fox", "5140904/30202", DAL::getLocalIpAddress());
     QCOMPARE(table->rowCount(), 1);
     QCOMPARE(table->item(0, 0)->text(), "Fox");
-    QCOMPARE(table->item(0, 1)->text(), "3530904/90102");
+    QCOMPARE(table->item(0, 1)->text(), "5140904/30202");
 
     QCOMPARE(table->rowCount(), 1);
-    QCOMPARE(label->text(), QString("Number of online user: %1").arg(table->rowCount()));
+    QCOMPARE(label->text(), QString::number(table->rowCount()));
 
     QCOMPARE(table->rowCount(), 1);
-    QCOMPARE(label->text(), QString("Number of online user: %1").arg(table->rowCount()));
+    QCOMPARE(label->text(), QString::number(table->rowCount()));
 
     QToolButton* btnFileSend = chatBox.findChild<QToolButton*>("btnFileSend");
 
@@ -2390,8 +2390,8 @@ void PolyChatTester::e2e_receive_file()
     QCOMPARE(DAL::getLocalUserGroupNumber(), "3530409/90102");
 
     ChatList chatList(nullptr, DAL::getLocalUserName(), DAL::getLocalUserGroupNumber(), DAL::getLocalIpAddress());
-    QToolButton* btn = chatList.getNewBtn("3530904/90102", 6666, false);
-    QPair<Chat*, QToolButton*> pair(new Chat("3530904/90102", 6666, false), btn);
+    QToolButton* btn = chatList.getNewBtn("5140904/30202", 6666, false);
+    QPair<Chat*, QToolButton*> pair(new Chat("5140904/30202", 6666, false), btn);
     chatList.vPair_OChat_BtnChat.push_front(pair);
     QTest::mouseClick(btn, Qt::LeftButton);
 
@@ -2402,21 +2402,21 @@ void PolyChatTester::e2e_receive_file()
     QCOMPARE(table->rowCount(), 0);
 
     QCOMPARE(table->rowCount(), 0);
-    QCOMPARE(label->text(), QString("Number of online user: %1").arg(table->rowCount()));
+    QCOMPARE(label->text(), QString::number(table->rowCount()));
 
     QCOMPARE(table->rowCount(), 0);
-    QCOMPARE(label->text(), QString("Number of online user: %1").arg(table->rowCount()));
+    QCOMPARE(label->text(), QString::number(table->rowCount()));
 
-    chatBox.userJoin("Fox", "3530904/90102", DAL::getLocalIpAddress());
+    chatBox.userJoin("Fox", "5140904/30202", DAL::getLocalIpAddress());
     QCOMPARE(table->rowCount(), 1);
     QCOMPARE(table->item(0, 0)->text(), "Fox");
-    QCOMPARE(table->item(0, 1)->text(), "3530904/90102");
+    QCOMPARE(table->item(0, 1)->text(), "5140904/30202");
 
     QCOMPARE(table->rowCount(), 1);
-    QCOMPARE(label->text(), QString("Number of online user: %1").arg(table->rowCount()));
+    QCOMPARE(label->text(), QString::number(table->rowCount()));
 
     QCOMPARE(table->rowCount(), 1);
-    QCOMPARE(label->text(), QString("Number of online user: %1").arg(table->rowCount()));
+    QCOMPARE(label->text(), QString::number(table->rowCount()));
 
     TcpClient widget(nullptr, "fox.exe", 1551155, DAL::getLocalIpAddress(), PORT_TCP_FILE);
     widget.show();
@@ -2474,8 +2474,8 @@ void PolyChatTester::e2e_clean_chat()
     QCOMPARE(DAL::getLocalUserGroupNumber(), "3530409/90102");
 
     ChatList chatList(nullptr, DAL::getLocalUserName(), DAL::getLocalUserGroupNumber(), DAL::getLocalIpAddress());
-    QToolButton* btn = chatList.getNewBtn("3530904/90102", 6666, false);
-    QPair<Chat*, QToolButton*> pair(new Chat("3530904/90102", 6666, false), btn);
+    QToolButton* btn = chatList.getNewBtn("5140904/30202", 6666, false);
+    QPair<Chat*, QToolButton*> pair(new Chat("5140904/30202", 6666, false), btn);
     chatList.vPair_OChat_BtnChat.push_front(pair);
     QTest::mouseClick(btn, Qt::LeftButton);
 
@@ -2487,23 +2487,23 @@ void PolyChatTester::e2e_clean_chat()
     QCOMPARE(table->rowCount(), 0);
 
     QCOMPARE(table->rowCount(), 0);
-    QCOMPARE(label->text(), QString("Number of online user: %1").arg(table->rowCount()));
+    QCOMPARE(label->text(), QString::number(table->rowCount()));
 
     QCOMPARE(table->rowCount(), 0);
-    QCOMPARE(label->text(), QString("Number of online user: %1").arg(table->rowCount()));
+    QCOMPARE(label->text(), QString::number(table->rowCount()));
 
     QString initString = msgTextBrowser->toPlainText();
 
-    chatBox.userJoin("Fox", "3530904/90102", DAL::getLocalIpAddress());
+    chatBox.userJoin("Fox", "5140904/30202", DAL::getLocalIpAddress());
     QCOMPARE(table->rowCount(), 1);
     QCOMPARE(table->item(0, 0)->text(), "Fox");
-    QCOMPARE(table->item(0, 1)->text(), "3530904/90102");
+    QCOMPARE(table->item(0, 1)->text(), "5140904/30202");
 
     QCOMPARE(table->rowCount(), 1);
-    QCOMPARE(label->text(), QString("Number of online user: %1").arg(table->rowCount()));
+    QCOMPARE(label->text(), QString::number(table->rowCount()));
 
     QCOMPARE(table->rowCount(), 1);
-    QCOMPARE(label->text(), QString("Number of online user: %1").arg(table->rowCount()));
+    QCOMPARE(label->text(), QString::number(table->rowCount()));
 
     QVERIFY(initString != msgTextBrowser->toPlainText());
     QCOMPARE(msgTextBrowser->toPlainText(), QString("%1 online！").arg("Fox"));
@@ -2533,8 +2533,8 @@ void PolyChatTester::e2e_save_chat()
     QCOMPARE(DAL::getLocalUserGroupNumber(), "3530409/90102");
 
     ChatList chatList(nullptr, DAL::getLocalUserName(), DAL::getLocalUserGroupNumber(), DAL::getLocalIpAddress());
-    QToolButton* btn = chatList.getNewBtn("3530904/90102", 6666, false);
-    QPair<Chat*, QToolButton*> pair(new Chat("3530904/90102", 6666, false), btn);
+    QToolButton* btn = chatList.getNewBtn("5140904/30202", 6666, false);
+    QPair<Chat*, QToolButton*> pair(new Chat("5140904/30202", 6666, false), btn);
     chatList.vPair_OChat_BtnChat.push_front(pair);
     QTest::mouseClick(btn, Qt::LeftButton);
 
@@ -2546,23 +2546,23 @@ void PolyChatTester::e2e_save_chat()
     QCOMPARE(table->rowCount(), 0);
 
     QCOMPARE(table->rowCount(), 0);
-    QCOMPARE(label->text(), QString("Number of online user: %1").arg(table->rowCount()));
+    QCOMPARE(label->text(), QString::number(table->rowCount()));
 
     QCOMPARE(table->rowCount(), 0);
-    QCOMPARE(label->text(), QString("Number of online user: %1").arg(table->rowCount()));
+    QCOMPARE(label->text(), QString::number(table->rowCount()));
 
     QString initString = msgTextBrowser->toPlainText();
 
-    chatBox.userJoin("Fox", "3530904/90102", DAL::getLocalIpAddress());
+    chatBox.userJoin("Fox", "5140904/30202", DAL::getLocalIpAddress());
     QCOMPARE(table->rowCount(), 1);
     QCOMPARE(table->item(0, 0)->text(), "Fox");
-    QCOMPARE(table->item(0, 1)->text(), "3530904/90102");
+    QCOMPARE(table->item(0, 1)->text(), "5140904/30202");
 
     QCOMPARE(table->rowCount(), 1);
-    QCOMPARE(label->text(), QString("Number of online user: %1").arg(table->rowCount()));
+    QCOMPARE(label->text(), QString::number(table->rowCount()));
 
     QCOMPARE(table->rowCount(), 1);
-    QCOMPARE(label->text(), QString("Number of online user: %1").arg(table->rowCount()));
+    QCOMPARE(label->text(), QString::number(table->rowCount()));
 
     QVERIFY(initString != msgTextBrowser->toPlainText());
     QCOMPARE(msgTextBrowser->toPlainText(), QString("%1 online！").arg("Fox"));
@@ -2593,8 +2593,8 @@ void PolyChatTester::e2e_leave_chat()
     QCOMPARE(DAL::getLocalUserGroupNumber(), "3530409/90102");
 
     ChatList chatList(nullptr, DAL::getLocalUserName(), DAL::getLocalUserGroupNumber(), DAL::getLocalIpAddress());
-    QToolButton* btn = chatList.getNewBtn("3530904/90102", 6666, false);
-    QPair<Chat*, QToolButton*> pair(new Chat("3530904/90102", 6666, false), btn);
+    QToolButton* btn = chatList.getNewBtn("5140904/30202", 6666, false);
+    QPair<Chat*, QToolButton*> pair(new Chat("5140904/30202", 6666, false), btn);
     chatList.vPair_OChat_BtnChat.push_front(pair);
     QTest::mouseClick(btn, Qt::LeftButton);
 
@@ -2606,23 +2606,23 @@ void PolyChatTester::e2e_leave_chat()
     QCOMPARE(table->rowCount(), 0);
 
     QCOMPARE(table->rowCount(), 0);
-    QCOMPARE(label->text(), QString("Number of online user: %1").arg(table->rowCount()));
+    QCOMPARE(label->text(), QString::number(table->rowCount()));
 
     QCOMPARE(table->rowCount(), 0);
-    QCOMPARE(label->text(), QString("Number of online user: %1").arg(table->rowCount()));
+    QCOMPARE(label->text(), QString::number(table->rowCount()));
 
     QCOMPARE(msgTextBrowser->toPlainText(), "");
 
-    chatBox.userJoin("Fox", "3530904/90102", DAL::getLocalIpAddress());
+    chatBox.userJoin("Fox", "5140904/30202", DAL::getLocalIpAddress());
     QCOMPARE(table->rowCount(), 1);
     QCOMPARE(table->item(0, 0)->text(), "Fox");
-    QCOMPARE(table->item(0, 1)->text(), "3530904/90102");
+    QCOMPARE(table->item(0, 1)->text(), "5140904/30202");
 
     QCOMPARE(table->rowCount(), 1);
-    QCOMPARE(label->text(), QString("Number of online user: %1").arg(table->rowCount()));
+    QCOMPARE(label->text(), QString::number(table->rowCount()));
 
     QCOMPARE(table->rowCount(), 1);
-    QCOMPARE(label->text(), QString("Number of online user: %1").arg(table->rowCount()));
+    QCOMPARE(label->text(), QString::number(table->rowCount()));
 
     QTextEdit* textEdit = chatBox.findChild<QTextEdit*>("msgTextEdit");
     QTest::keyClicks(textEdit, "HelloThere");
@@ -2644,7 +2644,7 @@ void PolyChatTester::e2e_leave_chat()
 
     QCOMPARE(table->rowCount(), 1);
     QCOMPARE(table->item(0, 0)->text(), "Fox");
-    QCOMPARE(table->item(0, 1)->text(), "3530904/90102");
+    QCOMPARE(table->item(0, 1)->text(), "5140904/30202");
 
     QPushButton* btnExit = chatBox.findChild<QPushButton*>("btnExit");
     QTest::mouseClick(btnExit, Qt::LeftButton);
@@ -2729,7 +2729,7 @@ void PolyChatTester::e2e_Login_empty_group()
 void PolyChatTester::e2e_ChatList_AddChat()
 {
     timer->start(TIMER_STEP);
-    DAL::initLocalUser("Fox", "3530904/90102");
+    DAL::initLocalUser("Fox", "5140904/30202");
     ChatList widget(nullptr, DAL::getLocalUserName(), DAL::getLocalUserGroupNumber(), DAL::getLocalIpAddress());
     QToolButton* btnNewChat = widget.findChild<QToolButton*>("btnNewChat");
     QTest::mouseClick(btnNewChat, Qt::LeftButton);
@@ -2746,7 +2746,7 @@ void PolyChatTester::e2e_ChatList_AddChat()
 
 void PolyChatTester::e2e_ChatList_search()
 {
-    DAL::initLocalUser("Fox", "3530904/90102");
+    DAL::initLocalUser("Fox", "5140904/30202");
     ChatList widget(nullptr, DAL::getLocalUserName(), DAL::getLocalUserGroupNumber(), DAL::getLocalIpAddress());
     QLineEdit* lineEdit = widget.findChild<QLineEdit*>("leSearch");
 
@@ -2848,8 +2848,8 @@ void PolyChatTester::e2e_ChatBox_other_user_left()
 {
     ChatBoxWidget chatBox(nullptr, "3530409/90102", 2333);
     QString time = QDateTime::currentDateTime().toString("dd-MM-yyyy hh:mm:ss");
-    chatBox.userJoin("Fox", "3530904/90102", DAL::getLocalIpAddress());
-    chatBox.userJoin("Fox2", "3530904/90102", DAL::getLocalIpAddress());
+    chatBox.userJoin("Fox", "5140904/30202", DAL::getLocalIpAddress());
+    chatBox.userJoin("Fox2", "5140904/30202", DAL::getLocalIpAddress());
 
     QTextEdit* msgTextEdit = chatBox.findChild<QTextEdit*>("msgTextEdit");
     QTest::mouseClick(msgTextEdit, Qt::LeftButton);
@@ -2868,10 +2868,10 @@ void PolyChatTester::e2e_ChatBox_join_left()
 {
     ChatBoxWidget chatBox(nullptr, "3530409/90102", 2333);
     QString time = QDateTime::currentDateTime().toString("dd-MM-yyyy hh:mm:ss");
-    chatBox.userJoin("Fox", "3530904/90102", DAL::getLocalIpAddress());
+    chatBox.userJoin("Fox", "5140904/30202", DAL::getLocalIpAddress());
 
-    chatBox.userJoin("Fox2", "3530904/90102", DAL::getLocalIpAddress());
-    chatBox.userJoin("Fox3", "3530904/90102", DAL::getLocalIpAddress());
+    chatBox.userJoin("Fox2", "5140904/30202", DAL::getLocalIpAddress());
+    chatBox.userJoin("Fox3", "5140904/30202", DAL::getLocalIpAddress());
 
     QTextEdit* msgTextEdit = chatBox.findChild<QTextEdit*>("msgTextEdit");
     QTest::mouseClick(msgTextEdit, Qt::LeftButton);

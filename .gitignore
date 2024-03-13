@@ -32,7 +32,7 @@ ui_*.h
 *.jsc
 Makefile*
 *build-*
-*.qm
+# *.qm
 *.prl
 
 # Qt unit tests
