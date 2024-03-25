@@ -2,6 +2,7 @@
 #define TCPCLIENT_H
 
 #include <QWidget>
+#include <QHostAddress>
 #include <QTcpSocket>
 #include <QFile>
 #include <QTime>
