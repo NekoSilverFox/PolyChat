@@ -4,6 +4,9 @@
 
 #include <QMessageBox>
 #include <QPalette>
+#include <QMainWindow>
+#include <QMenuBar>
+
 
 LoginWidget::LoginWidget(QWidget *parent) :
     QWidget(parent),
@@ -11,7 +14,7 @@ LoginWidget::LoginWidget(QWidget *parent) :
 {
     ui->setupUi(this);
 
-    this->setWindowTitle("PolyChat Login");
+    this->setWindowTitle(tr("PolyChat Login"));
     this->setWindowIcon(QIcon(":/icon/icons/nekosilverfox.png"));
     ui->leUserName->setFocus();
 //    this->setAttribute(Qt::WA_DeleteOnClose);
@@ -52,7 +55,7 @@ void LoginWidget::userLogin()
     bool isSuccInitLocalUser = DAL::initLocalUser(ui->leUserName->text(), ui->leUserGroupNumber->text());
     if (!isSuccInitLocalUser)
     {
-        QMessageBox::warning(this, "Warning", "Name or Group number can not be empty");
+        QMessageBox::warning(this, ("Warning"), tr("Name or Group number can not be empty"));
         return;
     }
     this->close();

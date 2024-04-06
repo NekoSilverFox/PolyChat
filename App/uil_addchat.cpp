@@ -10,7 +10,7 @@ AddChat::AddChat(QWidget *parent) :
     ui(new Ui::AddChat)
 {
     ui->setupUi(this);
-    this->setWindowTitle("Add new chat");
+    this->setWindowTitle(tr("Add new chat"));
     this->setWindowIcon(QIcon(":/icon/icons/register-add-friend.png"));
     this->setAttribute(Qt::WA_DeleteOnClose);
     this->setWindowModality(Qt::ApplicationModal);
@@ -22,7 +22,7 @@ AddChat::AddChat(QWidget *parent) :
             this, [=](){
         if (ui->leNameNewChat->text().isEmpty())
         {
-            QMessageBox::warning(this, "Warning", "Name can not be empty");
+            QMessageBox::warning(this, tr("Warning"), tr("Name can not be empty"));
             return;
         }
 

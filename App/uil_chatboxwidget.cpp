@@ -21,9 +21,11 @@ ChatBoxWidget::ChatBoxWidget(QWidget* parent, QString name, qint16 port)
       port(port)
 {
     ui->setupUi(this);
-    this->setWindowTitle(QString("[Chat] %1 on port %2").arg(name).arg(port));
     this->setAttribute(Qt::WA_DeleteOnClose);
     this->setWindowIcon(QIcon(":/icon/icons/user-group.png"));
+    this->setWindowTitle(QString("Chat %1 on port %2").arg(name, port));
+//    this->setWindowTitle(tr("Chat %1 on port %2").arg(name, port));
+
 
     /* 对所有窗口的同样地址广播 8888 (告诉 ChatList 本窗口存在) */
     this->udpSocketOnPortChatList = new QUdpSocket(this);
@@ -94,7 +96,7 @@ ChatBoxWidget::ChatBoxWidget(QWidget* parent, QString name, qint16 port)
     /* 更改颜色 */
     connect(ui->btnColor, &QToolButton::clicked,
             this, [=](){
-                        QColor color = QColorDialog::getColor(Qt::black);
+        QColor color = QColorDialog::getColor(Qt::black);  // getColor 参数中颜色是默认开启颜色对话框中的颜色
                         ui->msgTextEdit->setTextColor(color);
     });
 
@@ -104,8 +106,8 @@ ChatBoxWidget::ChatBoxWidget(QWidget* parent, QString name, qint16 port)
 
         if (QMessageBox::Ok ==
                 QMessageBox::question(this,
-                                      "Clean all message",
-                                      "Are you sure you want to clear all messages?",
+                                      tr("Clean all message"),
+                                      tr("Are you sure you want to clear all messages?"),
                                       QMessageBox::Ok | QMessageBox::Cancel,
                                       QMessageBox::Cancel))
         {
@@ -117,14 +119,14 @@ ChatBoxWidget::ChatBoxWidget(QWidget* parent, QString name, qint16 port)
             this, [=](){
         if (ui->msgTextBrowser->document()->isEmpty())
         {
-            QMessageBox::warning(this, "Warning", "Can not save!\nMessage box is empty");
+            QMessageBox::warning(this, tr("Warning"), tr("Can not save!\nMessage box is empty"));
             return;
         }
 
-        QString path = QFileDialog::getSaveFileName(this, "Save file", "PolyChat-MsgLog", "(*.txt)");
+        QString path = QFileDialog::getSaveFileName(this, tr("Save file"), "PolyChat-MsgLog", "(*.txt)");
         if (path.isEmpty())
         {
-            QMessageBox::warning(this, "Warning", "Save cancel");
+            QMessageBox::warning(this, tr("Warning"), tr("Save cancel"));
             return;
         }
 
@@ -138,18 +140,18 @@ ChatBoxWidget::ChatBoxWidget(QWidget* parent, QString name, qint16 port)
     /* 发送文件 */
     connect(ui->btnFileSend, &QToolButton::clicked,
             this, [=](){
-        QString path = QFileDialog::getOpenFileName(this, "Send file", ".");
+        QString path = QFileDialog::getOpenFileName(this, tr("Send file"), ".");
 
         if (path.isEmpty())
         {
-             QMessageBox::warning(this, "Warning", "File sending cancellation");
+            QMessageBox::warning(this, tr("Warning"), tr("Cancel sending file"));
              return;
         }
 
         QFileInfo info(path);
         if (info.size() > FILE_SEND_MAX_BYTES)
         {
-            QMessageBox::critical(this, "Error", "File size cannot exceed 1Gb");
+             QMessageBox::critical(this, tr("Error"), tr("File size cannot exceed 1Gb"));
             return;
         }
 
@@ -217,7 +219,7 @@ void ChatBoxWidget::sendUDPSignal(const SignalType type)
         break;  // END SignalType::ChatExist
 
     case SignalType::ChatDestory:
-        dataStream <<  QString("SignalType::ChatDestory");
+        dataStream << QString("SignalType::ChatDestory");
         udpSocketOnPortChatList->writeDatagram(resByteArray,
                                                QHostAddress(QHostAddress::Broadcast),
                                                DAL::getPortChatList());
@@ -249,14 +251,14 @@ void ChatBoxWidget::sendUDPSignal(const SignalType type)
         break;  // END SignalType::File
 
     case SignalType::UserJoin:
-        dataStream <<  QString("SignalType::UserJoin");
+        dataStream << QString("SignalType::UserJoin");
         udpSocketOnPortChatBox->writeDatagram(resByteArray,
                                               QHostAddress(QHostAddress::Broadcast),
                                               port);
         break;  // END SignalType::UserJoin
 
     case UserLeft:
-        dataStream <<  QString("SignalType::UserLeft");
+        dataStream << QString("SignalType::UserLeft");
         udpSocketOnPortChatBox->writeDatagram(resByteArray,
                                               QHostAddress(QHostAddress::Broadcast),
                                               port);
@@ -343,7 +345,7 @@ void ChatBoxWidget::receiveUDPMessage()
          */
         if (localIpAddress_6 == DAL::getLocalIpAddress()) { return; }  // 如果文件接收方和发送方都是本机，那么不需要弹出文件接收请求
 #endif
-        if (QMessageBox::Yes == QMessageBox::information(this, "File reception request", QString(
+        if (QMessageBox::Yes == QMessageBox::information(this, tr("File reception request"), tr(
                                  "[%1] from group [%2] wants to send you a file, do you want to receive it?\n\n"
                                  "---------------------\n"
                                  "File information:\n"
@@ -386,7 +388,7 @@ void ChatBoxWidget::userJoin(QString name, QString groupNumber, QHostAddress ip)
 
         /* 追加聊天记录 */
         ui->msgTextBrowser->setTextColor(Qt::gray);
-        ui->msgTextBrowser->append(QString("%1 online！").arg(name));
+        ui->msgTextBrowser->append(tr("%1 online").arg(name));
 
         /* 在线用户更新 */
         ui->lbNumberOnlineUse->setText(QString::number(ui->tbUser->rowCount()));
@@ -407,7 +409,7 @@ void ChatBoxWidget::userLeft(QString name, QString time)
 
         /* 追加聊天记录 */
         ui->msgTextBrowser->setTextColor(Qt::gray);
-        ui->msgTextBrowser->append(QString("%1 left on %2").arg(name, time));
+        ui->msgTextBrowser->append(tr("%1 left on %2").arg(name, time));
 
         /* 在线用户更新 */
         ui->lbNumberOnlineUse->setText(QString::number(ui->tbUser->rowCount()));

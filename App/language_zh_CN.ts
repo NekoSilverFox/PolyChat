@@ -10,6 +10,7 @@
     </message>
     <message>
         <location filename="addchat.ui" line="34"/>
+        <location filename="uil_addchat.cpp" line="13"/>
         <source>Add new chat</source>
         <translation>新建群聊</translation>
     </message>
@@ -32,6 +33,16 @@
         <location filename="addchat.ui" line="98"/>
         <source>Return</source>
         <translation>返回</translation>
+    </message>
+    <message>
+        <location filename="uil_addchat.cpp" line="25"/>
+        <source>Warning</source>
+        <translation>警告</translation>
+    </message>
+    <message>
+        <location filename="uil_addchat.cpp" line="25"/>
+        <source>Name can not be empty</source>
+        <translation>名称不能为空</translation>
     </message>
 </context>
 <context>
@@ -144,6 +155,7 @@
     </message>
     <message>
         <location filename="chatboxwidget.ui" line="246"/>
+        <location filename="uil_chatboxwidget.cpp" line="143"/>
         <source>Send file</source>
         <translation>发送文件</translation>
     </message>
@@ -199,7 +211,6 @@
     </message>
     <message>
         <location filename="chatboxwidget.ui" line="391"/>
-        <location filename="uil_chatboxwidget.cpp" line="392"/>
         <source>Number of online user: </source>
         <oldsource>Number of online user: 0</oldsource>
         <translation>当前在线人数: </translation>
@@ -238,6 +249,91 @@
         <location filename="chatboxwidget.ui" line="505"/>
         <source>IP</source>
         <translation>IP 地址</translation>
+    </message>
+    <message>
+        <source>Chat %1 on port %2</source>
+        <oldsource>[Chat] %1 on port %2</oldsource>
+        <translation type="vanished">群聊 %1 在端口 %2</translation>
+    </message>
+    <message>
+        <location filename="uil_chatboxwidget.cpp" line="109"/>
+        <source>Clean all message</source>
+        <translation>清空聊天框</translation>
+    </message>
+    <message>
+        <location filename="uil_chatboxwidget.cpp" line="110"/>
+        <source>Are you sure you want to clear all messages?</source>
+        <translation>您确定要清空聊天框吗？</translation>
+    </message>
+    <message>
+        <location filename="uil_chatboxwidget.cpp" line="122"/>
+        <location filename="uil_chatboxwidget.cpp" line="129"/>
+        <location filename="uil_chatboxwidget.cpp" line="147"/>
+        <source>Warning</source>
+        <translation>警告</translation>
+    </message>
+    <message>
+        <location filename="uil_chatboxwidget.cpp" line="122"/>
+        <source>Can not save!
+Message box is empty</source>
+        <translation>无法保存！
+信息框为空</translation>
+    </message>
+    <message>
+        <location filename="uil_chatboxwidget.cpp" line="126"/>
+        <source>Save file</source>
+        <translation>保存文件</translation>
+    </message>
+    <message>
+        <location filename="uil_chatboxwidget.cpp" line="129"/>
+        <source>Save cancel</source>
+        <translation>取消保存</translation>
+    </message>
+    <message>
+        <location filename="uil_chatboxwidget.cpp" line="147"/>
+        <source>Cancel sending file</source>
+        <translation>取消文件发送</translation>
+    </message>
+    <message>
+        <location filename="uil_chatboxwidget.cpp" line="154"/>
+        <source>Error</source>
+        <translation>错误</translation>
+    </message>
+    <message>
+        <location filename="uil_chatboxwidget.cpp" line="154"/>
+        <source>File size cannot exceed 1Gb</source>
+        <translation>文件大小不能超过 1GB</translation>
+    </message>
+    <message>
+        <location filename="uil_chatboxwidget.cpp" line="348"/>
+        <source>File reception request</source>
+        <translation>文件接收请求</translation>
+    </message>
+    <message>
+        <location filename="uil_chatboxwidget.cpp" line="348"/>
+        <source>[%1] from group [%2] wants to send you a file, do you want to receive it?
+
+---------------------
+File information:
+Name: %3
+Size: %4Kb</source>
+        <translation>来自 [%2] 的 [%1] 希望向您发送一个文件，您想接收吗？
+
+---------------------
+文件信息：
+文件名： %3
+大小： %4Kb</translation>
+    </message>
+    <message>
+        <location filename="uil_chatboxwidget.cpp" line="391"/>
+        <source>%1 online</source>
+        <oldsource>%1 online！</oldsource>
+        <translation>%1 上线</translation>
+    </message>
+    <message>
+        <location filename="uil_chatboxwidget.cpp" line="412"/>
+        <source>%1 left on %2</source>
+        <translation>%1 在 %2 退出</translation>
     </message>
 </context>
 <context>
@@ -302,6 +398,21 @@
         <source>XXXX/XXXXXX</source>
         <translation></translation>
     </message>
+    <message>
+        <location filename="uil_chatlist.cpp" line="16"/>
+        <source>PolyChat Chat list</source>
+        <translation>PolyChat 群聊列表</translation>
+    </message>
+    <message>
+        <location filename="uil_chatlist.cpp" line="44"/>
+        <source>Warning</source>
+        <translation>警告</translation>
+    </message>
+    <message>
+        <location filename="uil_chatlist.cpp" line="44"/>
+        <source>Chat with the same name already exists</source>
+        <translation>已存在同名群聊</translation>
+    </message>
 </context>
 <context>
     <name>LoginWidget</name>
@@ -339,6 +450,16 @@
         <location filename="loginwidget.ui" line="160"/>
         <source>Return</source>
         <translation>返回</translation>
+    </message>
+    <message>
+        <location filename="uil_loginwidget.cpp" line="14"/>
+        <source>PolyChat Login</source>
+        <translation>登录 PolyChat</translation>
+    </message>
+    <message>
+        <location filename="uil_loginwidget.cpp" line="55"/>
+        <source>Name or Group number can not be empty</source>
+        <translation>名称或班级号不能为空</translation>
     </message>
 </context>
 <context>
@@ -441,6 +562,46 @@ Receipter</source>
         <source>Return</source>
         <translation></translation>
     </message>
+    <message>
+        <location filename="tcpclient.cpp" line="16"/>
+        <source>File receipter</source>
+        <translation>文件接收器</translation>
+    </message>
+    <message>
+        <location filename="tcpclient.cpp" line="92"/>
+        <source>Save file to</source>
+        <translation>文件保存至</translation>
+    </message>
+    <message>
+        <location filename="tcpclient.cpp" line="96"/>
+        <source>ERROR</source>
+        <translation>错误</translation>
+    </message>
+    <message>
+        <location filename="tcpclient.cpp" line="96"/>
+        <source>File path is empty, you did not specify a save directory.
+You can click on the `Save` button to receive the file again</source>
+        <translation>文件路径为空，您没有指定保存目录
+您可以点击 &quot;保存 &quot;按钮再次接收文件</translation>
+    </message>
+    <message>
+        <source>File path is empty, because the file save path is empty (You did not specify a save directory).
+You can click on the `Save` button to receive the file again</source>
+        <translation type="obsolete">文件路径为空，您没有指定保存目录
+您可以点击 &quot;保存 &quot;按钮再次接收文件</translation>
+    </message>
+    <message>
+        <location filename="tcpclient.cpp" line="187"/>
+        <source>Cancel receive</source>
+        <translation>取消接收</translation>
+    </message>
+    <message>
+        <location filename="tcpclient.cpp" line="188"/>
+        <source>If the file is not received, it will be stopped and disconnected.
+Are you sure you want to cancel receiving files?</source>
+        <translation>如果没有接收完文件，此操作会停止并断开连接
+您确定要取消接收文件吗？</translation>
+    </message>
 </context>
 <context>
     <name>TcpServer</name>
@@ -519,6 +680,33 @@ Receipter</source>
         <location filename="tcpserver.ui" line="289"/>
         <source>Esc</source>
         <translation></translation>
+    </message>
+    <message>
+        <location filename="tcpserver.cpp" line="16"/>
+        <source>File sender</source>
+        <translation>文件发送器</translation>
+    </message>
+    <message>
+        <location filename="tcpserver.cpp" line="30"/>
+        <source>ERROR</source>
+        <translation>错误</translation>
+    </message>
+    <message>
+        <location filename="tcpserver.cpp" line="30"/>
+        <source>You have not selected any files</source>
+        <translation>您没有选择任何文件</translation>
+    </message>
+    <message>
+        <location filename="tcpserver.cpp" line="191"/>
+        <source>Cancel send</source>
+        <translation>取消发送</translation>
+    </message>
+    <message>
+        <location filename="tcpserver.cpp" line="192"/>
+        <source>The current file transfer will be cancelled if it is not completed and all connections will be disconnected.
+Are you sure you want to cancel sending files?</source>
+        <translation>如果当前文件传输未完成，则将取消传输，并断开所有连接
+您确定要取消发送文件吗？</translation>
     </message>
 </context>
 </TS>

@@ -29,4 +29,8 @@
     <qresource prefix="/bk">
         <file>background/bg-login.png</file>
     </qresource>
+    <qresource prefix="/language">
+        <file>language_EN.qm</file>
+        <file>language_zh_CN.qm</file>
+    </qresource>
 </RCC>

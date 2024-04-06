@@ -13,7 +13,7 @@ TcpClient::TcpClient(QWidget *parent, const QString &fileName, qint64 fileSizeBy
     ui(new Ui::TcpClient)
 {
     ui->setupUi(this);
-    this->setWindowTitle("File receipter");
+    this->setWindowTitle(tr("File receipter"));
     this->setAttribute(Qt::WA_DeleteOnClose);
     appendTextBrowser(Qt::blue, "[INFO] TCP client start");
 
@@ -89,12 +89,12 @@ void TcpClient::connectTcpServerAndOpenFile()
 {
     /* 获取保存路径 */
     ui->lbFileSavePath->setText("[EMPTY] Click `Save` to receive the file");
-    QString savePath = QFileDialog::getSaveFileName(this, "Save file to", fileName);
+    QString savePath = QFileDialog::getSaveFileName(this, tr("Save file to"), fileName);
     if (savePath.isEmpty())
     {
         appendTextBrowser(Qt::red, "[ERROR] Save cancel, because the file save path is empty. Click on the `Save` button to receive the file again");
-        QMessageBox::critical(this, "ERROR", "File path is empty, because the file save path is empty (You did not specify a save directory).\n"
-                                             "You can click on the `Save` button to receive the file again");
+        QMessageBox::critical(this, tr("ERROR"), tr("File path is empty, you did not specify a save directory.\n"
+                                                  "You can click on the `Save` button to receive the file again"));
         return;
     }
 
@@ -183,11 +183,12 @@ void TcpClient::receiveTcpDataAndSave()
 
 void TcpClient::closeEvent(QCloseEvent* event)
 {
-    QMessageBox::StandardButton btnPush = QMessageBox::warning(this, "Cancel receive",
-                         "If the file is not received, it will be stopped and disconnected.\n"
-                         "Are you sure you want to cancel receiving files?",
-                         QMessageBox::No | QMessageBox::Yes,
-                         QMessageBox::No);
+    QMessageBox::StandardButton btnPush =
+        QMessageBox::warning(this, tr("Cancel receive"),
+                             tr("If the file is not received, it will be stopped and disconnected.\n"
+                                "Are you sure you want to cancel receiving files?"),
+                             QMessageBox::No | QMessageBox::Yes,
+                             QMessageBox::No);
     if (btnPush == QMessageBox::No)
     {
         event->ignore();
@@ -196,8 +197,9 @@ void TcpClient::closeEvent(QCloseEvent* event)
     {
         tcpSocket->disconnectFromHost(); //断开连接
         tcpSocket->close(); //关闭套接字
+
         event->accept();
-        QWidget::closeEvent(event);
+        QWidget::closeEvent(event);  // 向上传递
     }
 }
 
