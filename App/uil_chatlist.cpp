@@ -13,7 +13,7 @@ ChatList::ChatList(QWidget* parent, QString localUserName, QString localUserGrou
     ui(new Ui::ChatList)
 {
     ui->setupUi(this);
-    this->setWindowTitle("PolyChat Chat list");
+    this->setWindowTitle(tr("PolyChat Chat list"));
     this->setWindowIcon(QIcon(":/icon/icons/logo_fox.png"));
 
 
@@ -41,7 +41,7 @@ ChatList::ChatList(QWidget* parent, QString localUserName, QString localUserGrou
 
                 if (isChatExist(name))
                 {
-                    QMessageBox::warning(this, "Warning", "Chat with the same name already exists");
+                    QMessageBox::warning(this, tr("Warning"), tr("Chat with the same name already exists"));
                     return;
                 }
 
@@ -379,7 +379,7 @@ bool ChatList::isNeedHideBtn(QString textOnBtn)
     /* 如果文本框中的内容为空，则不需要隐藏 */
     if (ui->leSearch->text().isEmpty()) return false;
 
-    QString strRegExp("\\S*" + ui->leSearch->text() + "\\S*");
+    QString strRegExp("\\S*" + ui->leSearch->text() + "\\S*");  // 正则表达式
     QRegularExpression regExp;
     regExp.setPattern(strRegExp);
 

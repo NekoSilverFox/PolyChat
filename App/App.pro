@@ -47,4 +47,7 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 RESOURCES += \
     resource.qrc
 
+TRANSLATIONS += language_zh_CN.ts \
+                language_EN.ts
+
 RC_ICONS = logo_fox.ico

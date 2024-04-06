@@ -11,6 +11,7 @@
     </message>
     <message>
         <location filename="addchat.ui" line="34"/>
+        <location filename="uil_addchat.cpp" line="13"/>
         <source>Add new chat</source>
         <translation>Add new chat</translation>
     </message>
@@ -33,6 +34,16 @@
         <location filename="addchat.ui" line="98"/>
         <source>Return</source>
         <translation>Return</translation>
+    </message>
+    <message>
+        <location filename="uil_addchat.cpp" line="25"/>
+        <source>Warning</source>
+        <translation>Warning</translation>
+    </message>
+    <message>
+        <location filename="uil_addchat.cpp" line="25"/>
+        <source>Name can not be empty</source>
+        <translation>Name can not be empty</translation>
     </message>
 </context>
 <context>
@@ -145,6 +156,7 @@
     </message>
     <message>
         <location filename="chatboxwidget.ui" line="246"/>
+        <location filename="uil_chatboxwidget.cpp" line="143"/>
         <source>Send file</source>
         <translation>Send file</translation>
     </message>
@@ -200,7 +212,6 @@
     </message>
     <message>
         <location filename="chatboxwidget.ui" line="391"/>
-        <location filename="uil_chatboxwidget.cpp" line="392"/>
         <source>Number of online user: </source>
         <oldsource>Number of online user: 0</oldsource>
         <translation>Number of online user: </translation>
@@ -239,6 +250,91 @@
         <location filename="chatboxwidget.ui" line="505"/>
         <source>IP</source>
         <translation>IP address</translation>
+    </message>
+    <message>
+        <source>Chat %1 on port %2</source>
+        <oldsource>[Chat] %1 on port %2</oldsource>
+        <translation type="vanished">Chat %1 on port %2</translation>
+    </message>
+    <message>
+        <location filename="uil_chatboxwidget.cpp" line="109"/>
+        <source>Clean all message</source>
+        <translation>Clean all message</translation>
+    </message>
+    <message>
+        <location filename="uil_chatboxwidget.cpp" line="110"/>
+        <source>Are you sure you want to clear all messages?</source>
+        <translation>Are you sure you want to clear all messages?</translation>
+    </message>
+    <message>
+        <location filename="uil_chatboxwidget.cpp" line="122"/>
+        <location filename="uil_chatboxwidget.cpp" line="129"/>
+        <location filename="uil_chatboxwidget.cpp" line="147"/>
+        <source>Warning</source>
+        <translation>Warning</translation>
+    </message>
+    <message>
+        <location filename="uil_chatboxwidget.cpp" line="122"/>
+        <source>Can not save!
+Message box is empty</source>
+        <translation>Can not save!
+Message box is empty</translation>
+    </message>
+    <message>
+        <location filename="uil_chatboxwidget.cpp" line="126"/>
+        <source>Save file</source>
+        <translation>Save file</translation>
+    </message>
+    <message>
+        <location filename="uil_chatboxwidget.cpp" line="129"/>
+        <source>Save cancel</source>
+        <translation>Save cancel</translation>
+    </message>
+    <message>
+        <location filename="uil_chatboxwidget.cpp" line="147"/>
+        <source>Cancel sending file</source>
+        <translation>Cancel sending file</translation>
+    </message>
+    <message>
+        <location filename="uil_chatboxwidget.cpp" line="154"/>
+        <source>Error</source>
+        <translation>Error</translation>
+    </message>
+    <message>
+        <location filename="uil_chatboxwidget.cpp" line="154"/>
+        <source>File size cannot exceed 1Gb</source>
+        <translation>File size cannot exceed 1GB</translation>
+    </message>
+    <message>
+        <location filename="uil_chatboxwidget.cpp" line="348"/>
+        <source>File reception request</source>
+        <translation>File reception request</translation>
+    </message>
+    <message>
+        <location filename="uil_chatboxwidget.cpp" line="348"/>
+        <source>[%1] from group [%2] wants to send you a file, do you want to receive it?
+
+---------------------
+File information:
+Name: %3
+Size: %4Kb</source>
+        <translation>[%1] from group [%2] wants to send you a file, do you want to receive it?
+
+---------------------
+File information:
+Name: %3
+Size: %4Kb</translation>
+    </message>
+    <message>
+        <location filename="uil_chatboxwidget.cpp" line="391"/>
+        <source>%1 online</source>
+        <oldsource>%1 online！</oldsource>
+        <translation>%1 online</translation>
+    </message>
+    <message>
+        <location filename="uil_chatboxwidget.cpp" line="412"/>
+        <source>%1 left on %2</source>
+        <translation>%1 left on %2</translation>
     </message>
 </context>
 <context>
@@ -303,6 +399,21 @@
         <source>XXXX/XXXXXX</source>
         <translation></translation>
     </message>
+    <message>
+        <location filename="uil_chatlist.cpp" line="16"/>
+        <source>PolyChat Chat list</source>
+        <translation>PolyChat Chat list</translation>
+    </message>
+    <message>
+        <location filename="uil_chatlist.cpp" line="44"/>
+        <source>Warning</source>
+        <translation>Warning</translation>
+    </message>
+    <message>
+        <location filename="uil_chatlist.cpp" line="44"/>
+        <source>Chat with the same name already exists</source>
+        <translation>Chat with the same name already exists</translation>
+    </message>
 </context>
 <context>
     <name>LoginWidget</name>
@@ -340,6 +451,16 @@
         <location filename="loginwidget.ui" line="160"/>
         <source>Return</source>
         <translation>Return</translation>
+    </message>
+    <message>
+        <location filename="uil_loginwidget.cpp" line="14"/>
+        <source>PolyChat Login</source>
+        <translation>PolyChat Login</translation>
+    </message>
+    <message>
+        <location filename="uil_loginwidget.cpp" line="55"/>
+        <source>Name or Group number can not be empty</source>
+        <translation>Name or Group number can not be empty</translation>
     </message>
 </context>
 <context>
@@ -442,6 +563,40 @@ Receipter</translation>
         <source>Return</source>
         <translation></translation>
     </message>
+    <message>
+        <location filename="tcpclient.cpp" line="16"/>
+        <source>File receipter</source>
+        <translation>File receipter</translation>
+    </message>
+    <message>
+        <location filename="tcpclient.cpp" line="92"/>
+        <source>Save file to</source>
+        <translation>Save file to</translation>
+    </message>
+    <message>
+        <location filename="tcpclient.cpp" line="96"/>
+        <source>ERROR</source>
+        <translation>ERROR</translation>
+    </message>
+    <message>
+        <location filename="tcpclient.cpp" line="96"/>
+        <source>File path is empty, you did not specify a save directory.
+You can click on the `Save` button to receive the file again</source>
+        <translation>File path is empty, you did not specify a save directory.
+You can click on the `Save` button to receive the file again</translation>
+    </message>
+    <message>
+        <location filename="tcpclient.cpp" line="187"/>
+        <source>Cancel receive</source>
+        <translation>Cancel receive</translation>
+    </message>
+    <message>
+        <location filename="tcpclient.cpp" line="188"/>
+        <source>If the file is not received, it will be stopped and disconnected.
+Are you sure you want to cancel receiving files?</source>
+        <translation>If the file is not received, it will be stopped and disconnected.
+Are you sure you want to cancel receiving files?</translation>
+    </message>
 </context>
 <context>
     <name>TcpServer</name>
@@ -520,6 +675,33 @@ Receipter</translation>
         <location filename="tcpserver.ui" line="289"/>
         <source>Esc</source>
         <translation></translation>
+    </message>
+    <message>
+        <location filename="tcpserver.cpp" line="16"/>
+        <source>File sender</source>
+        <translation>File sender</translation>
+    </message>
+    <message>
+        <location filename="tcpserver.cpp" line="30"/>
+        <source>ERROR</source>
+        <translation>ERROR</translation>
+    </message>
+    <message>
+        <location filename="tcpserver.cpp" line="30"/>
+        <source>You have not selected any files</source>
+        <translation>You have not selected any files</translation>
+    </message>
+    <message>
+        <location filename="tcpserver.cpp" line="191"/>
+        <source>Cancel send</source>
+        <translation>Cancel send</translation>
+    </message>
+    <message>
+        <location filename="tcpserver.cpp" line="192"/>
+        <source>The current file transfer will be cancelled if it is not completed and all connections will be disconnected.
+Are you sure you want to cancel sending files?</source>
+        <translation>The current file transfer will be cancelled if it is not completed and all connections will be disconnected.
+Are you sure you want to cancel sending files?</translation>
     </message>
 </context>
 </TS>

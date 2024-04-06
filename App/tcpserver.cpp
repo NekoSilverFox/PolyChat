@@ -13,7 +13,7 @@ TcpServer::TcpServer(QWidget *parent, QString filePath, QHostAddress ip, qint16 
     ui(new Ui::TcpServer)
 {
     ui->setupUi(this);
-    this->setWindowTitle("File sender");
+    this->setWindowTitle(tr("File sender"));
     this->setAttribute(Qt::WA_DeleteOnClose);
     appendTextBrowser(Qt::blue, "[INFO] TCP server start");
 
@@ -27,7 +27,7 @@ TcpServer::TcpServer(QWidget *parent, QString filePath, QHostAddress ip, qint16 
     if (filePath.isEmpty())
     {
         appendTextBrowser(Qt::red, "[ERROR] Send Cancel");
-        QMessageBox::critical(this, "ERROR", "File path is empty");
+        QMessageBox::critical(this, tr("ERROR"), tr("You have not selected any files"));
         return;
     }
 
@@ -187,11 +187,12 @@ void TcpServer::appendTextBrowser(Qt::GlobalColor color, QString text)
 
 void  TcpServer::closeEvent(QCloseEvent* event)
 {
-    QMessageBox::StandardButton btnPush = QMessageBox::warning(this, "Cancel send",
-                         "The current file transfer will be cancelled if it is not completed and all connections will be disconnected.\n"
-                         "Are you sure you want to cancel sending files?",
-                         QMessageBox::No | QMessageBox::Yes,
-                         QMessageBox::No);
+    QMessageBox::StandardButton btnPush =
+        QMessageBox::warning(this, tr("Cancel send"),
+                             tr("The current file transfer will be cancelled if it is not completed and all connections will be disconnected.\n"
+                                "Are you sure you want to cancel sending files?"),
+                             QMessageBox::No | QMessageBox::Yes,
+                             QMessageBox::No);
     if (btnPush == QMessageBox::No)
     {
         event->ignore();

@@ -946,7 +946,7 @@ void PolyChatTester::ut_tcpserver_textBrowser()
 void PolyChatTester::ut_chatbox_title()
 {
     ChatBoxWidget chatBox(nullptr, "3530409/90102", 2333);
-    QCOMPARE(chatBox.windowTitle(), QString("[Chat] %1 on port %2").arg("3530409/90102").arg(2333));
+    QCOMPARE(chatBox.windowTitle(), QString("Chat %1 on port %2").arg("3530409/90102", 2333));
 }
 
 /** 保证 btnBold 是可选按钮（Checkable-QToolButton），且文字显示被禁用
@@ -1495,7 +1495,7 @@ void PolyChatTester::mt_chatbox_userjoin_msgTextBrowser()
     chatBox.userJoin("Fox", "5140904/30202", DAL::getLocalIpAddress());
     QVERIFY(initString != msgTextBrowser->toPlainText());
 
-    QCOMPARE(msgTextBrowser->toPlainText(), QString("%1 online！").arg("Fox"));
+    QCOMPARE(msgTextBrowser->toPlainText(), QString("%1 online").arg("Fox"));
 }
 
 /** 用户离开（用户列表正确刷新）
@@ -1593,7 +1593,7 @@ void PolyChatTester::mt_chatbox_userleft_msgTextBrowser()
     chatBox.userJoin("Fox", "5140904/30202", DAL::getLocalIpAddress());
     QVERIFY(curString != msgTextBrowser->toPlainText());
 
-    QCOMPARE(msgTextBrowser->toPlainText(), QString("%1 online！").arg("Fox"));
+    QCOMPARE(msgTextBrowser->toPlainText(), QString("%1 online").arg("Fox"));
 
     QString time = QDateTime::currentDateTime().toString("dd-MM-yyyy hh:mm:ss");
     curString = msgTextBrowser->toPlainText();
@@ -2241,7 +2241,7 @@ void PolyChatTester::e2e_send_message()
     QTest::keyClicks(textEdit, "HelloThere");
     QCOMPARE(textEdit->toPlainText(), "HelloThere");
 
-    QCOMPARE(msgTextBrowser->toPlainText(), QString("%1 online！").arg("Fox"));
+    QCOMPARE(msgTextBrowser->toPlainText(), QString("%1 online").arg("Fox"));
 
     QPushButton* button = chatBox.findChild<QPushButton*>("btnSend");
     QTest::mouseClick(button, Qt::LeftButton);
@@ -2312,7 +2312,7 @@ void PolyChatTester::e2e_send_special_message()
     QToolButton* btnUnderLine = chatBox.findChild<QToolButton*>("btnUnderLine");
     QTest::mouseClick(btnUnderLine, Qt::LeftButton);
 
-    QCOMPARE(msgTextBrowser->toPlainText(), QString("%1 online！").arg("Fox"));
+    QCOMPARE(msgTextBrowser->toPlainText(), QString("%1 online").arg("Fox"));
 
     QPushButton* button = chatBox.findChild<QPushButton*>("btnSend");
     QTest::mouseClick(button, Qt::LeftButton);
@@ -2506,7 +2506,7 @@ void PolyChatTester::e2e_clean_chat()
     QCOMPARE(label->text(), QString::number(table->rowCount()));
 
     QVERIFY(initString != msgTextBrowser->toPlainText());
-    QCOMPARE(msgTextBrowser->toPlainText(), QString("%1 online！").arg("Fox"));
+    QCOMPARE(msgTextBrowser->toPlainText(), QString("%1 online").arg("Fox"));
 
     timer->start(TIMER_STEP);
     QToolButton* btnClean = chatBox.findChild<QToolButton*>("btnClean");
@@ -2565,7 +2565,7 @@ void PolyChatTester::e2e_save_chat()
     QCOMPARE(label->text(), QString::number(table->rowCount()));
 
     QVERIFY(initString != msgTextBrowser->toPlainText());
-    QCOMPARE(msgTextBrowser->toPlainText(), QString("%1 online！").arg("Fox"));
+    QCOMPARE(msgTextBrowser->toPlainText(), QString("%1 online").arg("Fox"));
 
     timer->start(TIMER_STEP);
     QToolButton* btnSave = chatBox.findChild<QToolButton*>("btnSave");
@@ -2628,7 +2628,7 @@ void PolyChatTester::e2e_leave_chat()
     QTest::keyClicks(textEdit, "HelloThere");
     QCOMPARE(textEdit->toPlainText(), "HelloThere");
 
-    QCOMPARE(msgTextBrowser->toPlainText(), QString("%1 online！").arg("Fox"));
+    QCOMPARE(msgTextBrowser->toPlainText(), QString("%1 online").arg("Fox"));
 
     QPushButton* button = chatBox.findChild<QPushButton*>("btnSend");
     QTest::mouseClick(button, Qt::LeftButton);

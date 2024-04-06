@@ -1,4 +1,5 @@
 #include <QApplication>
+#include <QTranslator>
 
 #include "uil_chatboxwidget.h"
 #include "uil_loginwidget.h"
@@ -15,7 +16,10 @@ ChatList*    chatList                = nullptr;          // Widget ChatList (Onl
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
-    a.setWindowIcon(QIcon(":/icon/icons/logo_fox.png"));              
+    a.setWindowIcon(QIcon(":/icon/icons/logo_fox.png"));
+
+//    QString appDirPath = QCoreApplication::applicationDirPath();   //程序所在路径
+//    qDebug() << appDirPath;
 
     LoginWidget login;
     login.show();
