@@ -23,8 +23,7 @@ ChatBoxWidget::ChatBoxWidget(QWidget* parent, QString name, qint16 port)
     ui->setupUi(this);
     this->setAttribute(Qt::WA_DeleteOnClose);
     this->setWindowIcon(QIcon(":/icon/icons/user-group.png"));
-    this->setWindowTitle(QString("Chat %1 on port %2").arg(name, port));
-//    this->setWindowTitle(tr("Chat %1 on port %2").arg(name, port));
+    this->setWindowTitle(QString(tr("Chat %1 on port %2")).arg(name).arg(port));  // 注意：这里 .arg() 必须链式调用 不可以 .arg(name, port) 否则无法正常渲染。这是因为 如果想 .arg(name, port) 单次调用的话，必须保证参数类型一样，而这里是一个 QString 一个 qint16 类型，而链式调用就不存在这个问题
 
 
     /* 对所有窗口的同样地址广播 8888 (告诉 ChatList 本窗口存在) */

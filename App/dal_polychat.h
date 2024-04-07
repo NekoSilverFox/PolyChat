@@ -71,6 +71,11 @@ static void initAndShowChatList(QWidget* parent)
     BLL::initAndShowChatList(parent);
 }
 
+static void loadTranslator()
+{
+    BLL::loadTranslator();
+}
+
 }
 
 #endif // DAL_POLYCHAT_H

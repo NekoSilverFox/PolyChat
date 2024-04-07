@@ -16,6 +16,9 @@ public:
     explicit LoginWidget(QWidget *parent = nullptr);
     ~LoginWidget();
 
+protected:
+    virtual void changeEvent(QEvent *event);
+
 public slots:
     void userLogin();
 

@@ -91,6 +91,15 @@ static void initAndShowChatList(QWidget* parent)
     ::chatList->show();
 }
 
+static void loadTranslator()
+{
+    ::translator_EN = new QTranslator;
+    ::translator_EN->load(":/language/language_EN.qm");
+
+    ::translator_zn_CN = new QTranslator;
+    ::translator_zn_CN->load(":/language/language_zh_CN.qm");
+}
+
 }
 
 #endif // BLL_POLYCHAT_H
