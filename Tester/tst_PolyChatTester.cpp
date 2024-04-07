@@ -946,7 +946,7 @@ void PolyChatTester::ut_tcpserver_textBrowser()
 void PolyChatTester::ut_chatbox_title()
 {
     ChatBoxWidget chatBox(nullptr, "3530409/90102", 2333);
-    QCOMPARE(chatBox.windowTitle(), QString("Chat %1 on port %2").arg("3530409/90102", 2333));
+    QCOMPARE(chatBox.windowTitle(), QString("Chat %1 on port %2").arg("3530409/90102").arg(2333));
 }
 
 /** 保证 btnBold 是可选按钮（Checkable-QToolButton），且文字显示被禁用

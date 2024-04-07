@@ -155,7 +155,7 @@
     </message>
     <message>
         <location filename="chatboxwidget.ui" line="246"/>
-        <location filename="uil_chatboxwidget.cpp" line="143"/>
+        <location filename="uil_chatboxwidget.cpp" line="142"/>
         <source>Send file</source>
         <translation>发送文件</translation>
     </message>
@@ -251,66 +251,67 @@
         <translation>IP 地址</translation>
     </message>
     <message>
+        <location filename="uil_chatboxwidget.cpp" line="26"/>
         <source>Chat %1 on port %2</source>
         <oldsource>[Chat] %1 on port %2</oldsource>
-        <translation type="vanished">群聊 %1 在端口 %2</translation>
+        <translation>群聊 %1 在端口 %2</translation>
     </message>
     <message>
-        <location filename="uil_chatboxwidget.cpp" line="109"/>
+        <location filename="uil_chatboxwidget.cpp" line="108"/>
         <source>Clean all message</source>
         <translation>清空聊天框</translation>
     </message>
     <message>
-        <location filename="uil_chatboxwidget.cpp" line="110"/>
+        <location filename="uil_chatboxwidget.cpp" line="109"/>
         <source>Are you sure you want to clear all messages?</source>
         <translation>您确定要清空聊天框吗？</translation>
     </message>
     <message>
-        <location filename="uil_chatboxwidget.cpp" line="122"/>
-        <location filename="uil_chatboxwidget.cpp" line="129"/>
-        <location filename="uil_chatboxwidget.cpp" line="147"/>
+        <location filename="uil_chatboxwidget.cpp" line="121"/>
+        <location filename="uil_chatboxwidget.cpp" line="128"/>
+        <location filename="uil_chatboxwidget.cpp" line="146"/>
         <source>Warning</source>
         <translation>警告</translation>
     </message>
     <message>
-        <location filename="uil_chatboxwidget.cpp" line="122"/>
+        <location filename="uil_chatboxwidget.cpp" line="121"/>
         <source>Can not save!
 Message box is empty</source>
         <translation>无法保存！
 信息框为空</translation>
     </message>
     <message>
-        <location filename="uil_chatboxwidget.cpp" line="126"/>
+        <location filename="uil_chatboxwidget.cpp" line="125"/>
         <source>Save file</source>
         <translation>保存文件</translation>
     </message>
     <message>
-        <location filename="uil_chatboxwidget.cpp" line="129"/>
+        <location filename="uil_chatboxwidget.cpp" line="128"/>
         <source>Save cancel</source>
         <translation>取消保存</translation>
     </message>
     <message>
-        <location filename="uil_chatboxwidget.cpp" line="147"/>
+        <location filename="uil_chatboxwidget.cpp" line="146"/>
         <source>Cancel sending file</source>
         <translation>取消文件发送</translation>
     </message>
     <message>
-        <location filename="uil_chatboxwidget.cpp" line="154"/>
+        <location filename="uil_chatboxwidget.cpp" line="153"/>
         <source>Error</source>
         <translation>错误</translation>
     </message>
     <message>
-        <location filename="uil_chatboxwidget.cpp" line="154"/>
+        <location filename="uil_chatboxwidget.cpp" line="153"/>
         <source>File size cannot exceed 1Gb</source>
         <translation>文件大小不能超过 1GB</translation>
     </message>
     <message>
-        <location filename="uil_chatboxwidget.cpp" line="348"/>
+        <location filename="uil_chatboxwidget.cpp" line="347"/>
         <source>File reception request</source>
         <translation>文件接收请求</translation>
     </message>
     <message>
-        <location filename="uil_chatboxwidget.cpp" line="348"/>
+        <location filename="uil_chatboxwidget.cpp" line="347"/>
         <source>[%1] from group [%2] wants to send you a file, do you want to receive it?
 
 ---------------------
@@ -325,13 +326,13 @@ Size: %4Kb</source>
 大小： %4Kb</translation>
     </message>
     <message>
-        <location filename="uil_chatboxwidget.cpp" line="391"/>
+        <location filename="uil_chatboxwidget.cpp" line="390"/>
         <source>%1 online</source>
         <oldsource>%1 online！</oldsource>
         <translation>%1 上线</translation>
     </message>
     <message>
-        <location filename="uil_chatboxwidget.cpp" line="412"/>
+        <location filename="uil_chatboxwidget.cpp" line="411"/>
         <source>%1 left on %2</source>
         <translation>%1 在 %2 退出</translation>
     </message>
@@ -417,47 +418,57 @@ Size: %4Kb</source>
 <context>
     <name>LoginWidget</name>
     <message>
-        <location filename="loginwidget.ui" line="26"/>
         <source>Form</source>
-        <translation>Hello PolyChat</translation>
+        <translation type="vanished">Hello PolyChat</translation>
     </message>
     <message>
-        <location filename="loginwidget.ui" line="47"/>
+        <location filename="loginwidget.ui" line="100"/>
+        <source>🌏 English</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="loginwidget.ui" line="105"/>
+        <source>🇨🇳 Chinese</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="loginwidget.ui" line="131"/>
         <source>PolyChat</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="loginwidget.ui" line="69"/>
+        <location filename="loginwidget.ui" line="163"/>
         <source>Group:</source>
         <translation>班级号：</translation>
     </message>
     <message>
-        <location filename="loginwidget.ui" line="76"/>
+        <location filename="loginwidget.ui" line="186"/>
         <source>Name:</source>
         <translation>姓名：</translation>
     </message>
     <message>
-        <location filename="loginwidget.ui" line="137"/>
+        <location filename="loginwidget.ui" line="221"/>
         <source>🚀</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="loginwidget.ui" line="157"/>
+        <location filename="loginwidget.ui" line="241"/>
         <source>Login</source>
         <translation>登录</translation>
     </message>
     <message>
-        <location filename="loginwidget.ui" line="160"/>
+        <location filename="loginwidget.ui" line="244"/>
         <source>Return</source>
         <translation>返回</translation>
     </message>
     <message>
-        <location filename="uil_loginwidget.cpp" line="14"/>
+        <location filename="loginwidget.ui" line="26"/>
+        <location filename="uil_loginwidget.cpp" line="17"/>
         <source>PolyChat Login</source>
         <translation>登录 PolyChat</translation>
     </message>
     <message>
-        <location filename="uil_loginwidget.cpp" line="55"/>
+        <location filename="uil_loginwidget.cpp" line="92"/>
         <source>Name or Group number can not be empty</source>
         <translation>名称或班级号不能为空</translation>
     </message>

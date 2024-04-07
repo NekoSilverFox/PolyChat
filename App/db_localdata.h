@@ -3,6 +3,7 @@
 #include <QString>
 #include <QHostAddress>
 #include <QVector>
+#include <QTranslator>
 
 #include "uil_chatlist.h"
 #include "chat.h"
@@ -35,6 +36,12 @@ extern QString      localUserName;
 extern QString      localUserGroupNumber;
 extern QHostAddress localIpAddress      ;
 extern ChatList*    chatList            ;
+
+/**
+ * 语言配置
+ */
+static QTranslator* translator_EN;
+static QTranslator* translator_zn_CN;
 
 
 #endif // DB_LOCALDATA_H
