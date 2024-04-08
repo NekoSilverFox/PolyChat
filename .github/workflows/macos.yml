@@ -22,7 +22,7 @@ jobs:
     env:
       targetName: PolyChat
       # 在 Qt pro 文件中的 TARGET
-      QtApplicationName: App
+      QtApplicationName: PolyChat
     steps:
       # macos 11.0 默认环境变了,要指定
       - name: prepare env

@@ -36,7 +36,7 @@ jobs:
     env:
       targetName: PolyChat
       # 在 Qt pro 文件中的
-      QtApplicationName: App.exe
+      QtApplicationName: PolyChat.exe
     # 步骤
     steps:
       # 安装Qt
