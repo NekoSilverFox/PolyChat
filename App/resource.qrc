@@ -32,5 +32,6 @@
     <qresource prefix="/language">
         <file>language_EN.qm</file>
         <file>language_zh_CN.qm</file>
+        <file>language_RU.qm</file>
     </qresource>
 </RCC>

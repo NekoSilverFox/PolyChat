@@ -552,7 +552,7 @@ Receipter</translation>
     <message>
         <location filename="tcpclient.ui" line="255"/>
         <source>[EMPTY] Click `Save` to receive the file</source>
-        <translation></translation>
+        <translation>[EMPTY] Click `Save` to receive the file</translation>
     </message>
     <message>
         <location filename="tcpclient.ui" line="292"/>
@@ -614,7 +614,7 @@ Are you sure you want to cancel receiving files?</translation>
     <message>
         <location filename="tcpserver.ui" line="20"/>
         <source>Form</source>
-        <translation>Fine Sender</translation>
+        <translation>File Sender</translation>
     </message>
     <message>
         <location filename="tcpserver.ui" line="70"/>

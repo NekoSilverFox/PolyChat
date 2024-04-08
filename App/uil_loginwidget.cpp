@@ -42,7 +42,12 @@ LoginWidget::LoginWidget(QWidget *parent) :
         case 1:
             qApp->installTranslator(::translator_zn_CN);
             break;
+        case 2:
+            qApp->installTranslator(::translator_RU);
+            break;
+
         default:
+            qDebug() << "[ERROR] Fail change language";
             break;
         }
 
