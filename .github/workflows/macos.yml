@@ -20,9 +20,10 @@ jobs:
         qt_ver: [6.2.2, 6.6.0]
         qt_arch: [clang_64]
     env:
-      targetName: PolyChat
       # 在 Qt pro 文件中的 TARGET
-      QtApplicationName: PolyChat
+      AppTargetName: PolyChat
+      # .app 所处编译文件夹的路径
+      QtAppDirName: App
     steps:
       # macos 11.0 默认环境变了,要指定
       - name: prepare env
@@ -61,30 +62,30 @@ jobs:
       - name: Build on macOS 
         run: |
           ls
-          cd ./${QtApplicationName}
+          cd ./${QtAppDirName}
           qmake
           make
       # 打包
       - name: Package on MacOS
         run: |
-          cd ./${QtApplicationName}
-          # mv ./${QtApplicationName}/${QtApplicationName}.app .
+          cd ./${QtAppDirName}
+          # mv ./${QtAppDirName}/${AppTargetName}.app .
           echo '------------------'
           ls
           # 拷贝依赖 pro文件里的名称：
-          macdeployqt ${QtApplicationName}.app -qmldir=. -verbose=1 -dmg
+          macdeployqt ${AppTargetName}.app -qmldir=. -verbose=1 -dmg
       # 上传artifacts          
       - uses: actions/upload-artifact@v2
         with:
-          name: ${{ env.targetName }}_${{ matrix.os }}_${{matrix.qt_ver}}.zip
-          path: ${{ env.QtApplicationName }}/${{ env.QtApplicationName }}.app
+          name: ${{ env.AppTargetName }}_${{ matrix.os }}_${{matrix.qt_ver}}.zip
+          path: ${{ env.QtAppDirName }}/${{ env.AppTargetName }}.app
       # tag 上传Release
       - name: Upload Release
         if: startsWith(github.event.ref, 'refs/tags/')
         uses: svenstaro/upload-release-action@v2
         with:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
-          file: ${{ env.QtApplicationName }}/${{ env.QtApplicationName }}.dmg
-          asset_name: ${{ env.targetName }}_${{ matrix.os }}_${{ matrix.qt_ver }}.dmg
+          file: ${{ env.QtAppDirName }}/${{ env.AppTargetName }}.dmg
+          asset_name: ${{ env.AppTargetName }}_${{ matrix.os }}_${{ matrix.qt_ver }}.dmg
           tag: ${{ github.ref }}
           overwrite: true
