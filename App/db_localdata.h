@@ -42,6 +42,7 @@ extern ChatList*    chatList            ;
  */
 static QTranslator* translator_EN;
 static QTranslator* translator_zn_CN;
+static QTranslator* translator_RU;
 
 
 #endif // DB_LOCALDATA_H

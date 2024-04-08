@@ -48,6 +48,7 @@ RESOURCES += \
     resource.qrc
 
 TRANSLATIONS += language_zh_CN.ts \
-                language_EN.ts
+                language_EN.ts \
+                language_RU.ts
 
 RC_ICONS = logo_fox.ico

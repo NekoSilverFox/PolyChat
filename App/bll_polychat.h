@@ -98,6 +98,9 @@ static void loadTranslator()
 
     ::translator_zn_CN = new QTranslator;
     ::translator_zn_CN->load(":/language/language_zh_CN.qm");
+
+    ::translator_RU = new QTranslator;
+    ::translator_RU->load(":/language/language_RU.qm");
 }
 
 }
