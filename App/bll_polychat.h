@@ -17,18 +17,37 @@ static QHostAddress getIPAddress()
 {
     QHostAddress ipAddress;
     QList<QHostAddress> ipAddressesList = QNetworkInterface::allAddresses();
-    for (int i = 0; i < ipAddressesList.size(); ++i)
+
+    // 优先寻找以192开头的IPv4地址
+    for (const QHostAddress &address : ipAddressesList)
     {
-        if (ipAddressesList.at(i) != QHostAddress::LocalHost
-            && ipAddressesList.at(i).toIPv4Address())
+        if (address != QHostAddress::LocalHost && address.toIPv4Address())
         {
-            ipAddress = ipAddressesList.at(i);
-            break;
+            QString ipString = address.toString();
+            if (ipString.startsWith("192"))
+            {
+                ipAddress = address;
+                break;
+            }
         }
     }
 
-    if (ipAddress.toString().isEmpty())
+    // 如果没有找到以192开头的地址，再考虑其他IPv4地址
+    if (ipAddress.isNull())
+    {
+        for (const QHostAddress &address : ipAddressesList) {
+            if (address != QHostAddress::LocalHost && address.toIPv4Address())
+            {
+                ipAddress = address;
+                break;
+            }
+        }
+    }
+
+    // 如果仍然没有找到，返回 localhost IPv4 地址
+    if (ipAddress.isNull()) {
         ipAddress = QHostAddress(QHostAddress::LocalHost);
+    }
 
     return ipAddress;
 }

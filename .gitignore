@@ -1,5 +1,6 @@
 .DS_Store
 *build-PolyChat*
+*build*
 
 # C++ objects and libs
 *.slo
