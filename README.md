@@ -9,10 +9,6 @@
 </p>
 
 
-<div align=left>
-
-
-
 
 <div align=center>
 
@@ -24,7 +20,41 @@
 </div>
 
 
-[toc]
+
+- [Requirements](#requirements)
+  - [System Requirements](#system-requirements)
+  - [Technical Requirements](#technical-requirements)
+- [Functional Specifications](#functional-specifications)
+- [HLD](#hld)
+  - [User Interface Design](#user-interface-design)
+    - [Login](#login)
+    - [User List Interface](#user-list-interface)
+    - [Chat Widget](#chat-widget)
+  - [Software Architecture](#software-architecture)
+  - [Class Diagram](#class-diagram)
+  - [UDP Group Chat and Chat List](#udp-group-chat-and-chat-list)
+  - [UDP Communication Protocol](#udp-communication-protocol)
+    - [Server](#server)
+    - [Client](#client)
+  - [TCP File Transfer Section](#tcp-file-transfer-section)
+    - [TCP Communication Protocol](#tcp-communication-protocol)
+    - [Sender](#sender)
+    - [Receiver](#receiver)
+  - [Data flow](#data-flow)
+- [Test](#test)
+  - [Explanation](#explanation)
+  - [Expanding Test Suites](#expanding-test-suites)
+  - [Unit (Module) Testing](#unit-module-testing)
+  - [Integration (Interface) Testing](#integration-interface-testing)
+  - [System/End-to-End and Other Tests](#systemend-to-end-and-other-tests)
+  - [Other Tests](#other-tests)
+  - [Local Test Results](#local-test-results)
+- [CI/CD](#cicd)
+  - [CI (Continuous Integration)](#ci-continuous-integration)
+  - [CD (Continuous Deployment)](#cd-continuous-deployment)
+  - [Code](#code)
+    - [MacOS](#macos)
+    - [Windows](#windows)
 
 # Requirements
 
@@ -516,7 +546,7 @@ void PolyChatTester::mt_chatbox_save_empty()
 
 **GitHub Results:**
 
-![image-20230219131232852](pic/image-20230316204636445.png)
+![image-20230219131232852](doc/pic/image-20230316204636445.png)
 
 ## Other Tests
 
@@ -559,7 +589,7 @@ void PolyChatTester::mt_chatbox_save_empty()
 
 Test environment: MacBook Pro with macOS 14 and Apple M1 Pro chip
 
-![image-20231024155247741](pic/image-20231024155247741.png)
+![image-20231024155247741](doc/pic/image-20231024155247741.png)
 
 
 
@@ -647,11 +677,11 @@ CI/CD is built through Github Actions. The CI/CD process is divided into two par
    - Packaging: Package the application as a dmg/zip file.
    - Upload Artifacts: Upload the generated files as CI artifacts.
 
-![iShot_2023-10-24_16.07.04](pic/iShot_2023-10-24_16.07.04.jpg)
+![iShot_2023-10-24_16.07.04](doc/pic/iShot_2023-10-24_16.07.04.jpg)
 
-![image-20231024164656277](pic/image-20231024164656277.png)
+![image-20231024164656277](doc/pic/image-20231024164656277.png)
 
-![image-20231024160959353](pic/image-20231024160959353.png)
+![image-20231024160959353](doc/pic/image-20231024160959353.png)
 
 ## CD (Continuous Deployment)
 
@@ -667,9 +697,9 @@ This process automates the build, testing, packaging, and deployment of the appl
 
 As shown in the figure below, the application has been successfully packaged and published on MacOS and Windows.
 
-![image-20231024165220391](pic/image-20231024165220391.png)
+![image-20231024165220391](doc/pic/image-20231024165220391.png)
 
-![image-20231024170159500](pic/image-20231024170159500.png)
+![image-20231024170159500](doc/pic/image-20231024170159500.png)
 
 ## Code
 
