@@ -152,8 +152,6 @@ void TcpServer::sendData()
         lenPackage = tcpSocket->write(buf, lenPackage);  // 发送数据，读多少，发多少
 
         this->bytesAlreadySend += lenPackage;  // 发送的数据需要累积
-
-
     } while (lenPackage > 0);
 
     if (this->bytesAlreadySend == this->fileSize)
