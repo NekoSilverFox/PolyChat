@@ -97,7 +97,7 @@ ChatBoxWidget::ChatBoxWidget(QWidget* parent, QString name, qint16 port)
     /* 更改颜色 */
     connect(ui->btnColor, &QToolButton::clicked,
             this, [=](){
-        QColor color = QColorDialog::getColor(Qt::black);  // getColor 参数中颜色是默认开启颜色对话框中的颜色
+                        QColor color = QColorDialog::getColor(Qt::black, this);  // getColor 参数中颜色是默认开启颜色对话框中的颜色
                         ui->msgTextEdit->setTextColor(color);
     });
 

@@ -59,6 +59,7 @@ LoginWidget::LoginWidget(QWidget *parent) :
     connect(ui->btnLogin, &QPushButton::clicked,
             this, &LoginWidget::userLogin);
 
+    /* User checked button `about` */
     connect(ui->btnInfo, &QPushButton::clicked,
             this, [=](){
         QMessageBox::about(this, "About Polychat",
